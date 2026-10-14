@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import PageHero from '../components/PageHero'
+import WhatsAppIcon from '../components/WhatsAppIcon'
 
 const serviceOptions = [
   // Barbering
@@ -172,9 +173,10 @@ export default function BookingPage() {
                   href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Saloon%2C%20I%20have%20an%20inquiry%20about%20booking"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-sans tracking-widest uppercase transition-colors"
+                  className="w-full flex items-center justify-center gap-2.5 py-3 border border-[#25D366]/40 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-xs font-sans font-semibold tracking-widest uppercase transition-colors"
                 >
-                  <span>💬 Chat with Concierge on WhatsApp</span>
+                  <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
+                  <span>Chat with Concierge on WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -237,8 +239,9 @@ export default function BookingPage() {
                     href={`https://wa.me/237677123456?text=${whatsappMessage}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center justify-center gap-2"
+                    className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center justify-center gap-2.5 font-semibold"
                   >
+                    <WhatsAppIcon className="w-4 h-4 fill-current text-dark-950" />
                     <span>Confirm on WhatsApp &rarr;</span>
                   </a>
                   <button

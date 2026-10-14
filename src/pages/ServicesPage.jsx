@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
+import WhatsAppIcon from '../components/WhatsAppIcon'
 
 const categories = ['All Services', 'Barbering', 'Spa & Facial', 'VIP Suite', 'Tattoo Art']
 
@@ -297,9 +298,10 @@ export default function ServicesPage() {
               href="https://wa.me/237677123456?text=Hello%20Cigaraw%2C%20I%20have%20a%20question%20about%20your%20services"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase"
+              className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
             >
-              Ask on WhatsApp
+              <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
+              <span>Ask on WhatsApp</span>
             </a>
           </div>
         </div>

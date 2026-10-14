@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import WhatsAppIcon from './WhatsAppIcon'
 
 const navLinks = [
   { num: '01', label: 'Home',                  path: '/' },
@@ -196,9 +197,10 @@ export default function Navbar() {
                     href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Saloon%2C%20I%20would%20like%20to%20inquire%20about%20booking"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-sans tracking-widest text-emerald-400 hover:text-emerald-300 uppercase mt-2 font-medium"
+                    className="inline-flex items-center gap-2 text-xs font-sans tracking-widest text-[#25D366] hover:text-[#20ba5a] uppercase mt-2 font-medium transition-colors"
                   >
-                    <span>💬 WhatsApp Concierge</span>
+                    <WhatsAppIcon className="w-4 h-4 fill-current" />
+                    <span>WhatsApp Concierge</span>
                   </a>
                 </div>
               </div>

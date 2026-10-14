@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import WhatsAppIcon from './WhatsAppIcon'
 
 const navLinks = [
   { label: 'Home',                  path: '/' },
@@ -58,8 +59,16 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   aria-label={`${name}: ${handle}`}
                 >
-                  <span className="w-8 h-8 border border-gold-500/20 flex items-center justify-center text-gold-500 group-hover:border-gold-400 group-hover:bg-gold-500/10 transition-all duration-300 text-xs font-bold">
-                    {name[0]}
+                  <span className={`w-8 h-8 border flex items-center justify-center transition-all duration-300 text-xs font-bold ${
+                    name === 'WhatsApp'
+                      ? 'border-[#25D366]/30 text-[#25D366] group-hover:border-[#25D366] group-hover:bg-[#25D366]/10'
+                      : 'border-gold-500/20 text-gold-500 group-hover:border-gold-400 group-hover:bg-gold-500/10'
+                  }`}>
+                    {name === 'WhatsApp' ? (
+                      <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
+                    ) : (
+                      name[0]
+                    )}
                   </span>
                   <div>
                     <p className="text-xs font-sans tracking-widest text-gold-500 uppercase">{name}</p>

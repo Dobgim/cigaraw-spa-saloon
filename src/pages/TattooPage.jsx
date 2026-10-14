@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
+import WhatsAppIcon from '../components/WhatsAppIcon'
 
 const tattooStyles = [
   {
@@ -223,9 +224,10 @@ export default function TattooPage() {
               href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Tattoo%20Studio%2C%20I%20have%20an%20idea%20for%20a%20tattoo"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase"
+              className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
             >
-              Send Reference on WhatsApp
+              <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
+              <span>Send Reference on WhatsApp</span>
             </a>
           </div>
         </div>

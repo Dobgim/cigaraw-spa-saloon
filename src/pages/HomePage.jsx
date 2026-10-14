@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Hero from '../components/Hero'
+import WhatsAppIcon from '../components/WhatsAppIcon'
 
 const pillars = [
   {
@@ -240,9 +241,10 @@ export default function HomePage() {
               href="https://wa.me/237677123456?text=Hello%20Cigaraw%2C%20I%20would%20like%20to%20book%20an%20appointment"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase"
+              className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
             >
-              WhatsApp Concierge
+              <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
+              <span>WhatsApp Concierge</span>
             </a>
           </div>
         </div>

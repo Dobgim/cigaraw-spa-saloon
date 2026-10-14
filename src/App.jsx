@@ -5,6 +5,7 @@ import Preloader   from './components/Preloader'
 import Cursor      from './components/Cursor'
 import Navbar      from './components/Navbar'
 import Footer      from './components/Footer'
+import WhatsAppButton from './components/WhatsAppButton'
 
 import HomePage     from './pages/HomePage'
 import ServicesPage from './pages/ServicesPage'
@@ -39,6 +40,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <WhatsAppButton />
     </BrowserRouter>
   )
 }

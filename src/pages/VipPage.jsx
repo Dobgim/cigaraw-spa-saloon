@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
+import WhatsAppIcon from '../components/WhatsAppIcon'
 
 const amenities = [
   { icon: '🚪', title: 'Private Acoustic Seclusion', desc: 'Sound-isolated private room ensuring complete discretion during phone calls or private conversations.' },
@@ -92,9 +93,10 @@ export default function VipPage() {
                 href="https://wa.me/237677123456?text=Hello%20Cigaraw%2C%20I%20would%20like%20to%20reserve%20the%20VIP%20Executive%20Suite"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase"
+                className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
               >
-                VIP WhatsApp Desk
+                <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
+                <span>VIP WhatsApp Desk</span>
               </a>
             </div>
           </div>
