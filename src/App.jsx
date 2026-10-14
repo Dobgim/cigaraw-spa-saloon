@@ -8,6 +8,7 @@ import Footer      from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 
 import HomePage     from './pages/HomePage'
+import AboutPage    from './pages/AboutPage'
 import ServicesPage from './pages/ServicesPage'
 import BarbingPage  from './pages/BarbingPage'
 import VipPage      from './pages/VipPage'
@@ -29,6 +30,7 @@ export default function App() {
       <main className="min-h-screen bg-dark-950">
         <Routes>
           <Route path="/"          element={<HomePage />} />
+          <Route path="/about"     element={<AboutPage />} />
           <Route path="/services"  element={<ServicesPage />} />
           <Route path="/barbing"   element={<BarbingPage />} />
           <Route path="/vip"       element={<VipPage />} />

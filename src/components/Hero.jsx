@@ -144,7 +144,7 @@ export default function Hero() {
           {[
             { target: 5000, label: 'Happy Clients', suffix: '+' },
             { target: 12,   label: 'Expert Artists'            },
-            { target: 8,    label: 'Years of Excellence', suffix: '+' },
+            { target: 2,    label: 'Years of Excellence', suffix: '+' },
           ].map(({ target, label, suffix }, i) => (
             <div key={i} className="flex flex-col">
               <span className="font-display text-4xl md:text-5xl text-white leading-none">

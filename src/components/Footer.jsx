@@ -3,6 +3,7 @@ import WhatsAppIcon from './WhatsAppIcon'
 
 const navLinks = [
   { label: 'Home',                  path: '/' },
+  { label: 'About Cigaraw',         path: '/about' },
   { label: 'Services & Menu',       path: '/services' },
   { label: 'Master Barbering',      path: '/barbing' },
   { label: 'VIP Executive Suite',   path: '/vip' },

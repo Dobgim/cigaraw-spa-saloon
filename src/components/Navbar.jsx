@@ -4,12 +4,13 @@ import WhatsAppIcon from './WhatsAppIcon'
 
 const navLinks = [
   { num: '01', label: 'Home',                  path: '/' },
-  { num: '02', label: 'Services & Menu',       path: '/services' },
-  { num: '03', label: 'Master Barbering',      path: '/barbing' },
-  { num: '04', label: 'VIP Executive Suite',   path: '/vip' },
-  { num: '05', label: 'Tattoo Studio',         path: '/tattoo' },
-  { num: '06', label: 'Lookbook & Gallery',    path: '/gallery' },
-  { num: '07', label: 'Book Appointment',      path: '/booking' },
+  { num: '02', label: 'About Cigaraw',         path: '/about' },
+  { num: '03', label: 'Services & Menu',       path: '/services' },
+  { num: '04', label: 'Master Barbering',      path: '/barbing' },
+  { num: '05', label: 'VIP Executive Suite',   path: '/vip' },
+  { num: '06', label: 'Tattoo Studio',         path: '/tattoo' },
+  { num: '07', label: 'Lookbook & Gallery',    path: '/gallery' },
+  { num: '08', label: 'Book Appointment',      path: '/booking' },
 ]
 
 export default function Navbar() {

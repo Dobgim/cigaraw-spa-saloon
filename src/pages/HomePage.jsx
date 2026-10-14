@@ -76,6 +76,72 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* About Us Story Section on Home Page */}
+      <section className="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-16 border-b border-gold-500/10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div>
+            <p className="eyebrow">About Cigaraw &bull; Bamenda Roots</p>
+            <h2 className="section-title">
+              Crafted in 2024,<br />Elevated with <em>Passion</em>
+            </h2>
+            <div className="gold-divider my-6" />
+            <p className="font-serif text-dark-200 text-lg leading-relaxed mb-6">
+              Located on Commercial Avenue in Bamenda, Cigaraw Saloon &amp; Spa was founded with a clear intention: to bring authentic luxury, hospital-grade hygiene, and master craftsmanship together under one distinguished roof.
+            </p>
+            <p className="font-serif text-dark-400 text-base leading-relaxed mb-8">
+              Over 2+ years of excellence, we have transformed everyday grooming into an art form. From seamless skin fades and therapeutic hot stone rituals to custom tribal body ink and our private VIP suite, our sanctuary is designed for those who carry themselves with pride.
+            </p>
+
+            {/* Quick value cards */}
+            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+              <div className="border border-gold-500/20 bg-dark-900/40 p-4">
+                <span className="font-display text-3xl text-gold-400 block">2+</span>
+                <span className="text-[0.65rem] font-sans tracking-widest text-dark-300 uppercase mt-1 block">Years of Mastery</span>
+              </div>
+              <div className="border border-gold-500/20 bg-dark-900/40 p-4">
+                <span className="font-display text-3xl text-gold-400 block">5k+</span>
+                <span className="text-[0.65rem] font-sans tracking-widest text-dark-300 uppercase mt-1 block">Satisfied Clients</span>
+              </div>
+              <div className="border border-gold-500/20 bg-dark-900/40 p-4">
+                <span className="font-display text-3xl text-gold-400 block">100%</span>
+                <span className="text-[0.65rem] font-sans tracking-widest text-dark-300 uppercase mt-1 block">Sterile Guarantee</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <Link to="/about" className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase">
+                Read Our Story &rarr;
+              </Link>
+              <Link to="/booking" className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase">
+                Reserve Appointment
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="relative h-[480px] overflow-hidden border border-gold-500/20">
+              <img
+                src="/images/hero_barber.jpg"
+                alt="Cigaraw Master Barber at work in Bamenda"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/80 via-transparent to-transparent" />
+              <div className="absolute top-6 right-6 bg-dark-950/90 border border-gold-400/40 px-4 py-2 backdrop-blur-sm">
+                <span className="text-xs font-sans tracking-widest text-gold-400 uppercase font-semibold">
+                  Est. 2024 &bull; Bamenda
+                </span>
+              </div>
+              <div className="absolute bottom-6 left-6 right-6 p-6 bg-dark-950/85 backdrop-blur-md border border-gold-400/30">
+                <p className="font-serif italic text-white text-sm">
+                  &ldquo;A haven of dignity, meticulous skill, and warm camaraderie on Commercial Avenue.&rdquo;
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* The 4 Pillars / Dedicated Portals */}
       <section className="py-28 max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
