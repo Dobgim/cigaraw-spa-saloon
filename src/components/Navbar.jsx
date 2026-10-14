@@ -103,7 +103,7 @@ export default function Navbar() {
 
       {/* Luxury Fullscreen Menu Overlay */}
       <div
-        className={`fixed inset-0 z-[995] bg-dark-950/95 backdrop-blur-xl transition-all duration-500 flex flex-col justify-between ${
+        className={`fixed inset-0 z-[995] bg-dark-950/98 backdrop-blur-xl transition-all duration-500 flex flex-col ${
           menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         role="dialog"
@@ -116,19 +116,19 @@ export default function Navbar() {
         </div>
 
         {/* Top bar inside drawer */}
-        <div className="flex items-center justify-between px-6 md:px-12 lg:px-16 py-6 border-b border-gold-500/15">
+        <div className="flex-shrink-0 flex items-center justify-between px-5 md:px-12 lg:px-16 py-4 md:py-6 border-b border-gold-500/15 bg-dark-950">
           <Link
             to="/"
             onClick={() => setMenuOpen(false)}
             className="flex flex-col leading-none"
           >
-            <span className="font-display text-2xl text-white tracking-[0.2em]">CIGARAW</span>
+            <span className="font-display text-xl md:text-2xl text-white tracking-[0.2em]">CIGARAW</span>
             <span className="text-[0.5rem] tracking-[0.45em] text-gold-500 uppercase font-sans mt-0.5">Bamenda, Cameroon</span>
           </Link>
 
           <button
             onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 px-4 py-2 border border-gold-500/25 text-gold-400 hover:text-white hover:border-gold-400 text-xs font-sans tracking-widest uppercase transition-all duration-300"
+            className="flex items-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 border border-gold-500/25 text-gold-400 hover:text-white hover:border-gold-400 text-xs font-sans tracking-widest uppercase transition-all duration-300"
             aria-label="Close menu"
           >
             <span>Close</span>
@@ -136,13 +136,13 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Main Links Body */}
-        <div className="flex-1 overflow-y-auto px-6 md:px-12 lg:px-16 py-10 flex items-center">
-          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        {/* Main Links Body - Scroll starts at top (01 Home) without flex items-center clipping */}
+        <div className="flex-1 overflow-y-auto px-5 md:px-12 lg:px-16 py-6 md:py-10">
+          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-16 items-start lg:items-center">
             {/* Numbered Page List */}
             <div className="lg:col-span-7">
-              <p className="eyebrow mb-6">Directory &bull; Dedicated Pages</p>
-              <ul className="space-y-4 md:space-y-5" role="list">
+              <p className="eyebrow mb-3 md:mb-6 text-[0.65rem] md:text-xs">Directory &bull; Dedicated Pages</p>
+              <ul className="space-y-1.5 sm:space-y-2 md:space-y-4" role="list">
                 {navLinks.map(({ num, label, path }) => {
                   const isActive = location.pathname === path
                   return (
@@ -150,17 +150,17 @@ export default function Navbar() {
                       <Link
                         to={path}
                         onClick={() => setMenuOpen(false)}
-                        className={`group flex items-baseline gap-4 md:gap-6 py-1 transition-all duration-300 ${
-                          isActive ? 'text-gold-400' : 'text-dark-200 hover:text-white'
+                        className={`group flex items-center gap-3 md:gap-5 py-1 transition-all duration-300 ${
+                          isActive ? 'text-gold-400 font-semibold' : 'text-dark-200 hover:text-white'
                         }`}
                       >
-                        <span className="font-sans text-xs md:text-sm text-gold-500/50 group-hover:text-gold-400 transition-colors tracking-widest font-mono">
+                        <span className="font-sans text-[0.7rem] md:text-xs text-gold-500/60 group-hover:text-gold-400 transition-colors tracking-widest font-mono w-6 flex-shrink-0">
                           {num}
                         </span>
-                        <span className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wide group-hover:translate-x-3 transition-transform duration-300 flex items-center gap-3">
+                        <span className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-wide group-hover:translate-x-2 transition-transform duration-300 flex items-center gap-2">
                           {label}
                           {isActive && (
-                            <span className="w-2.5 h-2.5 rounded-full bg-gold-400 inline-block align-middle ml-2" />
+                            <span className="w-2 h-2 rounded-full bg-gold-400 inline-block align-middle ml-1" />
                           )}
                         </span>
                       </Link>
@@ -171,34 +171,34 @@ export default function Navbar() {
             </div>
 
             {/* Right Information & Quick Contacts */}
-            <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-gold-500/15 pt-8 lg:pt-0 lg:pl-12 space-y-8">
+            <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-gold-500/15 pt-6 lg:pt-0 lg:pl-12 space-y-4 md:space-y-6">
               <div>
-                <p className="text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-2">Location</p>
-                <p className="font-serif text-white text-base leading-relaxed">
+                <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Location</p>
+                <p className="font-serif text-white text-xs sm:text-sm md:text-base leading-relaxed">
                   Commercial Avenue, Bamenda<br />
                   North West Region, Cameroon
                 </p>
               </div>
 
               <div>
-                <p className="text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-2">Opening Hours</p>
-                <p className="font-serif text-dark-300 text-sm leading-relaxed">
+                <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Opening Hours</p>
+                <p className="font-serif text-dark-300 text-xs sm:text-sm leading-relaxed">
                   Monday – Saturday: 8:00 AM – 7:00 PM<br />
                   Sunday: 10:00 AM – 4:00 PM
                 </p>
               </div>
 
               <div>
-                <p className="text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-2">Direct Contact</p>
+                <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Direct Contact</p>
                 <div className="space-y-1">
-                  <a href="tel:+237677123456" className="font-serif text-white hover:text-gold-400 text-sm block transition-colors">
+                  <a href="tel:+237677123456" className="font-serif text-white hover:text-gold-400 text-xs sm:text-sm block transition-colors">
                     +237 677 123 456
                   </a>
                   <a
                     href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Saloon%2C%20I%20would%20like%20to%20inquire%20about%20booking"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-sans tracking-widest text-[#25D366] hover:text-[#20ba5a] uppercase mt-2 font-medium transition-colors"
+                    className="inline-flex items-center gap-2 text-xs font-sans tracking-widest text-[#25D366] hover:text-[#20ba5a] uppercase mt-1 font-medium transition-colors"
                   >
                     <WhatsAppIcon className="w-4 h-4 fill-current" />
                     <span>WhatsApp Concierge</span>
@@ -206,11 +206,11 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-2">
                 <Link
                   to="/booking"
                   onClick={() => setMenuOpen(false)}
-                  className="btn-gold w-full text-center py-4 text-xs tracking-widest block font-semibold"
+                  className="btn-gold w-full text-center py-3 text-xs tracking-widest block font-semibold"
                 >
                   Schedule Appointment
                 </Link>
@@ -220,9 +220,9 @@ export default function Navbar() {
         </div>
 
         {/* Footer inside drawer */}
-        <div className="px-6 md:px-12 lg:px-16 py-4 border-t border-gold-500/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-serif text-dark-500">
-          <span>&copy; {new Date().getFullYear()} Cigaraw Saloon &amp; Spa. Bamenda, Cameroon.</span>
-          <span className="font-sans text-[0.65rem] tracking-widest text-gold-500/60 uppercase">
+        <div className="flex-shrink-0 px-5 md:px-12 lg:px-16 py-3 border-t border-gold-500/10 flex flex-col sm:flex-row items-center justify-between gap-1 text-[0.65rem] md:text-xs font-serif text-dark-500 bg-dark-950">
+          <span>&copy; {new Date().getFullYear()} Cigaraw Saloon &amp; Spa. Bamenda.</span>
+          <span className="font-sans text-[0.55rem] md:text-[0.65rem] tracking-widest text-gold-500/60 uppercase">
             Master Barbering &bull; Luxury Spa &bull; Custom Ink
           </span>
         </div>
