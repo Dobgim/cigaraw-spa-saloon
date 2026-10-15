@@ -74,21 +74,36 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative h-[500px] overflow-hidden border border-gold-500/20">
+          <div className="relative flex flex-col items-center">
+            <div className="relative w-full h-[460px] overflow-hidden border border-gold-500/30 bg-dark-900 group">
               <img
                 src="/images/hero_barber.jpg"
                 alt="Master Barber in Bamenda"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover ken-burns-image"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/80 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 p-6 bg-dark-950/85 backdrop-blur-md border border-gold-400/30">
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/40 to-transparent" />
+              
+              {/* Floating Medallion in center */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="relative zoom-in-out-hero">
+                  <div className="absolute -inset-4 rounded-full border border-gold-400/30 animate-spin-slow" />
+                  <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-full p-1.5 bg-gradient-to-tr from-gold-400 via-ruby-600 to-gold-300 shadow-[0_0_40px_rgba(232,168,32,0.4)]">
+                    <img
+                      src="/logo.png"
+                      alt="CiGa Raw Crest"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute bottom-6 left-6 right-6 p-5 bg-dark-950/90 backdrop-blur-md border border-gold-400/30">
                 <p className="font-serif italic text-white text-sm">
-                  &ldquo;A haircut is not just maintenance; it is an elevation of confidence and self-respect.&rdquo;
+                  &ldquo;Beauty &bull; Relaxation &bull; Confidence. A visit to CiGa Raw is an elevation of self-respect and timeless dignity.&rdquo;
                 </p>
                 <p className="text-xs font-sans tracking-widest text-gold-400 uppercase mt-2">
-                  &mdash; Cigaraw Master Barber Philosophy
+                  &mdash; CiGa Raw Salon and Spa Motto
                 </p>
               </div>
             </div>

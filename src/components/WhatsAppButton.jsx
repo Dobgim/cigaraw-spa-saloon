@@ -3,8 +3,8 @@ import WhatsAppIcon from './WhatsAppIcon'
 
 export default function WhatsAppButton() {
   const [hovered, setHovered] = useState(false)
-  const phone = '237677123456'
-  const message = encodeURIComponent('Hello Cigaraw Saloon & Spa Bamenda, I would like to inquire about booking an appointment.')
+  const phone = '237679170410'
+  const message = encodeURIComponent('Hello CiGa Raw Salon and Spa Bamenda, I would like to inquire about booking an appointment.')
   const url = `https://wa.me/${phone}?text=${message}`
 
   return (

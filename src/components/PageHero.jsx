@@ -4,11 +4,11 @@ export default function PageHero({ eyebrow, title, highlight, subtitle, image, b
   return (
     <div className="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden bg-dark-950 border-b border-gold-500/10">
       {/* Background with dark gradient & vignette */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           src={image || '/images/hero_barber.jpg'}
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover ken-burns-image"
           style={{ objectPosition: 'center 35%' }}
         />
         <div className="absolute inset-0 bg-dark-950/85" />

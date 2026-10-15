@@ -78,13 +78,20 @@ export default function Gallery() {
           </div>
         </div>
 
-        {/* Scrolling gallery */}
+        {/* Scrolling gallery with smooth zoom effects */}
         <div className="overflow-hidden py-4 reveal">
           <div className="gallery-scroll">
             {[...images, ...images].map(({ src, alt }, i) => (
-              <div key={i} className="gallery-item">
-                <img src={src} alt={alt} loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+              <div key={i} className="gallery-item group relative overflow-hidden rounded-sm border border-gold-500/10 hover:border-gold-400/40 transition-all duration-500">
+                <img
+                  src={src}
+                  alt={alt}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                  <span className="text-xs font-sans tracking-widest text-gold-300 uppercase font-semibold">{alt}</span>
+                </div>
               </div>
             ))}
           </div>

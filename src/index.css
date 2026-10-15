@@ -215,6 +215,38 @@
     background-clip: text;
   }
 
+  .text-gradient-logo {
+    background: linear-gradient(135deg, #fef08a 0%, #f59e0b 35%, #e8a820 70%, #dc2626 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-ruby {
+    background: linear-gradient(135deg, #f87171 0%, #dc2626 50%, #991b1b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Cinematic Medallion & Zoom Effects ─── */
+  .logo-medallion-ring {
+    position: relative;
+    border-radius: 9999px;
+    background: conic-gradient(from 0deg, #ffd700, #dc2626, #f59e0b, #7f1d1d, #ffd700);
+    padding: 3px;
+    box-shadow: 0 0 35px rgba(232, 168, 32, 0.4), 0 0 65px rgba(185, 28, 28, 0.3);
+  }
+
+  .zoom-in-out-hero {
+    animation: zoomInOut 7s ease-in-out infinite;
+  }
+
+  .ken-burns-image {
+    animation: kenBurns 26s ease-in-out infinite alternate;
+    transform-origin: center center;
+  }
+
   .bg-noise {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
   }
@@ -232,7 +264,7 @@
   .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
 
-/* ─── Preloader ─── */
+/* ─── Enhanced Preloader with Logo ─── */
 #preloader {
   position: fixed;
   inset: 0;

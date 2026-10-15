@@ -87,7 +87,7 @@ export default function Booking() {
             <div className="mt-10 space-y-6 reveal" style={{ transitionDelay: '0.3s' }}>
               {[
                 { icon: '📍', label: 'Location', value: 'Commercial Avenue, Bamenda, NW Region, Cameroon' },
-                { icon: '📞', label: 'Phone',    value: '+237 677 123 456' },
+                { icon: '📞', label: 'Phone',    value: '+237 6 79 17 04 10' },
                 { icon: '✉️', label: 'Email',    value: 'bookings@cigaraw.com' },
                 { icon: '🕐', label: 'Hours',    value: 'Mon–Sat: 8am – 7pm | Sun: 10am – 4pm' },
               ].map(({ icon, label, value }) => (

@@ -14,8 +14,8 @@ const navLinks = [
 
 const socials = [
   { name: 'Instagram', handle: '@cigaraw_saloon', href: '#' },
-  { name: 'Facebook',  handle: 'Cigaraw Saloon Bamenda', href: '#' },
-  { name: 'WhatsApp',  handle: '+237 677 123 456', href: 'https://wa.me/237677123456' },
+  { name: 'Facebook',  handle: 'CiGa Raw Salon & Spa Bamenda', href: '#' },
+  { name: 'WhatsApp',  handle: '+237 6 79 17 04 10', href: 'https://wa.me/237679170410' },
 ]
 
 export default function Footer() {
@@ -36,17 +36,26 @@ export default function Footer() {
 
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <Link to="/" className="inline-flex flex-col leading-none mb-6 group">
-              <span className="font-display text-4xl text-white tracking-[0.2em] group-hover:text-gold-400 transition-colors">
-                CIGARAW
-              </span>
-              <span className="text-[0.55rem] tracking-[0.5em] text-gold-500 uppercase font-sans mt-1">
-                Saloon &amp; Spa &bull; Bamenda
-              </span>
+            <Link to="/" className="inline-flex items-center gap-4 leading-none mb-6 group">
+              <div className="w-14 h-14 rounded-full overflow-hidden p-0.5 border border-gold-400/50 group-hover:border-gold-300 shadow-[0_0_20px_rgba(232,168,32,0.3)] bg-dark-900 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+                <img
+                  src="/logo.png"
+                  alt="CiGa Raw Salon and Spa"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-3xl md:text-4xl text-white tracking-[0.18em] group-hover:text-gold-300 transition-colors">
+                  CiGa Raw
+                </span>
+                <span className="text-[0.55rem] tracking-[0.45em] text-gold-400 uppercase font-sans mt-1">
+                  Salon &amp; Spa &bull; VIP Spa Bamenda
+                </span>
+              </div>
             </Link>
             <div className="w-12 h-px bg-gold-500/50 mb-6" />
             <p className="font-serif text-dark-400 text-sm leading-relaxed max-w-sm">
-              Where artistry meets luxury. Bamenda's premier destination for master barbering, luxury spa therapies, and bespoke tattoo artistry. Commercial Avenue, Bamenda, Cameroon.
+              Where artistry meets luxury. Bamenda's premier destination for master barbering, luxury VIP spa therapies, and bespoke tattoo artistry. Beauty &bull; Relaxation &bull; Confidence. Commercial Avenue, Bamenda, Cameroon.
             </p>
 
             {/* Socials */}
@@ -111,8 +120,8 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-xs font-sans tracking-widest text-gold-500 uppercase">Phone &amp; WhatsApp</p>
-                <a href="tel:+237677123456" className="font-serif text-dark-400 text-sm mt-1 hover:text-gold-400 transition-colors block">
-                  +237 677 123 456
+                <a href="tel:+237679170410" className="font-serif text-dark-400 text-sm mt-1 hover:text-gold-400 transition-colors block">
+                  +237 6 79 17 04 10
                 </a>
               </div>
               <div>

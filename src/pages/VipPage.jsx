@@ -90,7 +90,7 @@ export default function VipPage() {
                 Reserve the Suite
               </Link>
               <a
-                href="https://wa.me/237677123456?text=Hello%20Cigaraw%2C%20I%20would%20like%20to%20reserve%20the%20VIP%20Executive%20Suite"
+                href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%2C%20I%20would%20like%20to%20reserve%20the%20VIP%20Executive%20Suite"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"

@@ -75,7 +75,7 @@ export default function BookingPage() {
   const validate = () => {
     const err = {}
     if (!form.name.trim())  err.name  = 'Full name is required'
-    if (!form.phone.trim()) err.phone = 'Cameroon phone number is required (e.g. +237 677...)'
+    if (!form.phone.trim()) err.phone = 'Cameroon phone number is required (e.g. +237 679...)'
     if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) err.email = 'Valid email address is required'
     if (!form.service)      err.service = 'Please select a service'
     if (!form.date)         err.date    = 'Please select your preferred date'
@@ -160,7 +160,7 @@ export default function BookingPage() {
                 <div>
                   <p className="text-xs font-sans tracking-widest text-gold-400 uppercase">Direct Lines</p>
                   <p className="font-serif text-sm text-white mt-1">
-                    Phone: <a href="tel:+237677123456" className="text-gold-400 hover:underline">+237 677 123 456</a>
+                    Phone: <a href="tel:+237679170410" className="text-gold-400 hover:underline">+237 6 79 17 04 10</a>
                   </p>
                   <p className="font-serif text-sm text-white">
                     Email: <a href="mailto:bookings@cigaraw.com" className="text-gold-400 hover:underline">bookings@cigaraw.com</a>
@@ -170,7 +170,7 @@ export default function BookingPage() {
 
               <div className="mt-8 pt-6 border-t border-gold-500/10">
                 <a
-                  href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Saloon%2C%20I%20have%20an%20inquiry%20about%20booking"
+                  href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%20Salon%20and%20Spa%2C%20I%20have%20an%20inquiry%20about%20booking"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2.5 py-3 border border-[#25D366]/40 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-xs font-sans font-semibold tracking-widest uppercase transition-colors"
@@ -236,7 +236,7 @@ export default function BookingPage() {
 
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <a
-                    href={`https://wa.me/237677123456?text=${whatsappMessage}`}
+                    href={`https://wa.me/237679170410?text=${whatsappMessage}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center justify-center gap-2.5 font-semibold"
@@ -364,7 +364,7 @@ export default function BookingPage() {
                       id="phone"
                       name="phone"
                       type="tel"
-                      placeholder="+237 677 000 000"
+                      placeholder="+237 679 000 000"
                       className="form-input"
                       value={form.phone}
                       onChange={handleChange}

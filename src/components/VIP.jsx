@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const amenities = [
   'Private climate-controlled suite',
@@ -55,11 +56,11 @@ export default function VIP() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Image side */}
           <div className="reveal-left relative">
-            <div className="relative overflow-hidden" style={{ height: '540px' }}>
+            <div className="relative overflow-hidden border border-gold-500/20" style={{ height: '540px' }}>
               <img
                 src="/images/vip_section.jpg"
                 alt="VIP Suite interior"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover ken-burns-image"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-dark-950/60 to-transparent" />
@@ -112,13 +113,13 @@ export default function VIP() {
               ))}
             </div>
 
-            <button
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-              className="btn-gold w-full mt-8 font-semibold py-4 text-xs tracking-widest"
-              id="btn-vip-book"
-            >
-              Reserve Your Suite
-            </button>
+              <Link
+                to="/booking?service=VIP%20Suite%20Experience"
+                className="btn-gold w-full mt-8 font-semibold py-4 text-xs tracking-widest uppercase block text-center shadow-ruby-gold"
+                id="btn-vip-book"
+              >
+                Reserve Your VIP Suite
+              </Link>
           </div>
         </div>
       </div>

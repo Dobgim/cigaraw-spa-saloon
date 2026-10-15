@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const styles = [
   { name: 'Fine Line',       desc: 'Delicate, intricate line work with surgical precision' },
@@ -40,7 +41,7 @@ export default function Tattoo() {
             </h2>
             <div className="gold-divider reveal" style={{ transitionDelay: '0.2s' }} />
             <p className="font-serif text-dark-300 text-lg leading-relaxed reveal" style={{ transitionDelay: '0.25s' }}>
-              At Cigaraw's tattoo studio, your skin is the canvas and our artists are the storytellers. With a private consultation process and custom designs tailored to your narrative, every piece is a singular work of wearable art.
+              At CiGa Raw's tattoo studio in Bamenda, your skin is the canvas and our resident artists are the storytellers. With a private consultation process and custom sterile designs tailored to your narrative, every piece is a singular work of wearable art.
             </p>
 
             {/* Styles grid */}
@@ -48,26 +49,30 @@ export default function Tattoo() {
               {styles.map(({ name, desc }, i) => (
                 <div
                   key={name}
-                  className="reveal border border-gold-500/10 p-5 hover:border-gold-400/40 transition-colors duration-300 group"
+                  className="reveal border border-gold-500/10 p-5 hover:border-gold-400/40 transition-colors duration-300 group hover:shadow-ruby-gold"
                   style={{ transitionDelay: `${0.3 + i * 0.08}s` }}
                 >
-                  <h4 className="font-display text-xl text-white tracking-widest group-hover:text-gold-400 transition-colors duration-300">{name}</h4>
+                  <h4 className="font-display text-xl text-white tracking-widest group-hover:text-gold-300 transition-colors duration-300">{name}</h4>
                   <p className="font-serif text-dark-400 text-xs mt-2 leading-relaxed">{desc}</p>
                 </div>
               ))}
             </div>
 
-            <div className="flex gap-4 mt-10 reveal" style={{ transitionDelay: '0.7s' }}>
-              <button
-                onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-                className="btn-gold font-semibold px-8 py-4 text-xs tracking-widest"
+            <div className="flex flex-wrap gap-4 mt-10 reveal" style={{ transitionDelay: '0.7s' }}>
+              <Link
+                to="/booking?service=Tattoo%20Consultation"
+                className="btn-gold font-semibold px-8 py-4 text-xs tracking-widest uppercase shadow-ruby-gold"
                 id="btn-tattoo-consult"
               >
                 Book Consultation
-              </button>
-              <button className="btn-outline-gold px-8 py-4 text-xs tracking-widest">
-                View Portfolio
-              </button>
+              </Link>
+              <Link
+                to="/tattoo"
+                className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase"
+              >
+                View Full Studio
+              </Link>
+            </div>
             </div>
           </div>
 

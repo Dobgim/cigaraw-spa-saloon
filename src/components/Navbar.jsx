@@ -50,15 +50,24 @@ export default function Navbar() {
         {/* Brand Logo */}
         <Link
           to="/"
-          className="flex flex-col leading-none group"
-          aria-label="Cigaraw Saloon & Spa Homepage"
+          className="flex items-center gap-3 md:gap-3.5 group"
+          aria-label="CiGa Raw Salon and Spa Homepage"
         >
-          <span className="font-display text-2xl md:text-3xl text-white tracking-[0.2em] group-hover:text-gold-400 transition-colors duration-300">
-            CIGARAW
-          </span>
-          <span className="text-[0.5rem] md:text-[0.55rem] tracking-[0.45em] text-gold-500 uppercase font-sans mt-0.5">
-            Saloon &amp; Spa &bull; Bamenda
-          </span>
+          <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden p-0.5 border border-gold-400/50 group-hover:border-gold-300 group-hover:scale-105 shadow-[0_0_15px_rgba(232,168,32,0.35)] transition-all duration-300 bg-dark-900 flex-shrink-0">
+            <img
+              src="/logo.png"
+              alt="CiGa Raw Logo"
+              className="w-full h-full object-cover rounded-full"
+            />
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="font-display text-xl md:text-2xl text-white tracking-[0.16em] group-hover:text-gold-300 transition-colors duration-300">
+              CiGa Raw
+            </span>
+            <span className="text-[0.5rem] md:text-[0.55rem] tracking-[0.35em] text-gold-400 uppercase font-sans mt-0.5">
+              Salon &amp; Spa &bull; Bamenda
+            </span>
+          </div>
         </Link>
 
         {/* Right Actions: Direct Booking CTA + Clean Luxury Menu Trigger */}
@@ -191,11 +200,11 @@ export default function Navbar() {
               <div>
                 <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Direct Contact</p>
                 <div className="space-y-1">
-                  <a href="tel:+237677123456" className="font-serif text-white hover:text-gold-400 text-xs sm:text-sm block transition-colors">
-                    +237 677 123 456
+                  <a href="tel:+237679170410" className="font-serif text-white hover:text-gold-400 text-xs sm:text-sm block transition-colors">
+                    +237 6 79 17 04 10
                   </a>
                   <a
-                    href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Saloon%2C%20I%20would%20like%20to%20inquire%20about%20booking"
+                    href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%20Salon%20and%20Spa%2C%20I%20would%20like%20to%20inquire%20about%20booking"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-xs font-sans tracking-widest text-[#25D366] hover:text-[#20ba5a] uppercase mt-1 font-medium transition-colors"

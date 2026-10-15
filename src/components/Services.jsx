@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const services = [
   {
@@ -74,32 +75,37 @@ export default function Services() {
         {/* Service cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {services.map(({ id, image, tag, title, desc, href }, i) => (
-            <a
+            <Link
               key={id}
-              href={href}
-              onClick={e => { e.preventDefault(); document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }) }}
-              className="service-card reveal group block"
+              to={id === 'barbing' ? '/barbing' : id === 'spa' ? '/vip' : '/tattoo'}
+              className="service-card reveal group block border border-gold-500/15 hover:border-gold-400/50 hover:shadow-ruby-gold transition-all duration-500 rounded-sm"
               style={{ transitionDelay: `${i * 0.12}s` }}
               aria-label={title}
             >
-              <div className="overflow-hidden">
-                <img src={image} alt={title} loading="lazy" />
+              <div className="overflow-hidden relative">
+                <img
+                  src={image}
+                  alt={title}
+                  loading="lazy"
+                  className="w-full h-64 object-cover transform transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-300" />
               </div>
               <div className="p-8">
                 <span className="vip-badge mb-4 inline-block">{tag}</span>
-                <h3 className="font-display text-3xl text-white tracking-wider mt-3 group-hover:text-gold-400 transition-colors duration-300">
+                <h3 className="font-display text-3xl text-white tracking-wider mt-3 group-hover:text-gold-300 transition-colors duration-300">
                   {title}
                 </h3>
                 <div className="gold-divider" />
                 <p className="font-serif text-dark-300 leading-relaxed text-base">{desc}</p>
-                <div className="mt-6 flex items-center gap-2 text-gold-400 text-xs font-sans tracking-widest uppercase">
+                <div className="mt-6 flex items-center gap-2 text-gold-400 text-xs font-sans tracking-widest uppercase group-hover:text-gold-300">
                   <span>Discover More</span>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="group-hover:translate-x-1 transition-transform duration-300">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="group-hover:translate-x-2 transition-transform duration-300">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

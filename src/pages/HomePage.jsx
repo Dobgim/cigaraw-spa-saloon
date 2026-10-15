@@ -304,7 +304,7 @@ export default function HomePage() {
               Schedule Appointment
             </Link>
             <a
-              href="https://wa.me/237677123456?text=Hello%20Cigaraw%2C%20I%20would%20like%20to%20book%20an%20appointment"
+              href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%2C%20I%20would%20like%20to%20book%20an%20appointment"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"

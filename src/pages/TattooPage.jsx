@@ -221,7 +221,7 @@ export default function TattooPage() {
               Book Studio Consultation
             </Link>
             <a
-              href="https://wa.me/237677123456?text=Hello%20Cigaraw%20Tattoo%20Studio%2C%20I%20have%20an%20idea%20for%20a%20tattoo"
+              href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%20Tattoo%20Studio%2C%20I%20have%20an%20idea%20for%20a%20tattoo"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
