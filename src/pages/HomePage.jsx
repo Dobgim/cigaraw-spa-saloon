@@ -245,14 +245,14 @@ function Disciplines() {
   )
 }
 
-// Vertical scroll drives a horizontal strip of photos
+// Photo strip that drifts sideways as the section scrolls past (no pinning)
 function DayStrip() {
   const ref = useRef(null)
   const trackRef = useRef(null)
   const [distance, setDistance] = useState(0)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const x = useTransform(scrollYProgress, [0, 1], [0, -distance])
-  const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const x = useTransform(scrollYProgress, [0.15, 0.85], [0, -distance])
+  const bar = useTransform(scrollYProgress, [0.15, 0.85], ['0%', '100%'])
 
   useEffect(() => {
     const measure = () => {
@@ -264,9 +264,9 @@ function DayStrip() {
   }, [])
 
   return (
-    <section ref={ref} className="relative bg-bone" style={{ height: `calc(100vh + ${distance}px)` }}>
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        <div className="wrap flex items-end justify-between gap-6 mb-8 lg:mb-12">
+    <section ref={ref} className="relative bg-bone py-20 lg:py-28 overflow-hidden">
+      <div>
+        <div className="wrap flex items-end justify-between gap-6 mb-8 lg:mb-10">
           <div>
             <Label num="03" className="text-ink-500 mb-4">A day on Commercial Ave</Label>
             <h2 className="h2">Open to close.</h2>
@@ -276,13 +276,17 @@ function DayStrip() {
           </div>
         </div>
 
-        <motion.div ref={trackRef} style={{ x }} className="flex gap-5 lg:gap-8 pl-5 sm:pl-8 lg:pl-12 pr-[10vw] w-max">
+        <motion.div
+          ref={trackRef}
+          style={{ x }}
+          className="flex items-start gap-5 lg:gap-6 pl-5 sm:pl-8 lg:pl-12 min-[1440px]:pl-[calc((100vw-1440px)/2+3rem)] pr-[6vw] w-max"
+        >
           {day.map((d, i) => (
-            <figure key={d.time} className={`shrink-0 ${i % 2 ? 'w-[70vw] sm:w-[34vw] lg:w-[26vw] mt-16' : 'w-[78vw] sm:w-[42vw] lg:w-[32vw]'}`}>
-              <div className={`overflow-hidden ${i % 2 ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
+            <figure key={d.time} className={`shrink-0 ${i % 2 ? 'mt-10' : ''}`}>
+              <div className={`overflow-hidden ${i % 2 ? 'aspect-[3/4] h-[300px] lg:h-[min(42vh,380px)]' : 'aspect-[4/3] h-[240px] lg:h-[min(34vh,300px)]'}`}>
                 <img src={d.image} alt="" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" loading="lazy" />
               </div>
-              <figcaption className="mt-4 flex gap-4">
+              <figcaption className="mt-4 flex gap-4 w-0 min-w-full">
                 <span className="label text-ember pt-1">{d.time}</span>
                 <span className="text-ink-600 max-w-xs">{d.caption}</span>
               </figcaption>
