@@ -2,18 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
+import { CLASSIC, FACE_BODY } from '../menu'
 import { ArrowDot, easeOut, ImageReveal, Label, Lines, Marquee, Reveal } from '../components/motion'
 
-const cuts = [
-  { name: 'Classic precision cut',     desc: 'Scissor and clipper styling to your natural hairline', price: '3,000',  time: '35 min' },
-  { name: 'Seamless skin fade',        desc: 'Low, mid, high or taper, blended with razor detail',   price: '4,500',  time: '50 min' },
-  { name: 'Beard sculpt & definition', desc: 'Symmetrical shape, razor cheek lines, beard oil',      price: '2,500',  time: '30 min' },
-  { name: 'Hot towel straight razor',  desc: 'Steamed eucalyptus towels, rich lather, smooth shave',  price: '4,000',  time: '45 min' },
-  { name: 'Shape-up & line',           desc: 'Crisp edges, temple tapers and neck clean-up',         price: '2,000',  time: '20 min' },
-  { name: 'Hair tint & darkening',     desc: 'Natural black or brown, or grey beard coverage',       price: '4,000',  time: '40 min' },
-  { name: 'Father & son duo',          desc: 'Two chairs side by side — a proper ritual',            price: '7,000',  time: '60 min' },
-  { name: 'Full signature experience', desc: 'Fade, beard sculpt, hot towel shave and face massage', price: '10,000', time: '80 min' },
-]
+const cuts = [...CLASSIC, FACE_BODY.find(f => f.name === 'Dreadlock renewal')]
 
 // Each style looks for its own photo in public/images/styles/; until one is added it
 // falls back to an existing shop photo
@@ -92,10 +84,10 @@ export default function BarbingPage({ ready }) {
         index="03"
         kicker="Barbering"
         lines={[<>Clean lines.</>, <><span className="accent text-ember">No</span> shortcuts.</>]}
-        intro="Fades, tapers, beard work and the old-school hot towel shave — cut by barbers who know Afro hair inside out."
+        intro="Shaving, sporting waves, colour and dreadlock renewal — by barbers who know Afro hair inside out."
         image="/images/gallery_haircut.jpg"
         imageAlt="Fresh mid skin fade with a groomed beard"
-        aside={<Link to="/booking?service=Skin%20Fade" className="btn-ember group !pr-2">Book a chair <ArrowDot className="bg-paper/15" /></Link>}
+        aside={<Link to="/booking?service=Normal%20shaving" className="btn-ember group !pr-2">Book a chair <ArrowDot className="bg-paper/15" /></Link>}
       />
 
       <section className="bg-paper py-24 lg:py-36">
@@ -122,7 +114,7 @@ export default function BarbingPage({ ready }) {
           <div className="lg:col-span-4 lg:sticky lg:top-32 self-start">
             <Label num="B" className="text-paper/50 mb-6">Price list</Label>
             <h2 className="h2"><Lines lines={[<>The chair</>, <span key="y" className="accent text-ember">menu.</span>]} /></h2>
-            <p className="text-paper/60 text-lg mt-6 max-w-xs">FCFA. No hidden fees. Walk-ins welcome — bookings go first.</p>
+            <p className="text-paper/60 text-lg mt-6 max-w-xs">Prices in FCFA. Ranges depend on your hair and the products used — we confirm before we start.</p>
           </div>
           <ul className="lg:col-span-8 border-t border-paper/15">
             {cuts.map((c, i) => (
@@ -133,11 +125,10 @@ export default function BarbingPage({ ready }) {
                       <span className="text-2xl lg:text-3xl font-medium tracking-tight transition-colors group-hover:text-ember">{c.name}</span>
                       <span className="leader hidden sm:block" />
                     </div>
-                    <p className="text-paper/50 mt-1">{c.desc}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl lg:text-3xl font-medium tabular-nums">{c.price}</span>
-                    <span className="block label text-paper/40 mt-1">{c.time}</span>
+                    <span className="text-2xl lg:text-3xl font-medium tabular-nums whitespace-nowrap">{c.price}</span>
+                    <span className="block label text-paper/40 mt-1">FCFA</span>
                   </div>
                 </Link>
               </Reveal>

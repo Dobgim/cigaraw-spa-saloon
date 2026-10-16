@@ -5,45 +5,20 @@ import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ease, easeOut, Reveal } from '../components/motion'
 import { ADDRESS, EMAIL, HOURS, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
+import { MENU } from '../menu'
 
 const serviceOptions = [
-  { group: 'Barbering', name: 'Classic Precision Cut (3,000 FCFA)' },
-  { group: 'Barbering', name: 'Signature Skin Fade (4,500 FCFA)' },
-  { group: 'Barbering', name: 'Beard Sculpt & Treatment (2,500 FCFA)' },
-  { group: 'Barbering', name: 'Traditional Hot Towel Shave (4,000 FCFA)' },
-  { group: 'Barbering', name: 'Hairline Shape-Up & Line (2,000 FCFA)' },
-  { group: 'Barbering', name: 'Hair Tint & Darkening (4,000 FCFA)' },
-  { group: 'Barbering', name: 'Full Signature Hair & Beard (10,000 FCFA)' },
-  { group: 'Barbering', name: 'Father & Son Duo Cut (7,000 FCFA)' },
-
-  { group: 'Spa & Wellness', name: 'Gentleman’s Deep Cleanse Facial (10,000 FCFA)' },
-  { group: 'Spa & Wellness', name: 'Royal Botanical Facial (15,000 FCFA)' },
-  { group: 'Spa & Wellness', name: 'Full Body Deep Tissue Massage (10,000 FCFA)' },
-  { group: 'Spa & Wellness', name: 'Heated Basalt Stone Massage (12,000 FCFA)' },
-  { group: 'Spa & Wellness', name: 'Scalp & Neck Aromatherapy (8,000 FCFA)' },
-  { group: 'Spa & Wellness', name: 'Hand & Foot Grooming (9,000 FCFA)' },
-
-  { group: 'VIP Suite', name: 'Executive Suite Day Pass (20,000 FCFA)' },
-  { group: 'VIP Suite', name: 'Royal VIP Rejuvenation Ritual (35,000 FCFA)' },
-  { group: 'VIP Suite', name: 'Black Card Membership enquiry' },
-
-  { group: 'Packages', name: 'The Groom package (25,000 FCFA)' },
-  { group: 'Packages', name: 'Father & Son package (10,000 FCFA)' },
-  { group: 'Packages', name: 'Monthly Member (40,000 FCFA / month)' },
-
-  { group: 'Tattoo', name: 'Tattoo Consultation & Sketch (5,000 FCFA)' },
-  { group: 'Tattoo', name: 'Fine-Line Tattoo Session (from 15,000 FCFA)' },
-  { group: 'Tattoo', name: 'Afro-Centric Blackwork Session (from 30,000 FCFA)' },
+  ...MENU.flatMap(m => m.items.map(it => ({ group: m.group, name: `${it.name} (${it.price} FCFA)` }))),
+  { group: 'Tattoo', name: 'Tattoo consultation (priced per design)' },
 ]
 
 const groups = [...new Set(serviceOptions.map(s => s.group))]
 
 const specialists = [
   'First available',
-  'Senior fade barber',
-  'Beard & shave specialist',
-  'Lead spa therapist',
-  'Resident tattoo artist',
+  'Barber',
+  'Spa & beauty therapist',
+  'Tattoo artist',
 ]
 
 const timeSlots = ['08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:15']
@@ -270,7 +245,7 @@ export default function BookingPage({ ready }) {
                   </Step>
 
                   <div className="border-t border-ink/15 pt-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                    <p className="text-ink-500 max-w-sm">No deposit needed for barbering. We&rsquo;ll confirm on WhatsApp or by phone.</p>
+                    <p className="text-ink-500 max-w-sm">VIP bookings carry a 10,000 FCFA reservation fee. We&rsquo;ll confirm every booking on WhatsApp or by phone.</p>
                     <button type="submit" className="btn-ember !px-10 !py-5 text-base">Request booking</button>
                   </div>
                 </motion.form>

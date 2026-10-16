@@ -5,14 +5,15 @@ import PageHero from '../components/PageHero'
 import { ArrowDot, ease, easeOut, Label, Lines, Reveal } from '../components/motion'
 
 const items = [
-  { id: 1, title: 'Mid skin fade & groomed beard', category: 'Barbering', image: '/images/gallery_haircut.jpg', desc: 'Crisp hairline, natural beard shape, gradual skin blend.', span: 'lg:col-span-7 aspect-[4/3]' },
-  { id: 2, title: 'Saturday morning on the floor', category: 'Barbering', image: '/images/hero_barber.jpg', desc: 'Clipper work in the main shop on Commercial Avenue.', span: 'lg:col-span-5 aspect-[4/5]' },
-  { id: 3, title: 'Fade detailing',                category: 'Barbering', image: '/images/barber_service.jpg', desc: 'Close focus on the transition and the temple line.', span: 'lg:col-span-4 aspect-[3/4]' },
-  { id: 4, title: 'Facial massage',                category: 'Spa', image: '/images/spa_service.jpg', desc: 'Balancing facial acupressure in the spa room.', span: 'lg:col-span-8 aspect-[16/10]' },
+  { id: 9, title: 'Fresh out of the chair', category: 'Barbering', image: '/images/team_shop.jpg', desc: 'Clients and crew on the CiGa Raw floor.', span: 'lg:col-span-5 aspect-[3/4]' },
+  { id: 1, title: 'Mid skin fade & groomed beard', category: 'Barbering', image: '/images/gallery_haircut.jpg', desc: 'Crisp hairline, natural beard shape, gradual skin blend.', span: 'lg:col-span-7 aspect-[4/3] lg:aspect-auto' },
+  { id: 2, title: 'Saturday morning on the floor', category: 'Barbering', image: '/images/hero_barber.jpg', desc: 'Clipper work in the main shop on Commercial Avenue.', span: 'lg:col-span-8 aspect-[16/10]' },
+  { id: 3, title: 'Fade detailing',                category: 'Barbering', image: '/images/barber_service.jpg', desc: 'Close focus on the transition and the temple line.', span: 'lg:col-span-4 aspect-[3/4] lg:aspect-auto' },
+  { id: 4, title: 'Facial massage',                category: 'Spa', image: '/images/spa_service.jpg', desc: 'Balancing facial acupressure in the spa room.', span: 'lg:col-span-6 aspect-[4/3]' },
   { id: 5, title: 'The stone room',                category: 'Spa', image: '/images/spa_suite.jpg', desc: 'Stone walls, candlelight and two massage tables.', span: 'lg:col-span-6 aspect-[4/3]' },
-  { id: 6, title: 'The VIP Suite',                 category: 'VIP', image: '/images/vip_section.jpg', desc: 'Single-client lounge with leather chairs and a private bar.', span: 'lg:col-span-6 aspect-[4/3]' },
   { id: 7, title: 'Forearm tribal, session one',   category: 'Tattoo', image: '/images/tattoo_section.jpg', desc: 'Sterile needlework and custom Grassfields linework.', span: 'lg:col-span-5 aspect-[3/4]' },
-  { id: 8, title: 'Blackwork detail',              category: 'Tattoo', image: '/images/tattoo_art.jpg', desc: 'High-density pigment in Cameroonian geometric patterns.', span: 'lg:col-span-7 aspect-[4/3]' },
+  { id: 8, title: 'Blackwork detail',              category: 'Tattoo', image: '/images/tattoo_art.jpg', desc: 'High-density pigment in Cameroonian geometric patterns.', span: 'lg:col-span-7 aspect-[4/3] lg:aspect-auto' },
+  { id: 6, title: 'The VIP Suite',                 category: 'VIP', image: '/images/vip_section.jpg', desc: 'Single-client lounge with leather chairs and a private bar.', span: 'lg:col-span-12 aspect-[4/3] lg:aspect-[21/9]' },
 ]
 
 const categories = ['All', 'Barbering', 'Spa', 'VIP', 'Tattoo']

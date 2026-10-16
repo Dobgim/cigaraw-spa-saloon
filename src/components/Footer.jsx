@@ -8,10 +8,15 @@ export default function Footer() {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] })
   const y = useTransform(scrollYProgress, [0, 1], ['30%', '0%'])
+  const bgY = useTransform(scrollYProgress, [0, 1], ['-15%', '0%'])
 
   return (
     <footer ref={ref} className="relative bg-ink text-paper overflow-hidden">
-      <div className="wrap pt-24 lg:pt-36 pb-10">
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[720px] lg:h-[640px] overflow-hidden">
+        <motion.img src="/images/team_shop.jpg" alt="" style={{ y: bgY }} className="w-full h-[130%] object-cover object-[center_20%] opacity-35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/70 to-ink" />
+      </div>
+      <div className="wrap relative pt-24 lg:pt-36 pb-10">
         <div className="grid lg:grid-cols-12 gap-12 pb-20 border-b border-paper/10">
           <div className="lg:col-span-7">
             <p className="label text-paper/40 mb-6">Your chair is waiting</p>
@@ -69,7 +74,7 @@ export default function Footer() {
       <motion.p
         style={{ y }}
         aria-hidden="true"
-        className="display text-[23vw] leading-[0.75] text-center text-ember select-none -mb-[3vw] whitespace-nowrap"
+        className="relative display text-[23vw] leading-[0.75] text-center text-ember select-none -mb-[3vw] whitespace-nowrap"
       >
         CiGa Raw
       </motion.p>

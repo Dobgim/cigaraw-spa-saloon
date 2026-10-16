@@ -5,6 +5,7 @@ import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ArrowDot, easeOut, Label, Lines, Reveal } from '../components/motion'
 import { wa } from '../site'
+import { TEETH_WHITENING, VIP } from '../menu'
 
 const amenities = [
   { title: 'Sound-isolated room',     desc: 'Take a call, close your eyes, or just think. Nobody hears a thing.' },
@@ -13,24 +14,6 @@ const amenities = [
   { title: 'Private rain shower',     desc: 'Cedar-finished en-suite to freshen up after a massage.' },
   { title: 'Personal attendant',      desc: 'One person handling your timing, drinks and any request.' },
   { title: 'Screens & sound',         desc: 'Fast fibre, streaming, and jazz or Afrobeats at the volume you choose.' },
-]
-
-const rituals = [
-  { name: 'Royal botanical facial',      time: '90 min',  price: '15,000', desc: 'Gold infusion serum, ultrasonic cleanse, African shea hydration.' },
-  { name: 'Heated basalt stone massage', time: '75 min',  price: '12,000', desc: 'Volcanic stones worked along the spine and shoulders.' },
-  { name: 'Executive deep tissue',       time: '60 min',  price: '10,000', desc: 'Firm pressure for chronic tension and travel fatigue.' },
-  { name: 'Scalp & neck aromatherapy',   time: '45 min',  price: '8,000',  desc: 'Warm peppermint and eucalyptus oil for a tired head.' },
-  { name: 'Hand & foot grooming',        time: '60 min',  price: '9,000',  desc: 'Paraffin dip, nail shaping, cuticle care, calf massage.' },
-  { name: 'VIP full body ritual',        time: '3.5 hrs', price: '35,000', desc: 'Cut, beard sculpt, body scrub, massage and facial.' },
-]
-
-const tiers = [
-  { tier: 'Executive Pass', price: '25,000', unit: 'per session', desc: 'For the occasional day you need complete privacy.',
-    perks: ['2 hours in the suite', 'Signature cut + beard sculpt', 'Drinks included', 'Priority booking'] },
-  { tier: 'Black Card', price: '50,000', unit: 'per month', desc: 'Our membership for regulars who want the suite every time.',
-    perks: ['Unlimited suite sessions', '4 cuts + beard sculpts', '2 full body massages', 'Private entrance', '15% off for guests'], featured: true },
-  { tier: 'Private Group', price: 'On request', unit: '', desc: 'Full buy-out for wedding parties, retreats or delegations.',
-    perks: ['The whole VIP floor', 'Catering & cigars', 'Several dedicated barbers', 'Your schedule'] },
 ]
 
 function SuiteImage() {
@@ -94,11 +77,11 @@ export default function VipPage({ ready }) {
       <section className="bg-ink text-paper py-24 lg:py-36">
         <div className="wrap grid lg:grid-cols-12 gap-12">
           <div className="lg:col-span-4 lg:sticky lg:top-32 self-start">
-            <Label num="B" className="text-paper/50 mb-6">Suite rituals</Label>
+            <Label num="B" className="text-paper/50 mb-6">VIP menu</Label>
             <h2 className="h2"><Lines lines={[<>Slow down,</>, <span key="b" className="accent text-ember">properly.</span>]} /></h2>
           </div>
           <ul className="lg:col-span-8 border-t border-paper/15">
-            {rituals.map((r, i) => (
+            {VIP.map((r, i) => (
               <Reveal as="li" key={r.name} delay={(i % 3) * 0.05}>
                 <Link to={`/booking?service=${encodeURIComponent(r.name)}`} className="menu-row group">
                   <div>
@@ -106,48 +89,52 @@ export default function VipPage({ ready }) {
                       <span className="text-2xl lg:text-3xl font-medium tracking-tight transition-colors group-hover:text-ember">{r.name}</span>
                       <span className="leader hidden sm:block" />
                     </div>
-                    <p className="text-paper/50 mt-1">{r.desc}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl lg:text-3xl font-medium tabular-nums">{r.price}</span>
-                    <span className="block label text-paper/40 mt-1">{r.time}</span>
+                    <span className="text-2xl lg:text-3xl font-medium tabular-nums whitespace-nowrap">{r.price}</span>
+                    <span className="block label text-paper/40 mt-1">FCFA</span>
                   </div>
                 </Link>
               </Reveal>
             ))}
           </ul>
+          <p className="lg:col-span-8 lg:col-start-5 text-paper/50 -mt-6">The reservation fee secures the suite for your visit.</p>
         </div>
       </section>
 
       <section className="bg-bone py-24 lg:py-36">
         <div className="wrap">
-          <Label num="C" className="text-ink-500 mb-6">Membership</Label>
-          <h2 className="h2 mb-16"><Lines lines={[<>Make it a</>, <span key="c" className="accent text-ember">habit.</span>]} /></h2>
-          <div className="grid lg:grid-cols-3 gap-5">
-            {tiers.map((t, i) => (
-              <Reveal key={t.tier} delay={i * 0.1}>
-                <motion.article
-                  whileHover={{ y: -8 }}
-                  transition={{ duration: 0.5, ease: easeOut }}
-                  className={`h-full flex flex-col p-8 lg:p-10 rounded-[2px] ${t.featured ? 'bg-ink text-paper' : 'bg-paper'}`}
-                >
-                  <div className="flex justify-between items-center">
-                    <h3 className="display text-4xl">{t.tier}</h3>
-                    {t.featured && <span className="label bg-ember text-ink px-2.5 py-1 rounded-full">Popular</span>}
-                  </div>
-                  <p className={`mt-3 ${t.featured ? 'text-paper/60' : 'text-ink-600'}`}>{t.desc}</p>
-                  <p className="mt-10 text-4xl font-medium tabular-nums">
-                    {t.price} {t.unit && <span className="text-base opacity-60">FCFA {t.unit}</span>}
-                  </p>
-                  <ul className={`mt-8 pt-8 border-t space-y-2 flex-1 ${t.featured ? 'border-paper/15' : 'border-ink/15'}`}>
-                    {t.perks.map(p => <li key={p} className="flex gap-2"><span className="text-ember">—</span>{p}</li>)}
-                  </ul>
-                  <Link to={`/booking?service=${encodeURIComponent('Executive Suite')}`} className={`mt-10 group !pr-2 self-start ${t.featured ? 'btn-ember' : 'btn-line'}`}>
-                    Enquire <ArrowDot className={t.featured ? 'bg-paper/15' : 'bg-ink/5'} />
-                  </Link>
-                </motion.article>
+          <div className="grid lg:grid-cols-12 gap-12 items-end">
+            <div className="lg:col-span-5">
+              <Label num="C" className="text-ink-500 mb-6">VIP teeth whitening</Label>
+              <h2 className="h2"><Lines lines={[<>A brighter smile</>, <span key="c" className="accent text-ember">in three visits.</span>]} /></h2>
+              <Reveal className="mt-6 text-ink-600 text-lg max-w-sm">
+                Done in the privacy of the VIP suite. Pay for the first two sessions — the third one is free.
               </Reveal>
-            ))}
+              <Reveal delay={0.1} className="mt-8">
+                <Link to={`/booking?service=${encodeURIComponent('VIP teeth whitening')}`} className="btn-ink group !pr-2">
+                  Book whitening <ArrowDot className="bg-paper/15" />
+                </Link>
+              </Reveal>
+            </div>
+            <div className="lg:col-span-6 lg:col-start-7 grid sm:grid-cols-3 gap-4">
+              {TEETH_WHITENING.map((t, i) => (
+                <Reveal key={t.session} delay={i * 0.1}>
+                  <motion.div
+                    whileHover={{ y: -8 }}
+                    transition={{ duration: 0.5, ease: easeOut }}
+                    className={`h-full min-h-[220px] p-7 rounded-[2px] flex flex-col justify-between ${i === 2 ? 'bg-ember text-ink' : i === 1 ? 'bg-ink text-paper' : 'bg-paper'}`}
+                  >
+                    <span className="label opacity-60">0{i + 1}</span>
+                    <div>
+                      <p className="opacity-70">{t.session}</p>
+                      <p className="display text-5xl mt-2">{t.price}</p>
+                      {i < 2 && <p className="label opacity-50 mt-2">FCFA</p>}
+                    </div>
+                  </motion.div>
+                </Reveal>
+              ))}
+            </div>
           </div>
           <p className="mt-10 text-ink-500">Booking ahead is strongly recommended — there is only one suite.</p>
         </div>

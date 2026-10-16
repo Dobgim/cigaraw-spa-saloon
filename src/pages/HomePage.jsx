@@ -3,21 +3,22 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
 import { ADDRESS, HOURS, PHONE_DISPLAY, PHONE_TEL } from '../site'
+import { CLASSIC, FACE_BODY, VIP } from '../menu'
 
 const disciplines = [
-  { num: '01', title: 'Barbering', note: 'Fades, shape-ups, hot towel shaves', image: '/images/gallery_haircut.jpg', path: '/barbing' },
-  { num: '02', title: 'Spa',       note: 'Facials, stone & deep tissue massage', image: '/images/spa_service.jpg', path: '/services' },
-  { num: '03', title: 'VIP Suite', note: 'One client, one room, no rush',        image: '/images/vip_section.jpg',  path: '/vip' },
+  { num: '01', title: 'Barbering', note: 'Shaving, sporting waves, black & treatment', image: '/images/gallery_haircut.jpg', path: '/barbing' },
+  { num: '02', title: 'Spa',       note: 'Face treatments, scrubs, massage, mani-pedi', image: '/images/spa_service.jpg', path: '/services' },
+  { num: '03', title: 'VIP Suite', note: 'VIP shaving, facials & teeth whitening',        image: '/images/vip_section.jpg',  path: '/vip' },
   { num: '04', title: 'Tattoo',    note: 'Fine-line, blackwork, Grassfields motifs', image: '/images/tattoo_section.jpg', path: '/tattoo' },
 ]
 
 const shortMenu = [
-  { name: 'Classic precision cut',      time: '40 min', price: '3,000' },
-  { name: 'Signature skin fade',        time: '50 min', price: '4,500' },
-  { name: 'Hot towel straight razor',   time: '45 min', price: '4,000' },
-  { name: 'Deep cleanse facial',        time: '60 min', price: '10,000' },
-  { name: 'Heated basalt stone massage', time: '75 min', price: '12,000' },
-  { name: 'Executive suite day pass',   time: '2 hrs',  price: '20,000' },
+  { ...CLASSIC[0], group: 'Classic' },
+  { ...CLASSIC[3], group: 'Classic' },
+  { ...FACE_BODY[1], group: 'Face & body' },
+  { ...FACE_BODY[6], group: 'Face & body' },
+  { ...FACE_BODY[8], group: 'Face & body' },
+  { ...VIP[1], group: 'VIP' },
 ]
 
 const day = [
@@ -38,14 +39,35 @@ const reviews = [
 function Hero({ ready }) {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'])
   const headY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%'])
 
   return (
-    <section ref={ref} className="relative bg-paper pt-28 lg:pt-32 pb-16 overflow-hidden">
-      <div className="wrap">
+    <section ref={ref} className="relative bg-ink text-paper min-h-[100svh] pt-28 lg:pt-32 pb-14 overflow-hidden flex flex-col">
+      {/* Background photo: the CiGa Raw floor */}
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-0 lg:left-auto lg:w-[64%]"
+        initial={{ clipPath: 'inset(0% 0% 0% 100%)' }}
+        animate={ready ? { clipPath: 'inset(0% 0% 0% 0%)' } : {}}
+        transition={{ duration: 1.6, ease, delay: 0.2 }}
+      >
+        <motion.img
+          src="/images/team_shop.jpg"
+          alt=""
+          style={{ y: imgY }}
+          className="absolute inset-0 w-full h-[115%] object-cover object-[center_18%]"
+          initial={{ scale: 1.25 }}
+          animate={ready ? { scale: 1 } : {}}
+          transition={{ duration: 2.4, ease: easeOut, delay: 0.2 }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/40 lg:bg-gradient-to-r lg:from-ink lg:from-[8%] lg:via-ink/40 lg:via-[45%] lg:to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink to-transparent" />
+      </motion.div>
+
+      <div className="wrap relative flex-1 flex flex-col">
         <motion.div
-          className="flex justify-between label text-ink-500 mb-10"
+          className="flex justify-between label text-paper/60 mb-10"
           initial={{ opacity: 0 }}
           animate={ready ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -54,74 +76,54 @@ function Hero({ ready }) {
           <span>Bamenda<span className="hidden sm:inline"> — since 2024</span></span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
-          <motion.h1 style={{ y: headY }} className="lg:col-span-8 display text-[16vw] sm:text-[12vw] lg:text-[10.2vw]">
-            <Lines
-              when={ready}
-              delay={0.25}
-              lines={[
-                <>Sharp cuts,</>,
-                <><span className="accent text-ember">slow</span> rituals,</>,
-                <>honest ink.</>,
-              ]}
-            />
-          </motion.h1>
-
-          <div className="lg:col-span-4 relative">
-            <motion.div
-              className="relative aspect-[4/5] lg:aspect-auto lg:h-full min-h-[420px] overflow-hidden"
-              initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
-              animate={ready ? { clipPath: 'inset(0% 0% 0% 0%)' } : {}}
-              transition={{ duration: 1.4, ease, delay: 0.5 }}
-            >
-              <motion.img
-                src="/images/barber_service.jpg"
-                alt="A barber finishing a fade at CiGa Raw"
-                style={{ y: imgY }}
-                className="absolute inset-0 w-full h-[120%] object-cover"
-                initial={{ scale: 1.3 }}
-                animate={ready ? { scale: 1 } : {}}
-                transition={{ duration: 2, ease: easeOut, delay: 0.5 }}
-              />
-            </motion.div>
-            <motion.div
-              className="absolute -left-10 -bottom-10 lg:-left-16 hidden sm:block"
-              initial={{ scale: 0, rotate: -120 }}
-              animate={ready ? { scale: 1, rotate: 0 } : {}}
-              transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 1.3 }}
-            >
-              <Link to="/booking" aria-label="Book a chair" className="block group">
-                <SpinBadge className="w-32 h-32 lg:w-36 lg:h-36 text-ink bg-paper rounded-full">
-                  <span className="w-12 h-12 rounded-full bg-ember text-paper grid place-items-center transition-transform duration-500 group-hover:rotate-[-45deg]">
-                    <Arrow className="w-5 h-5" />
-                  </span>
-                </SpinBadge>
-              </Link>
-            </motion.div>
-          </div>
-        </div>
+        <motion.h1 style={{ y: headY }} className="display text-[16vw] sm:text-[12vw] lg:text-[9.6vw] max-w-[11ch]">
+          <Lines
+            when={ready}
+            delay={0.35}
+            lines={[
+              <>Sharp cuts,</>,
+              <><span className="accent text-ember">slow</span> rituals,</>,
+              <>honest ink.</>,
+            ]}
+          />
+        </motion.h1>
 
         <motion.div
-          className="mt-14 lg:mt-20 grid lg:grid-cols-12 gap-10 items-end"
+          className="absolute right-5 sm:right-8 lg:right-12 bottom-48 hidden sm:block"
+          initial={{ scale: 0, rotate: -120 }}
+          animate={ready ? { scale: 1, rotate: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 1.4 }}
+        >
+          <Link to="/booking" aria-label="Book a chair" className="block group">
+            <SpinBadge className="w-32 h-32 lg:w-36 lg:h-36 text-ink bg-paper rounded-full">
+              <span className="w-12 h-12 rounded-full bg-ember text-paper grid place-items-center transition-transform duration-500 group-hover:rotate-[-45deg]">
+                <Arrow className="w-5 h-5" />
+              </span>
+            </SpinBadge>
+          </Link>
+        </motion.div>
+
+        <motion.div
+          className="mt-auto pt-14 grid lg:grid-cols-12 gap-10 items-end"
           initial={{ opacity: 0, y: 30 }}
           animate={ready ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: easeOut, delay: 1 }}
         >
           <div className="lg:col-span-5">
-            <p className="text-lg lg:text-xl leading-snug text-ink-600 max-w-md">
+            <p className="text-lg lg:text-xl leading-snug text-paper/75 max-w-md">
               A barbershop, spa and tattoo studio under one roof on Commercial Avenue. Book a chair, take your time, leave sharper than you came in.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
-                <Link to="/booking" className="btn-ink group !pr-2">
+                <Link to="/booking" className="btn-ember group !pr-2">
                   Book an appointment <ArrowDot className="bg-paper/15" />
                 </Link>
               </Magnetic>
-              <Link to="/services" className="btn-line">See the menu</Link>
+              <Link to="/services" className="btn-line-light">See the menu</Link>
             </div>
           </div>
 
-          <dl className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-ink/15">
+          <dl className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-paper/20">
             {[
               { n: 5000, s: '+', l: 'Clients served' },
               { n: 12,   s: '',  l: 'Resident artists' },
@@ -131,7 +133,7 @@ function Hero({ ready }) {
                 <dd className="display text-4xl sm:text-5xl">
                   {x.raw ? <>{x.n}<span className="text-ember text-3xl align-top">{x.s}</span></> : <Count to={x.n} suffix={x.s} when={ready} />}
                 </dd>
-                <dt className="label text-ink-500 mt-2">{x.l}</dt>
+                <dt className="label text-paper/55 mt-2">{x.l}</dt>
               </div>
             ))}
           </dl>
@@ -323,8 +325,8 @@ function ShortMenu() {
                 <span className="leader hidden sm:block" />
               </div>
               <div className="text-right">
-                <span className="text-xl sm:text-2xl lg:text-3xl font-medium tabular-nums">{m.price}</span>
-                <span className="block label text-ink-500 mt-1">{m.time}</span>
+                <span className="text-xl sm:text-2xl lg:text-3xl font-medium tabular-nums whitespace-nowrap">{m.price}</span>
+                <span className="block label text-ink-500 mt-1">{m.group} · FCFA</span>
               </div>
             </Reveal>
           ))}
@@ -433,7 +435,7 @@ export default function HomePage({ ready }) {
 
       <div className="bg-ember text-paper py-5 lg:py-7 -rotate-1 scale-[1.03] relative z-10">
         <Marquee>
-          {['Skin fades', 'Hot towel shaves', 'Facials', 'Basalt stone massage', 'Fine-line ink', 'Private VIP suite'].map(t => (
+          {['Shaving & waves', 'Face scrub & mask', 'Full body massage', 'Pedicure & manicure', 'Dreadlock renewal', 'VIP teeth whitening'].map(t => (
             <span key={t} className="display text-4xl lg:text-6xl flex items-center">
               <span className="px-6 lg:px-10">{t}</span>
               <svg viewBox="0 0 20 20" className="w-6 h-6 lg:w-8 lg:h-8 fill-current" aria-hidden="true">

@@ -50,8 +50,8 @@ export default function AboutPage({ ready }) {
         kicker="About"
         lines={[<>Grooming,</>, <>done <span className="accent text-ember">properly.</span></>]}
         intro="CiGa Raw started in 2024 because Bamenda deserved better than rushed cuts and dirty tools. This is who we are and how we work."
-        image="/images/hero_barber.jpg"
-        imageAlt="Inside the CiGa Raw barbershop"
+        image="/images/team_shop.jpg"
+        imageAlt="Two clients posing in the CiGa Raw salon"
       />
 
       <section className="bg-paper py-24 lg:py-36">

@@ -7,7 +7,7 @@ import { ADDRESS, HOURS, NAV, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
 
 const previews = {
   '/':         '/images/hero_barber.jpg',
-  '/about':    '/images/spa_suite.jpg',
+  '/about':    '/images/team_shop.jpg',
   '/services': '/images/spa_service.jpg',
   '/barbing':  '/images/gallery_haircut.jpg',
   '/vip':      '/images/vip_section.jpg',
@@ -35,6 +35,9 @@ export default function Navbar() {
 
   useEffect(() => { setOpen(false) }, [location.pathname])
 
+  // Light text while floating over the dark photo hero on the home page
+  const light = open || (location.pathname === '/' && !solid)
+
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     const onKey = (e) => e.key === 'Escape' && setOpen(false)
@@ -54,7 +57,7 @@ export default function Navbar() {
         <div className="wrap flex items-center justify-between h-[72px]">
           <Link to="/" className="flex items-center gap-3 group" aria-label="CiGa Raw home">
             <img src="/logo.png" alt="" className="w-10 h-10 rounded-full object-cover transition-transform duration-700 group-hover:rotate-[360deg]" />
-            <span className={`display text-2xl transition-colors ${open ? 'text-paper' : 'text-ink'}`}>
+            <span className={`display text-2xl transition-colors ${light ? 'text-paper' : 'text-ink'}`}>
               CiGa Raw
             </span>
           </Link>
@@ -64,7 +67,7 @@ export default function Navbar() {
               <NavLink
                 key={path}
                 to={path}
-                className={({ isActive }) => `link-draw ${isActive ? 'text-ember' : 'text-ink'}`}
+                className={({ isActive }) => `link-draw transition-colors ${isActive ? 'text-ember' : light ? 'text-paper' : 'text-ink'}`}
               >
                 {label}
               </NavLink>
@@ -78,7 +81,7 @@ export default function Navbar() {
             <button
               onClick={() => setOpen(o => !o)}
               className={`relative w-12 h-12 rounded-full grid place-items-center transition-colors duration-300 ${
-                open ? 'bg-paper text-ink' : 'bg-ink text-paper'
+                light ? 'bg-paper text-ink' : 'bg-ink text-paper'
               }`}
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
