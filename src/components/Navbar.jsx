@@ -1,241 +1,184 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { ease, easeOut } from './motion'
 import WhatsAppIcon from './WhatsAppIcon'
+import { ADDRESS, HOURS, NAV, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
 
-const navLinks = [
-  { num: '01', label: 'Home',                  path: '/' },
-  { num: '02', label: 'About Cigaraw',         path: '/about' },
-  { num: '03', label: 'Services & Menu',       path: '/services' },
-  { num: '04', label: 'Master Barbering',      path: '/barbing' },
-  { num: '05', label: 'VIP Executive Suite',   path: '/vip' },
-  { num: '06', label: 'Tattoo Studio',         path: '/tattoo' },
-  { num: '07', label: 'Lookbook & Gallery',    path: '/gallery' },
-  { num: '08', label: 'Book Appointment',      path: '/booking' },
-]
+const previews = {
+  '/':         '/images/hero_barber.jpg',
+  '/about':    '/images/spa_suite.jpg',
+  '/services': '/images/spa_service.jpg',
+  '/barbing':  '/images/gallery_haircut.jpg',
+  '/vip':      '/images/vip_section.jpg',
+  '/tattoo':   '/images/tattoo_section.jpg',
+  '/gallery':  '/images/tattoo_art.jpg',
+  '/booking':  '/images/barber_service.jpg',
+}
+
+const inline = NAV.filter(n => ['/services', '/barbing', '/vip', '/tattoo', '/gallery'].includes(n.path))
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const [solid, setSolid] = useState(false)
+  const [hovered, setHovered] = useState(null)
   const location = useLocation()
+  const { scrollY } = useScroll()
+
+  // Hide while scrolling down, return when scrolling up
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    const prev = scrollY.getPrevious() ?? 0
+    setHidden(y > prev && y > 200)
+    setSolid(y > 40)
+  })
+
+  useEffect(() => { setOpen(false) }, [location.pathname])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // Close menu on route change
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [location.pathname])
-
-  // Prevent background scroll when mobile/fullscreen menu is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-  }, [menuOpen])
+    document.body.style.overflow = open ? 'hidden' : ''
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
 
   return (
     <>
-      {/* Clean, minimalist header - no horizontal menu clutter */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-[990] flex items-center justify-between px-6 md:px-12 lg:px-16 py-5 transition-all duration-500 ${
-          scrolled ? 'nav-scrolled py-3.5' : 'bg-gradient-to-b from-dark-950/90 via-dark-950/40 to-transparent'
+      <motion.header
+        className={`fixed inset-x-0 top-0 z-[990] transition-colors duration-500 ${
+          solid && !open ? 'bg-paper/85 backdrop-blur-md border-b border-ink/10' : 'border-b border-transparent'
         }`}
-        role="banner"
+        animate={{ y: hidden && !open ? '-100%' : '0%' }}
+        transition={{ duration: 0.5, ease }}
       >
-        {/* Brand Logo */}
-        <Link
-          to="/"
-          className="flex items-center gap-3 md:gap-3.5 group"
-          aria-label="CiGa Raw Salon and Spa Homepage"
-        >
-          <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden p-0.5 border border-gold-400/50 group-hover:border-gold-300 group-hover:scale-105 shadow-[0_0_15px_rgba(232,168,32,0.35)] transition-all duration-300 bg-dark-900 flex-shrink-0">
-            <img
-              src="/logo.png"
-              alt="CiGa Raw Logo"
-              className="w-full h-full object-cover rounded-full"
-            />
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-xl md:text-2xl text-white tracking-[0.16em] group-hover:text-gold-300 transition-colors duration-300">
+        <div className="wrap flex items-center justify-between h-[72px]">
+          <Link to="/" className="flex items-center gap-3 group" aria-label="CiGa Raw home">
+            <img src="/logo.png" alt="" className="w-10 h-10 rounded-full object-cover transition-transform duration-700 group-hover:rotate-[360deg]" />
+            <span className={`display text-2xl transition-colors ${open ? 'text-paper' : 'text-ink'}`}>
               CiGa Raw
             </span>
-            <span className="text-[0.5rem] md:text-[0.55rem] tracking-[0.35em] text-gold-400 uppercase font-sans mt-0.5">
-              Salon &amp; Spa &bull; Bamenda
-            </span>
+          </Link>
+
+          <nav className={`hidden lg:flex items-center gap-8 text-[0.95rem] transition-opacity ${open ? 'opacity-0 pointer-events-none' : ''}`} aria-label="Primary">
+            {inline.map(({ label, path }) => (
+              <NavLink
+                key={path}
+                to={path}
+                className={({ isActive }) => `link-draw ${isActive ? 'text-ember' : 'text-ink'}`}
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/booking" className={`hidden sm:inline-flex ${open ? 'btn-line-light' : 'btn-ember'} !py-2.5`}>
+              Book a chair
+            </Link>
+            <button
+              onClick={() => setOpen(o => !o)}
+              className={`relative w-12 h-12 rounded-full grid place-items-center transition-colors duration-300 ${
+                open ? 'bg-paper text-ink' : 'bg-ink text-paper'
+              }`}
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+            >
+              <span className={`absolute h-[1.5px] w-5 bg-current transition-transform duration-500 ${open ? 'rotate-45' : '-translate-y-[4px]'}`} />
+              <span className={`absolute h-[1.5px] w-5 bg-current transition-transform duration-500 ${open ? '-rotate-45' : 'translate-y-[4px]'}`} />
+            </button>
           </div>
-        </Link>
-
-        {/* Right Actions: Direct Booking CTA + Clean Luxury Menu Trigger */}
-        <div className="flex items-center gap-4 md:gap-6">
-          <Link
-            to="/booking"
-            className="btn-gold text-dark-950 font-semibold px-5 md:px-7 py-2.5 md:py-3 text-xs tracking-widest uppercase"
-            id="nav-book-btn"
-          >
-            Book Now
-          </Link>
-
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="group flex items-center gap-3 px-4 py-2.5 border border-gold-500/25 bg-dark-900/60 backdrop-blur-md hover:border-gold-400/70 hover:bg-gold-500/10 text-gold-400 transition-all duration-300"
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={menuOpen}
-          >
-            <span className="text-xs font-sans font-semibold tracking-[0.2em] uppercase text-gold-300 group-hover:text-gold-200">
-              {menuOpen ? 'Close' : 'Menu'}
-            </span>
-            <div className="flex flex-col justify-center gap-1.5 w-5 h-4">
-              <span
-                className={`block h-[1.5px] bg-gold-400 transition-transform duration-300 origin-center ${
-                  menuOpen ? 'rotate-45 translate-y-[5px]' : ''
-                }`}
-              />
-              <span
-                className={`block h-[1.5px] bg-white transition-opacity duration-200 ${
-                  menuOpen ? 'opacity-0' : 'opacity-80'
-                }`}
-              />
-              <span
-                className={`block h-[1.5px] bg-gold-400 transition-transform duration-300 origin-center ${
-                  menuOpen ? '-rotate-45 -translate-y-[5px]' : ''
-                }`}
-              />
-            </div>
-          </button>
         </div>
-      </header>
+      </motion.header>
 
-      {/* Luxury Fullscreen Menu Overlay */}
-      <div
-        className={`fixed inset-0 z-[995] bg-dark-950/98 backdrop-blur-xl transition-all duration-500 flex flex-col ${
-          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Site Navigation"
-      >
-        {/* Background decorative watermark */}
-        <div className="absolute right-6 bottom-10 pointer-events-none select-none opacity-5 hidden lg:block" aria-hidden="true">
-          <span className="font-display text-[18vw] text-gold-400 tracking-widest">CIGARAW</span>
-        </div>
-
-        {/* Top bar inside drawer */}
-        <div className="flex-shrink-0 flex items-center justify-between px-5 md:px-12 lg:px-16 py-4 md:py-6 border-b border-gold-500/15 bg-dark-950">
-          <Link
-            to="/"
-            onClick={() => setMenuOpen(false)}
-            className="flex flex-col leading-none"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-[985] bg-ink text-paper overflow-y-auto"
+            initial={{ clipPath: 'circle(0% at calc(100% - 44px) 36px)' }}
+            animate={{ clipPath: 'circle(150% at calc(100% - 44px) 36px)' }}
+            exit={{ clipPath: 'circle(0% at calc(100% - 44px) 36px)' }}
+            transition={{ duration: 0.8, ease }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
           >
-            <span className="font-display text-xl md:text-2xl text-white tracking-[0.2em]">CIGARAW</span>
-            <span className="text-[0.5rem] tracking-[0.45em] text-gold-500 uppercase font-sans mt-0.5">Bamenda, Cameroon</span>
-          </Link>
-
-          <button
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 border border-gold-500/25 text-gold-400 hover:text-white hover:border-gold-400 text-xs font-sans tracking-widest uppercase transition-all duration-300"
-            aria-label="Close menu"
-          >
-            <span>Close</span>
-            <span className="text-base leading-none">&times;</span>
-          </button>
-        </div>
-
-        {/* Main Links Body - Scroll starts at top (01 Home) without flex items-center clipping */}
-        <div className="flex-1 overflow-y-auto px-5 md:px-12 lg:px-16 py-6 md:py-10">
-          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-16 items-start lg:items-center">
-            {/* Numbered Page List */}
-            <div className="lg:col-span-7">
-              <p className="eyebrow mb-3 md:mb-6 text-[0.65rem] md:text-xs">Directory &bull; Dedicated Pages</p>
-              <ul className="space-y-1.5 sm:space-y-2 md:space-y-4" role="list">
-                {navLinks.map(({ num, label, path }) => {
-                  const isActive = location.pathname === path
+            <div className="wrap min-h-full pt-28 pb-10 grid lg:grid-cols-12 gap-10">
+              <ul className="lg:col-span-7 flex flex-col" onMouseLeave={() => setHovered(null)}>
+                {NAV.map(({ label, path }, i) => {
+                  const active = location.pathname === path
                   return (
-                    <li key={path}>
-                      <Link
-                        to={path}
-                        onClick={() => setMenuOpen(false)}
-                        className={`group flex items-center gap-3 md:gap-5 py-1 transition-all duration-300 ${
-                          isActive ? 'text-gold-400 font-semibold' : 'text-dark-200 hover:text-white'
-                        }`}
+                    <li key={path} className="overflow-hidden border-b border-paper/10">
+                      <motion.div
+                        initial={{ y: '100%' }}
+                        animate={{ y: '0%' }}
+                        exit={{ y: '100%' }}
+                        transition={{ duration: 0.8, ease: easeOut, delay: 0.15 + i * 0.05 }}
                       >
-                        <span className="font-sans text-[0.7rem] md:text-xs text-gold-500/60 group-hover:text-gold-400 transition-colors tracking-widest font-mono w-6 flex-shrink-0">
-                          {num}
-                        </span>
-                        <span className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-wide group-hover:translate-x-2 transition-transform duration-300 flex items-center gap-2">
-                          {label}
-                          {isActive && (
-                            <span className="w-2 h-2 rounded-full bg-gold-400 inline-block align-middle ml-1" />
-                          )}
-                        </span>
-                      </Link>
+                        <Link
+                          to={path}
+                          onMouseEnter={() => setHovered(path)}
+                          className="group flex items-baseline gap-4 py-2 sm:py-3"
+                        >
+                          <span className="label text-paper/40 w-8">0{i + 1}</span>
+                          <span
+                            className={`display text-5xl sm:text-6xl lg:text-7xl transition-all duration-500 group-hover:translate-x-4 ${
+                              active ? 'text-ember' : hovered && hovered !== path ? 'text-paper/30' : 'text-paper'
+                            }`}
+                          >
+                            {label}
+                          </span>
+                          {active && <span className="accent text-xl text-ember">— you are here</span>}
+                        </Link>
+                      </motion.div>
                     </li>
                   )
                 })}
               </ul>
-            </div>
 
-            {/* Right Information & Quick Contacts */}
-            <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-gold-500/15 pt-6 lg:pt-0 lg:pl-12 space-y-4 md:space-y-6">
-              <div>
-                <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Location</p>
-                <p className="font-serif text-white text-xs sm:text-sm md:text-base leading-relaxed">
-                  Commercial Avenue, Bamenda<br />
-                  North West Region, Cameroon
-                </p>
-              </div>
+              <motion.aside
+                className="lg:col-span-5 flex flex-col gap-8"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8, ease: easeOut, delay: 0.45 }}
+              >
+                <div className="relative hidden lg:block aspect-[4/3] rounded-[2px] overflow-hidden bg-ink-800">
+                  <AnimatePresence mode="popLayout">
+                    <motion.img
+                      key={hovered || location.pathname}
+                      src={previews[hovered || location.pathname] || previews['/']}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover"
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.7, ease: easeOut }}
+                    />
+                  </AnimatePresence>
+                </div>
 
-              <div>
-                <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Opening Hours</p>
-                <p className="font-serif text-dark-300 text-xs sm:text-sm leading-relaxed">
-                  Monday – Saturday: 8:00 AM – 7:00 PM<br />
-                  Sunday: 10:00 AM – 4:00 PM
-                </p>
-              </div>
+                <div className="grid grid-cols-2 gap-6 text-paper/80">
+                  <div>
+                    <p className="label text-paper/40 mb-2">Find us</p>
+                    {ADDRESS.map(l => <p key={l}>{l}</p>)}
+                  </div>
+                  <div>
+                    <p className="label text-paper/40 mb-2">Open</p>
+                    {HOURS.map(h => <p key={h.days}>{h.days} · {h.time}</p>)}
+                  </div>
+                </div>
 
-              <div>
-                <p className="text-[0.65rem] md:text-xs font-sans tracking-[0.3em] text-gold-400 uppercase mb-1">Direct Contact</p>
-                <div className="space-y-1">
-                  <a href="tel:+237679170410" className="font-serif text-white hover:text-gold-400 text-xs sm:text-sm block transition-colors">
-                    +237 6 79 17 04 10
-                  </a>
-                  <a
-                    href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%20Salon%20and%20Spa%2C%20I%20would%20like%20to%20inquire%20about%20booking"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-sans tracking-widest text-[#25D366] hover:text-[#20ba5a] uppercase mt-1 font-medium transition-colors"
-                  >
-                    <WhatsAppIcon className="w-4 h-4 fill-current" />
-                    <span>WhatsApp Concierge</span>
+                <div className="flex flex-wrap gap-3">
+                  <a href={`tel:${PHONE_TEL}`} className="btn-line-light">{PHONE_DISPLAY}</a>
+                  <a href={wa()} target="_blank" rel="noopener noreferrer" className="btn bg-wa text-ink before:bg-paper">
+                    <WhatsAppIcon className="w-4 h-4" /> WhatsApp
                   </a>
                 </div>
-              </div>
-
-              <div className="pt-2">
-                <Link
-                  to="/booking"
-                  onClick={() => setMenuOpen(false)}
-                  className="btn-gold w-full text-center py-3 text-xs tracking-widest block font-semibold"
-                >
-                  Schedule Appointment
-                </Link>
-              </div>
+              </motion.aside>
             </div>
-          </div>
-        </div>
-
-        {/* Footer inside drawer */}
-        <div className="flex-shrink-0 px-5 md:px-12 lg:px-16 py-3 border-t border-gold-500/10 flex flex-col sm:flex-row items-center justify-between gap-1 text-[0.65rem] md:text-xs font-serif text-dark-500 bg-dark-950">
-          <span>&copy; {new Date().getFullYear()} Cigaraw Saloon &amp; Spa. Bamenda.</span>
-          <span className="font-sans text-[0.55rem] md:text-[0.65rem] tracking-widest text-gold-500/60 uppercase">
-            Master Barbering &bull; Luxury Spa &bull; Custom Ink
-          </span>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

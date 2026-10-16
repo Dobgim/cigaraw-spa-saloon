@@ -1,222 +1,157 @@
 import { Link } from 'react-router-dom'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
+import { ArrowDot, easeOut, Label, Lines, Reveal } from '../components/motion'
+import { wa } from '../site'
 
 const amenities = [
-  { icon: '🚪', title: 'Private Acoustic Seclusion', desc: 'Sound-isolated private room ensuring complete discretion during phone calls or private conversations.' },
-  { icon: '🥃', title: 'Complimentary Spirits & Coffee', desc: 'Aged single malts, fine cognacs, and freshly pulled espresso available throughout your session.' },
-  { icon: '👔', title: 'Wardrobe Refresh Service', desc: 'Complimentary jacket steam press and footwear detailing while you sit back and relax.' },
-  { icon: '🚿', title: 'Private En-Suite Rain Shower', desc: 'Freshen up after deep-tissue therapy in our cedar-finished private rain shower.' },
-  { icon: '🤵', title: 'Personal Grooming Butler', desc: 'One dedicated specialist managing your schedule, beverage preferences, and bespoke requests.' },
-  { icon: '📺', title: 'Private Entertainment Hub', desc: 'High-speed fiber connectivity, curated jazz/afrobeats acoustics, and streaming screens.' },
+  { title: 'Sound-isolated room',     desc: 'Take a call, close your eyes, or just think. Nobody hears a thing.' },
+  { title: 'Spirits & espresso',      desc: 'Single malts, cognac and freshly pulled espresso throughout your session.' },
+  { title: 'Wardrobe refresh',        desc: 'Your jacket steamed and shoes cleaned while you sit.' },
+  { title: 'Private rain shower',     desc: 'Cedar-finished en-suite to freshen up after a massage.' },
+  { title: 'Personal attendant',      desc: 'One person handling your timing, drinks and any request.' },
+  { title: 'Screens & sound',         desc: 'Fast fibre, streaming, and jazz or Afrobeats at the volume you choose.' },
 ]
 
-const spaTreatments = [
-  { name: 'Royal Botanical Facial',       duration: '90 min',  price: '15,000 FCFA', desc: '24k gold infusion serum, ultrasonic pore vacuuming, and natural African shea hydration.' },
-  { name: 'Heated Basalt Stone Massage',  duration: '75 min',  price: '12,000 FCFA', desc: 'Volcanic basalt stones melting deep muscular stiffness along the spine and shoulders.' },
-  { name: 'Executive Deep Tissue Therapy',duration: '60 min',  price: '10,000 FCFA', desc: 'Therapeutic pressure targeting chronic tension, knots, and travel fatigue.' },
-  { name: 'VIP Full Body Ritual',         duration: '3.5 hrs', price: '35,000 FCFA', desc: 'The ultimate royal experience: Haircut, beard sculpt, full-body scrub, massage, and facial.' },
-  { name: 'Scalp & Neck Aromatherapy',    duration: '45 min',  price: '8,000 FCFA',  desc: 'Warm peppermint and eucalyptus oil massage relieving mental fatigue and headache tension.' },
-  { name: 'Executive Hand & Foot Grooming', duration: '60 min', price: '9,000 FCFA', desc: 'Therapeutic paraffin wax dip, nail shaping, cuticle care, and calf massage.' },
+const rituals = [
+  { name: 'Royal botanical facial',      time: '90 min',  price: '15,000', desc: 'Gold infusion serum, ultrasonic cleanse, African shea hydration.' },
+  { name: 'Heated basalt stone massage', time: '75 min',  price: '12,000', desc: 'Volcanic stones worked along the spine and shoulders.' },
+  { name: 'Executive deep tissue',       time: '60 min',  price: '10,000', desc: 'Firm pressure for chronic tension and travel fatigue.' },
+  { name: 'Scalp & neck aromatherapy',   time: '45 min',  price: '8,000',  desc: 'Warm peppermint and eucalyptus oil for a tired head.' },
+  { name: 'Hand & foot grooming',        time: '60 min',  price: '9,000',  desc: 'Paraffin dip, nail shaping, cuticle care, calf massage.' },
+  { name: 'VIP full body ritual',        time: '3.5 hrs', price: '35,000', desc: 'Cut, beard sculpt, body scrub, massage and facial.' },
 ]
 
 const tiers = [
-  {
-    tier: 'Executive Pass',
-    price: '25,000 FCFA / Session',
-    desc: 'Ideal for occasional VIP appointments when absolute privacy is required.',
-    perks: ['2 Hours VIP Suite Access', 'Signature Haircut + Beard Sculpt', 'Complimentary Beverage Bar', 'Priority Booking Status'],
-  },
-  {
-    tier: 'Black Card Monthly',
-    price: '50,000 FCFA / Month',
-    desc: 'Our premier private membership for Bamenda leaders and executives.',
-    perks: ['Unlimited VIP Suite sessions', '4 Haircuts + Beard Sculptings', '2 Full Body Massages per month', 'Private entrance coordination', '15% Guest discount'],
-  },
-  {
-    tier: 'Corporate Dignitary Group',
-    price: 'Custom Quotation',
-    desc: 'Full salon buyout for wedding parties, executive retreats, or delegations.',
-    perks: ['Full VIP floor exclusivity', 'Catered refreshments & cigars', 'Multi-barber dedicated staffing', 'Custom event scheduling'],
-  },
+  { tier: 'Executive Pass', price: '25,000', unit: 'per session', desc: 'For the occasional day you need complete privacy.',
+    perks: ['2 hours in the suite', 'Signature cut + beard sculpt', 'Drinks included', 'Priority booking'] },
+  { tier: 'Black Card', price: '50,000', unit: 'per month', desc: 'Our membership for regulars who want the suite every time.',
+    perks: ['Unlimited suite sessions', '4 cuts + beard sculpts', '2 full body massages', 'Private entrance', '15% off for guests'], featured: true },
+  { tier: 'Private Group', price: 'On request', unit: '', desc: 'Full buy-out for wedding parties, retreats or delegations.',
+    perks: ['The whole VIP floor', 'Catering & cigars', 'Several dedicated barbers', 'Your schedule'] },
 ]
 
-export default function VipPage() {
+function SuiteImage() {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const inset = useTransform(scrollYProgress, [0.05, 0.5], ['14%', '0%'])
+  const clip = useTransform(inset, v => `inset(${v} ${v} ${v} ${v} round 2px)`)
+  const scale = useTransform(scrollYProgress, [0, 1], [1.25, 1])
+
   return (
-    <div className="bg-dark-950">
+    <div ref={ref} className="bg-paper">
+      <motion.div style={{ clipPath: clip }} className="relative h-[75vh] lg:h-[95vh] overflow-hidden">
+        <motion.img style={{ scale }} src="/images/spa_suite.jpg" alt="The candle-lit private suite" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-ink/30" />
+        <p className="absolute bottom-8 left-5 sm:left-8 lg:left-12 display text-paper text-5xl lg:text-8xl max-w-3xl">
+          One client. <span className="accent text-ember">One room.</span>
+        </p>
+      </motion.div>
+    </div>
+  )
+}
+
+export default function VipPage({ ready }) {
+  return (
+    <>
       <PageHero
-        eyebrow="Exclusive Retreat &bull; Bamenda"
-        title="VIP Executive"
-        highlight="Suite &amp; Spa"
-        subtitle="Unmatched acoustic privacy, personal butler service, and world-class rejuvenation designed for those who value discretion and luxury."
+        ready={ready}
+        index="04"
+        kicker="VIP Suite"
+        lines={[<>Privacy is</>, <>the <span className="accent text-ember">luxury.</span></>]}
+        intro="A self-contained suite away from the main floor — for confidential calls, a quiet drink, and grooming without an audience."
         image="/images/vip_section.jpg"
-        breadcrumb="VIP Suite"
+        imageAlt="The VIP grooming suite"
+        aside={
+          <a href={wa('Hello CiGa Raw, I would like to reserve the VIP Suite.')} target="_blank" rel="noopener noreferrer" className="btn-ink">
+            <WhatsAppIcon className="w-4 h-4 text-wa" /> Reserve on WhatsApp
+          </a>
+        }
       />
 
-      {/* Main Feature Highlight */}
-      <section className="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="relative">
-            <div className="relative h-[520px] overflow-hidden border border-gold-500/20">
-              <img
-                src="/images/vip_section.jpg"
-                alt="VIP Suite interior in Bamenda"
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/80 via-transparent to-transparent" />
-              <div className="absolute top-6 left-6 bg-dark-950/90 border border-gold-400/40 px-5 py-3 backdrop-blur-md">
-                <span className="font-display text-2xl text-gold-400 block">PRIVATE</span>
-                <span className="text-[0.6rem] font-sans tracking-[0.3em] text-dark-300 uppercase">Single-Client Suite</span>
-              </div>
-            </div>
+      <section className="bg-paper py-24 lg:py-36">
+        <div className="wrap grid lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-4">
+            <Label num="A" className="text-ink-500 mb-6">Included every visit</Label>
+            <h2 className="h2"><Lines lines={[<>The small</>, <span key="a" className="accent text-ember">things.</span>]} /></h2>
           </div>
-
-          <div>
-            <p className="eyebrow">A Sanctuary of Discretion</p>
-            <h2 className="section-title">
-              Designed for <em>Uncompromising</em> Solitude
-            </h2>
-            <div className="gold-divider my-6" />
-            <p className="font-serif text-dark-200 text-lg leading-relaxed mb-6">
-              In a fast-paced world, true luxury is privacy. Our VIP Executive Suite is a self-contained sanctuary where you can conduct confidential calls, unwind with a glass of aged spirit, and receive seamless master grooming away from the public floor.
-            </p>
-            <p className="font-serif text-dark-400 text-base leading-relaxed mb-8">
-              Whether preparing for a major business keynote, hosting an intimate pre-wedding celebration, or taking time out for physical rejuvenation, our suite provides an unmatched hospitality standard in Bamenda.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <Link to="/booking?service=VIP%20Suite%20Experience" className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase">
-                Reserve the Suite
-              </Link>
-              <a
-                href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%2C%20I%20would%20like%20to%20reserve%20the%20VIP%20Executive%20Suite"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
-              >
-                <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
-                <span>VIP WhatsApp Desk</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Amenities Grid */}
-      <section className="py-24 bg-dark-900 border-y border-gold-500/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-          <div className="text-center mb-16">
-            <p className="eyebrow">Every Detail Considered</p>
-            <h2 className="section-title">
-              Suite <em>Privileges</em>
-            </h2>
-            <div className="gold-divider mx-auto my-6" />
-            <p className="font-serif text-dark-300 text-base max-w-xl mx-auto">
-              Included complimentary with every VIP Suite appointment.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {amenities.map((item) => (
-              <div key={item.title} className="p-8 border border-gold-500/15 bg-dark-950/60 hover:border-gold-400/40 transition-colors">
-                <span className="text-3xl block mb-4">{item.icon}</span>
-                <h3 className="font-sans font-semibold text-white text-lg mb-2">{item.title}</h3>
-                <p className="font-serif text-dark-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
+          <ol className="lg:col-span-8 grid sm:grid-cols-2 gap-x-12">
+            {amenities.map((a, i) => (
+              <Reveal as="li" key={a.title} delay={(i % 2) * 0.08} className="border-t border-ink/15 py-8 group">
+                <span className="label text-ember">0{i + 1}</span>
+                <h3 className="text-2xl lg:text-3xl font-medium tracking-tight mt-3 transition-transform duration-500 group-hover:translate-x-2">{a.title}</h3>
+                <p className="text-ink-600 text-lg mt-2">{a.desc}</p>
+              </Reveal>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      {/* VIP Spa Treatment Menu */}
-      <section className="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-        <div className="text-center mb-16">
-          <p className="eyebrow">Holistic Therapies</p>
-          <h2 className="section-title">
-            VIP Spa <em>Rituals</em>
-          </h2>
-          <div className="gold-divider mx-auto my-6" />
-        </div>
+      <SuiteImage />
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {spaTreatments.map((tr) => (
-            <div key={tr.name} className="border border-gold-500/15 bg-dark-900/40 p-6 flex items-start justify-between gap-6 hover:border-gold-400/40 transition-colors">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h3 className="font-sans font-semibold text-white text-base">{tr.name}</h3>
-                  <span className="text-[0.65rem] text-dark-400 border border-gold-500/20 px-2 py-0.5">{tr.duration}</span>
-                </div>
-                <p className="font-serif text-dark-400 text-sm mt-1 leading-relaxed">{tr.desc}</p>
-              </div>
-              <div className="text-right flex-shrink-0">
-                <span className="font-display text-gold-400 text-xl block">{tr.price}</span>
-                <Link
-                  to={`/booking?service=${encodeURIComponent(tr.name)}`}
-                  className="text-[0.65rem] font-sans text-gold-500 hover:text-white uppercase tracking-wider mt-2 inline-block font-semibold"
-                >
-                  Book &rarr;
+      <section className="bg-ink text-paper py-24 lg:py-36">
+        <div className="wrap grid lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-4 lg:sticky lg:top-32 self-start">
+            <Label num="B" className="text-paper/50 mb-6">Suite rituals</Label>
+            <h2 className="h2"><Lines lines={[<>Slow down,</>, <span key="b" className="accent text-ember">properly.</span>]} /></h2>
+          </div>
+          <ul className="lg:col-span-8 border-t border-paper/15">
+            {rituals.map((r, i) => (
+              <Reveal as="li" key={r.name} delay={(i % 3) * 0.05}>
+                <Link to={`/booking?service=${encodeURIComponent(r.name)}`} className="menu-row group">
+                  <div>
+                    <div className="flex items-baseline">
+                      <span className="text-2xl lg:text-3xl font-medium tracking-tight transition-colors group-hover:text-ember">{r.name}</span>
+                      <span className="leader hidden sm:block" />
+                    </div>
+                    <p className="text-paper/50 mt-1">{r.desc}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl lg:text-3xl font-medium tabular-nums">{r.price}</span>
+                    <span className="block label text-paper/40 mt-1">{r.time}</span>
+                  </div>
                 </Link>
-              </div>
-            </div>
-          ))}
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Membership Tiers */}
-      <section className="py-24 bg-dark-900 border-t border-gold-500/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-          <div className="text-center mb-16">
-            <p className="eyebrow">Exclusive Access</p>
-            <h2 className="section-title">
-              VIP <em>Memberships</em>
-            </h2>
-            <div className="gold-divider mx-auto my-6" />
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {tiers.map((t) => (
-              <div key={t.tier} className="border border-gold-500/20 bg-dark-950 p-8 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-display text-2xl text-white">{t.tier}</h3>
-                  <p className="font-display text-2xl text-gold-400 my-3">{t.price}</p>
-                  <p className="font-serif text-dark-400 text-xs mb-6 leading-relaxed">{t.desc}</p>
-                  <div className="gold-divider mb-6" />
-
-                  <ul className="space-y-3 mb-8">
-                    {t.perks.map((p, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm font-serif text-dark-200">
-                        <span className="text-gold-400 font-bold">&check;</span>
-                        <span>{p}</span>
-                      </li>
-                    ))}
+      <section className="bg-bone py-24 lg:py-36">
+        <div className="wrap">
+          <Label num="C" className="text-ink-500 mb-6">Membership</Label>
+          <h2 className="h2 mb-16"><Lines lines={[<>Make it a</>, <span key="c" className="accent text-ember">habit.</span>]} /></h2>
+          <div className="grid lg:grid-cols-3 gap-5">
+            {tiers.map((t, i) => (
+              <Reveal key={t.tier} delay={i * 0.1}>
+                <motion.article
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.5, ease: easeOut }}
+                  className={`h-full flex flex-col p-8 lg:p-10 rounded-[2px] ${t.featured ? 'bg-ink text-paper' : 'bg-paper'}`}
+                >
+                  <div className="flex justify-between items-center">
+                    <h3 className="display text-4xl">{t.tier}</h3>
+                    {t.featured && <span className="label bg-ember text-ink px-2.5 py-1 rounded-full">Popular</span>}
+                  </div>
+                  <p className={`mt-3 ${t.featured ? 'text-paper/60' : 'text-ink-600'}`}>{t.desc}</p>
+                  <p className="mt-10 text-4xl font-medium tabular-nums">
+                    {t.price} {t.unit && <span className="text-base opacity-60">FCFA {t.unit}</span>}
+                  </p>
+                  <ul className={`mt-8 pt-8 border-t space-y-2 flex-1 ${t.featured ? 'border-paper/15' : 'border-ink/15'}`}>
+                    {t.perks.map(p => <li key={p} className="flex gap-2"><span className="text-ember">—</span>{p}</li>)}
                   </ul>
-                </div>
-
-                <Link
-                  to="/booking"
-                  className="btn-gold w-full text-center py-3.5 text-xs tracking-widest uppercase block"
-                >
-                  Inquire Membership
-                </Link>
-              </div>
+                  <Link to={`/booking?service=${encodeURIComponent('Executive Suite')}`} className={`mt-10 group !pr-2 self-start ${t.featured ? 'btn-ember' : 'btn-line'}`}>
+                    Enquire <ArrowDot className={t.featured ? 'bg-paper/15' : 'bg-ink/5'} />
+                  </Link>
+                </motion.article>
+              </Reveal>
             ))}
           </div>
+          <p className="mt-10 text-ink-500">Booking ahead is strongly recommended — there is only one suite.</p>
         </div>
       </section>
-
-      {/* Final CTA */}
-      <section className="py-20 bg-dark-950 border-t border-gold-500/10 text-center">
-        <div className="max-w-xl mx-auto px-6">
-          <h2 className="font-display text-4xl text-white mb-4">Book the VIP Suite</h2>
-          <p className="font-serif text-dark-300 text-base mb-8">
-            Advanced reservations are strongly recommended to ensure suite availability.
-          </p>
-          <Link to="/booking" className="btn-gold px-10 py-4 text-xs tracking-widest uppercase">
-            Schedule VIP Session
-          </Link>
-        </div>
-      </section>
-    </div>
+    </>
   )
 }

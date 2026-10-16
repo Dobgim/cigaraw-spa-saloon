@@ -1,424 +1,284 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
+import { ease, easeOut, Reveal } from '../components/motion'
+import { ADDRESS, EMAIL, HOURS, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
 
 const serviceOptions = [
-  // Barbering
-  { group: 'Master Barbering', name: 'Classic Precision Cut (3,000 FCFA)' },
-  { group: 'Master Barbering', name: 'Signature Skin Fade (4,500 FCFA)' },
-  { group: 'Master Barbering', name: 'Beard Sculpt & Treatment (2,500 FCFA)' },
-  { group: 'Master Barbering', name: 'Traditional Hot Towel Shave (4,000 FCFA)' },
-  { group: 'Master Barbering', name: 'Hairline Shape-Up & Line (2,000 FCFA)' },
-  { group: 'Master Barbering', name: 'Full Signature Hair & Beard Package (10,000 FCFA)' },
-  { group: 'Master Barbering', name: 'Father & Son Duo Cut (7,000 FCFA)' },
+  { group: 'Barbering', name: 'Classic Precision Cut (3,000 FCFA)' },
+  { group: 'Barbering', name: 'Signature Skin Fade (4,500 FCFA)' },
+  { group: 'Barbering', name: 'Beard Sculpt & Treatment (2,500 FCFA)' },
+  { group: 'Barbering', name: 'Traditional Hot Towel Shave (4,000 FCFA)' },
+  { group: 'Barbering', name: 'Hairline Shape-Up & Line (2,000 FCFA)' },
+  { group: 'Barbering', name: 'Hair Tint & Darkening (4,000 FCFA)' },
+  { group: 'Barbering', name: 'Full Signature Hair & Beard (10,000 FCFA)' },
+  { group: 'Barbering', name: 'Father & Son Duo Cut (7,000 FCFA)' },
 
-  // Spa
   { group: 'Spa & Wellness', name: 'Gentleman’s Deep Cleanse Facial (10,000 FCFA)' },
   { group: 'Spa & Wellness', name: 'Royal Botanical Facial (15,000 FCFA)' },
   { group: 'Spa & Wellness', name: 'Full Body Deep Tissue Massage (10,000 FCFA)' },
-  { group: 'Spa & Wellness', name: 'Heated Basalt Stone Therapy (12,000 FCFA)' },
+  { group: 'Spa & Wellness', name: 'Heated Basalt Stone Massage (12,000 FCFA)' },
+  { group: 'Spa & Wellness', name: 'Scalp & Neck Aromatherapy (8,000 FCFA)' },
+  { group: 'Spa & Wellness', name: 'Hand & Foot Grooming (9,000 FCFA)' },
 
-  // VIP Suite
-  { group: 'VIP Executive Suite', name: 'Executive Suite Day Pass (20,000 FCFA)' },
-  { group: 'VIP Executive Suite', name: 'Royal VIP Rejuvenation Ritual (35,000 FCFA)' },
+  { group: 'VIP Suite', name: 'Executive Suite Day Pass (20,000 FCFA)' },
+  { group: 'VIP Suite', name: 'Royal VIP Rejuvenation Ritual (35,000 FCFA)' },
+  { group: 'VIP Suite', name: 'Black Card Membership enquiry' },
 
-  // Tattoo
-  { group: 'Tattoo Studio', name: 'Custom Tattoo Consultation (5,000 FCFA)' },
-  { group: 'Tattoo Studio', name: 'Fine-Line Tattoo Session (From 15,000 FCFA)' },
-  { group: 'Tattoo Studio', name: 'Afro-Centric Blackwork Session (From 30,000 FCFA)' },
+  { group: 'Packages', name: 'The Groom package (25,000 FCFA)' },
+  { group: 'Packages', name: 'Father & Son package (10,000 FCFA)' },
+  { group: 'Packages', name: 'Monthly Member (40,000 FCFA / month)' },
+
+  { group: 'Tattoo', name: 'Tattoo Consultation & Sketch (5,000 FCFA)' },
+  { group: 'Tattoo', name: 'Fine-Line Tattoo Session (from 15,000 FCFA)' },
+  { group: 'Tattoo', name: 'Afro-Centric Blackwork Session (from 30,000 FCFA)' },
 ]
+
+const groups = [...new Set(serviceOptions.map(s => s.group))]
 
 const specialists = [
-  'First Available Master Specialist',
-  'Senior Fade Master',
-  'Beard & Shave Specialist',
-  'Lead Spa Therapist',
-  'Resident Tattoo Artist',
+  'First available',
+  'Senior fade barber',
+  'Beard & shave specialist',
+  'Lead spa therapist',
+  'Resident tattoo artist',
 ]
 
-const timeSlots = [
-  '08:30 AM', '09:30 AM', '10:30 AM', '11:30 AM',
-  '12:30 PM', '01:30 PM', '02:30 PM', '03:30 PM',
-  '04:30 PM', '05:30 PM', '06:15 PM',
-]
+const timeSlots = ['08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:15']
 
-export default function BookingPage() {
-  const [searchParams] = useSearchParams()
-  const initialService = searchParams.get('service') || searchParams.get('package') || ''
+const empty = { name: '', phone: '', email: '', service: '', specialist: 'First available', date: '', time: '', notes: '' }
 
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    service: '',
-    specialist: 'First Available Master Specialist',
-    date: '',
-    time: '',
-    notes: '',
+function Field({ label, error, children, htmlFor }) {
+  return (
+    <div>
+      <label htmlFor={htmlFor} className="label text-ink-500 block">{label}</label>
+      {children}
+      <AnimatePresence>
+        {error && (
+          <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="text-ember-600 text-sm mt-2">
+            {error}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+function Step({ n, title, children }) {
+  return (
+    <Reveal className="grid md:grid-cols-[8rem_1fr] gap-6 py-10 border-t border-ink/15">
+      <div>
+        <span className="label text-ember">Step {n}</span>
+        <h3 className="text-2xl font-medium tracking-tight mt-1">{title}</h3>
+      </div>
+      <div className="space-y-8">{children}</div>
+    </Reveal>
+  )
+}
+
+export default function BookingPage({ ready }) {
+  const [params] = useSearchParams()
+  const initial = params.get('service') || params.get('package') || ''
+  const initialNotes = params.get('notes') || ''
+
+  // Pre-fill from ?service= links; unmatched names go into the notes
+  const [form, setForm] = useState(() => {
+    if (!initial) return { ...empty, notes: initialNotes }
+    const match = serviceOptions.find(s => s.name.toLowerCase().includes(initial.toLowerCase()))
+    return { ...empty, service: match ? match.name : '', notes: initialNotes || (match ? '' : initial) }
   })
-
   const [errors, setErrors] = useState({})
-  const [confirmation, setConfirmation] = useState(null)
-
-  useEffect(() => {
-    if (initialService) {
-      const match = serviceOptions.find(s => s.name.toLowerCase().includes(initialService.toLowerCase()))
-      if (match) {
-        setForm(prev => ({ ...prev, service: match.name }))
-      } else {
-        setForm(prev => ({ ...prev, service: initialService }))
-      }
-    }
-  }, [initialService])
+  const [done, setDone] = useState(null)
 
   const validate = () => {
     const err = {}
-    if (!form.name.trim())  err.name  = 'Full name is required'
-    if (!form.phone.trim()) err.phone = 'Cameroon phone number is required (e.g. +237 679...)'
-    if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) err.email = 'Valid email address is required'
-    if (!form.service)      err.service = 'Please select a service'
-    if (!form.date)         err.date    = 'Please select your preferred date'
-    if (!form.time)         err.time    = 'Please select a time slot'
+    if (!form.name.trim())  err.name  = 'Please tell us your name.'
+    if (!form.phone.trim()) err.phone = 'We need a number to confirm (e.g. +237 679…).'
+    if (form.email.trim() && !/\S+@\S+\.\S+/.test(form.email)) err.email = 'That email doesn’t look right.'
+    if (!form.service)      err.service = 'Pick a service.'
+    if (!form.date)         err.date    = 'Pick a date.'
+    if (!form.time)         err.time    = 'Pick a time.'
     return err
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
+  const set = (name, value) => {
     setForm(prev => ({ ...prev, [name]: value }))
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }))
   }
+  const onChange = (e) => set(e.target.name, e.target.value)
 
-  const handleSubmit = (e) => {
+  const submit = (e) => {
     e.preventDefault()
     const err = validate()
-    if (Object.keys(err).length > 0) {
-      setErrors(err)
-      return
-    }
-
-    const refCode = `CIG-${Math.floor(10000 + Math.random() * 90000)}`
-    setConfirmation({
-      ref: refCode,
-      ...form,
-    })
+    if (Object.keys(err).length) { setErrors(err); return }
+    setDone({ ref: `CIG-${Math.floor(10000 + Math.random() * 90000)}`, ...form })
+    window.scrollTo({ top: document.getElementById('booking-form').offsetTop - 100, behavior: 'smooth' })
   }
 
-  const whatsappMessage = confirmation
-    ? encodeURIComponent(
-        `Hello Cigaraw Bamenda, I have placed an appointment booking:\n\nReference: ${confirmation.ref}\nName: ${confirmation.name}\nService: ${confirmation.service}\nSpecialist: ${confirmation.specialist}\nDate: ${confirmation.date}\nTime: ${confirmation.time}\nPhone: ${confirmation.phone}\nNotes: ${confirmation.notes || 'None'}\n\nPlease confirm my reservation.`
-      )
-    : ''
+  const message = done && [
+    'Hello CiGa Raw, I would like to confirm this booking:',
+    '',
+    `Reference: ${done.ref}`,
+    `Name: ${done.name}`,
+    `Service: ${done.service}`,
+    `Specialist: ${done.specialist}`,
+    `Date: ${done.date} at ${done.time}`,
+    `Phone: ${done.phone}`,
+    `Notes: ${done.notes || 'None'}`,
+  ].join('\n')
 
   return (
-    <div className="bg-dark-950">
+    <>
       <PageHero
-        eyebrow="Instant Reservation &bull; Commercial Avenue"
-        title="Schedule Your"
-        highlight="Appointment"
-        subtitle="Book online in under 60 seconds. Our concierge team in Bamenda personally confirms every reservation via WhatsApp or phone."
-        image="/images/vip_section.jpg"
-        breadcrumb="Book Appointment"
+        ready={ready}
+        index="07"
+        kicker="Book"
+        lines={[<>Pull up</>, <>a <span className="accent text-ember">chair.</span></>]}
+        intro="Takes about a minute. We confirm every booking personally on WhatsApp or by phone."
       />
 
-      <section className="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+      <section id="booking-form" className="bg-paper pt-10 pb-24 lg:pb-36">
+        <div className="wrap grid lg:grid-cols-12 gap-12 lg:gap-16">
+          <aside className="lg:col-span-4 lg:sticky lg:top-28 self-start order-2 lg:order-1">
+            <div className="bg-ink text-paper p-8 rounded-[2px]">
+              <p className="label text-paper/40 mb-3">Address</p>
+              {ADDRESS.map(l => <p key={l} className="text-lg">{l}</p>)}
+              <p className="text-paper/50 text-sm mt-2">Street parking right outside.</p>
 
-          {/* Left Column: Salon Details & Map Card */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="border border-gold-500/15 bg-dark-900/50 p-8">
-              <span className="eyebrow block">Concierge &bull; Bamenda</span>
-              <h2 className="font-display text-3xl text-white mb-4">Visit Our Salon</h2>
-              <div className="gold-divider mb-6" />
+              <p className="label text-paper/40 mb-3 mt-8">Hours</p>
+              {HOURS.map(h => (
+                <p key={h.days} className="flex justify-between text-lg"><span className="text-paper/60">{h.days}</span><span>{h.time}</span></p>
+              ))}
 
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xs font-sans tracking-widest text-gold-400 uppercase">Physical Address</p>
-                  <p className="font-serif text-white text-base mt-1">
-                    Commercial Avenue, Bamenda<br />
-                    North West Region, Cameroon
-                  </p>
-                  <p className="font-serif text-xs text-dark-400 mt-1">
-                    Directly accessible with secured street parking in front.
-                  </p>
-                </div>
+              <p className="label text-paper/40 mb-3 mt-8">Contact</p>
+              <a href={`tel:${PHONE_TEL}`} className="block text-lg link-draw">{PHONE_DISPLAY}</a>
+              <a href={`mailto:${EMAIL}`} className="block text-lg link-draw">{EMAIL}</a>
 
-                <div>
-                  <p className="text-xs font-sans tracking-widest text-gold-400 uppercase">Opening Hours</p>
-                  <div className="font-serif text-sm text-dark-300 mt-1 space-y-1">
-                    <p className="flex justify-between">
-                      <span>Monday – Saturday:</span>
-                      <strong className="text-white">8:00 AM – 7:00 PM</strong>
-                    </p>
-                    <p className="flex justify-between">
-                      <span>Sunday:</span>
-                      <strong className="text-white">10:00 AM – 4:00 PM</strong>
-                    </p>
-                  </div>
-                </div>
+              <a href={wa()} target="_blank" rel="noopener noreferrer" className="btn bg-wa text-ink before:bg-paper w-full mt-8">
+                <WhatsAppIcon className="w-4 h-4" /> Book on WhatsApp instead
+              </a>
+            </div>
+            <div className="mt-5 p-8 bg-bone rounded-[2px]">
+              <p className="text-xl font-medium tracking-tight">Our promise</p>
+              <p className="text-ink-600 mt-2">If we keep you waiting more than 15 minutes past your time, your hot towel or conditioning treatment is on us.</p>
+            </div>
+          </aside>
 
-                <div>
-                  <p className="text-xs font-sans tracking-widest text-gold-400 uppercase">Direct Lines</p>
-                  <p className="font-serif text-sm text-white mt-1">
-                    Phone: <a href="tel:+237679170410" className="text-gold-400 hover:underline">+237 6 79 17 04 10</a>
-                  </p>
-                  <p className="font-serif text-sm text-white">
-                    Email: <a href="mailto:bookings@cigaraw.com" className="text-gold-400 hover:underline">bookings@cigaraw.com</a>
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-gold-500/10">
-                <a
-                  href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%20Salon%20and%20Spa%2C%20I%20have%20an%20inquiry%20about%20booking"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2.5 py-3 border border-[#25D366]/40 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] text-xs font-sans font-semibold tracking-widest uppercase transition-colors"
+          <div className="lg:col-span-8 order-1 lg:order-2">
+            <AnimatePresence mode="wait">
+              {done ? (
+                <motion.div
+                  key="done"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8, ease: easeOut }}
+                  className="bg-ember text-ink p-8 lg:p-14 rounded-[2px]"
                 >
-                  <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
-                  <span>Chat with Concierge on WhatsApp</span>
-                </a>
-              </div>
-            </div>
+                  <svg viewBox="0 0 52 52" className="w-16 h-16" aria-hidden="true">
+                    <motion.circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" strokeWidth="2"
+                      initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, ease }} />
+                    <motion.path d="M15 27l7 7 15-16" fill="none" stroke="currentColor" strokeWidth="2.5"
+                      initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.5, delay: 0.7, ease }} />
+                  </svg>
+                  <p className="label mt-8 opacity-70">Request received · {done.ref}</p>
+                  <h2 className="display text-5xl lg:text-7xl mt-3">See you soon, {done.name.split(' ')[0]}.</h2>
 
-            {/* VIP Guarantee */}
-            <div className="border border-gold-500/15 bg-dark-900/30 p-8">
-              <h3 className="font-display text-xl text-white mb-2">The Cigaraw Promise</h3>
-              <p className="font-serif text-dark-400 text-xs leading-relaxed">
-                If your appointment starts more than 15 minutes past your reserved time due to our delay, your hot towel shave or conditioning treatment is completely on us.
-              </p>
-            </div>
-          </div>
+                  <dl className="mt-10 grid sm:grid-cols-2 gap-x-10 border-t border-ink/20">
+                    {[
+                      ['Service', done.service],
+                      ['With', done.specialist],
+                      ['When', `${done.date} · ${done.time}`],
+                      ['Where', 'Commercial Ave, Bamenda'],
+                    ].map(([k, v]) => (
+                      <div key={k} className="py-4 border-b border-ink/20">
+                        <dt className="label opacity-60">{k}</dt>
+                        <dd className="text-lg mt-1">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
 
-          {/* Right Column: Interactive Booking Form or Confirmation Card */}
-          <div className="lg:col-span-7">
-            {confirmation ? (
-              <div className="border border-gold-400/40 bg-dark-900/80 p-8 md:p-12 text-center">
-                <div className="w-16 h-16 rounded-full border border-gold-400/40 bg-gold-500/10 flex items-center justify-center mx-auto mb-6">
-                  <span className="text-gold-400 text-2xl">✓</span>
-                </div>
+                  <p className="mt-8 max-w-lg text-ink/80">
+                    To lock it in, send this booking to us on WhatsApp — we&rsquo;ll reply to confirm.
+                  </p>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <a href={wa(message)} target="_blank" rel="noopener noreferrer" className="btn-ink">
+                      <WhatsAppIcon className="w-4 h-4 text-wa" /> Confirm on WhatsApp
+                    </a>
+                    <button onClick={() => { setDone(null); setForm(empty) }} className="btn-line">Book something else</button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.form key="form" onSubmit={submit} noValidate exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
+                  <Step n="1" title="What">
+                    <Field label="Service" htmlFor="service" error={errors.service}>
+                      <select id="service" name="service" className="field" value={form.service} onChange={onChange}>
+                        <option value="">Choose a service…</option>
+                        {groups.map(g => (
+                          <optgroup key={g} label={g}>
+                            {serviceOptions.filter(s => s.group === g).map(s => <option key={s.name} value={s.name}>{s.name}</option>)}
+                          </optgroup>
+                        ))}
+                      </select>
+                    </Field>
+                    <Field label="Who with" htmlFor="specialist">
+                      <select id="specialist" name="specialist" className="field" value={form.specialist} onChange={onChange}>
+                        {specialists.map(s => <option key={s} value={s}>{s}</option>)}
+                      </select>
+                    </Field>
+                  </Step>
 
-                <span className="eyebrow block">Appointment Confirmed</span>
-                <h3 className="font-display text-4xl text-white mb-2">We Expect You, {confirmation.name}</h3>
-                <p className="font-mono text-sm text-gold-400 mb-6 tracking-widest">
-                  BOOKING REFERENCE: {confirmation.ref}
-                </p>
-                <div className="gold-divider mx-auto mb-6" />
+                  <Step n="2" title="When">
+                    <Field label="Date" htmlFor="date" error={errors.date}>
+                      <input id="date" name="date" type="date" min={new Date().toISOString().split('T')[0]} className="field" value={form.date} onChange={onChange} />
+                    </Field>
+                    <Field label="Time" error={errors.time}>
+                      <div className="flex flex-wrap gap-2 mt-3" role="radiogroup" aria-label="Time slot">
+                        {timeSlots.map(t => (
+                          <button
+                            type="button"
+                            key={t}
+                            role="radio"
+                            aria-checked={form.time === t}
+                            onClick={() => set('time', t)}
+                            className={`chip font-mono text-sm tabular-nums ${form.time === t ? 'bg-ink text-paper border-ink' : 'border-ink/20 hover:border-ink'}`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </Field>
+                  </Step>
 
-                <div className="bg-dark-950 p-6 border border-gold-500/15 max-w-md mx-auto text-left space-y-3 mb-8">
-                  <div className="flex justify-between text-xs font-serif">
-                    <span className="text-dark-400">Service:</span>
-                    <strong className="text-white">{confirmation.service}</strong>
-                  </div>
-                  <div className="flex justify-between text-xs font-serif">
-                    <span className="text-dark-400">Specialist:</span>
-                    <strong className="text-white">{confirmation.specialist}</strong>
-                  </div>
-                  <div className="flex justify-between text-xs font-serif">
-                    <span className="text-dark-400">Date &amp; Time:</span>
-                    <strong className="text-gold-400">{confirmation.date} at {confirmation.time}</strong>
-                  </div>
-                  <div className="flex justify-between text-xs font-serif">
-                    <span className="text-dark-400">Location:</span>
-                    <strong className="text-white">Commercial Ave, Bamenda</strong>
-                  </div>
-                  {confirmation.notes && (
-                    <div className="pt-2 border-t border-gold-500/10 text-xs font-serif text-dark-300">
-                      <span className="text-dark-400 block mb-0.5">Note:</span>
-                      {confirmation.notes}
+                  <Step n="3" title="You">
+                    <div className="grid sm:grid-cols-2 gap-8">
+                      <Field label="Full name" htmlFor="name" error={errors.name}>
+                        <input id="name" name="name" type="text" autoComplete="name" placeholder="Bertrand Nchinda" className="field" value={form.name} onChange={onChange} />
+                      </Field>
+                      <Field label="Phone / WhatsApp" htmlFor="phone" error={errors.phone}>
+                        <input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+237 679 000 000" className="field" value={form.phone} onChange={onChange} />
+                      </Field>
                     </div>
-                  )}
-                </div>
+                    <Field label="Email (optional)" htmlFor="email" error={errors.email}>
+                      <input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" className="field" value={form.email} onChange={onChange} />
+                    </Field>
+                    <Field label="Anything we should know?" htmlFor="notes">
+                      <textarea id="notes" name="notes" rows="3" placeholder="Reference style, sensitivities, VIP requests…" className="field resize-none" value={form.notes} onChange={onChange} />
+                    </Field>
+                  </Step>
 
-                <p className="font-serif text-dark-300 text-sm max-w-sm mx-auto mb-8">
-                  A confirmation SMS has been dispatched. You can also send this reservation directly to our WhatsApp concierge for instant acknowledgement:
-                </p>
-
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <a
-                    href={`https://wa.me/237679170410?text=${whatsappMessage}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase inline-flex items-center justify-center gap-2.5 font-semibold"
-                  >
-                    <WhatsAppIcon className="w-4 h-4 fill-current text-dark-950" />
-                    <span>Confirm on WhatsApp &rarr;</span>
-                  </a>
-                  <button
-                    onClick={() => { setConfirmation(null); setForm({ name:'',phone:'',email:'',service:'',specialist:'First Available Master Specialist',date:'',time:'',notes:'' }) }}
-                    className="btn-outline-gold px-6 py-3.5 text-xs tracking-widest uppercase"
-                  >
-                    Book Another Service
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} noValidate className="border border-gold-500/15 bg-dark-900/40 p-8 md:p-10 space-y-6">
-                <div>
-                  <h3 className="font-display text-2xl text-white tracking-wide">Reservation Details</h3>
-                  <p className="font-serif text-xs text-dark-400 mt-1">Please select your desired service and preferred timing.</p>
-                </div>
-                <div className="gold-divider" />
-
-                {/* Service Selection */}
-                <div>
-                  <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="service">
-                    Select Service *
-                  </label>
-                  <select
-                    id="service"
-                    name="service"
-                    className="form-input"
-                    value={form.service}
-                    onChange={handleChange}
-                  >
-                    <option value="">-- Choose a Grooming or Spa Service --</option>
-                    {serviceOptions.map((opt) => (
-                      <option key={opt.name} value={opt.name}>
-                        [{opt.group}] {opt.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.service && <p className="text-red-400 text-xs mt-1">{errors.service}</p>}
-                </div>
-
-                {/* Specialist & Date */}
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="specialist">
-                      Preferred Specialist
-                    </label>
-                    <select
-                      id="specialist"
-                      name="specialist"
-                      className="form-input"
-                      value={form.specialist}
-                      onChange={handleChange}
-                    >
-                      {specialists.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
+                  <div className="border-t border-ink/15 pt-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <p className="text-ink-500 max-w-sm">No deposit needed for barbering. We&rsquo;ll confirm on WhatsApp or by phone.</p>
+                    <button type="submit" className="btn-ember !px-10 !py-5 text-base">Request booking</button>
                   </div>
-
-                  <div>
-                    <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="date">
-                      Appointment Date *
-                    </label>
-                    <input
-                      id="date"
-                      name="date"
-                      type="date"
-                      min={new Date().toISOString().split('T')[0]}
-                      className="form-input"
-                      value={form.date}
-                      onChange={handleChange}
-                    />
-                    {errors.date && <p className="text-red-400 text-xs mt-1">{errors.date}</p>}
-                  </div>
-                </div>
-
-                {/* Time Slots */}
-                <div>
-                  <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="time">
-                    Preferred Time Slot *
-                  </label>
-                  <select
-                    id="time"
-                    name="time"
-                    className="form-input"
-                    value={form.time}
-                    onChange={handleChange}
-                  >
-                    <option value="">-- Select Time Slot --</option>
-                    {timeSlots.map((slot) => (
-                      <option key={slot} value={slot}>{slot}</option>
-                    ))}
-                  </select>
-                  {errors.time && <p className="text-red-400 text-xs mt-1">{errors.time}</p>}
-                </div>
-
-                {/* Client Details */}
-                <div className="grid sm:grid-cols-2 gap-6 pt-4 border-t border-gold-500/10">
-                  <div>
-                    <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="name">
-                      Full Name *
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      placeholder="e.g. Bertrand Nchinda"
-                      className="form-input"
-                      value={form.name}
-                      onChange={handleChange}
-                    />
-                    {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="phone">
-                      Cameroon Phone / WhatsApp *
-                    </label>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+237 679 000 000"
-                      className="form-input"
-                      value={form.phone}
-                      onChange={handleChange}
-                    />
-                    {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="email">
-                    Email Address *
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="yourname@gmail.com"
-                    className="form-input"
-                    value={form.email}
-                    onChange={handleChange}
-                  />
-                  {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
-                </div>
-
-                <div>
-                  <label className="text-xs font-sans tracking-widest text-gold-400 uppercase block mb-2" htmlFor="notes">
-                    Special Requests / Haircut Reference Notes
-                  </label>
-                  <textarea
-                    id="notes"
-                    name="notes"
-                    rows="3"
-                    placeholder="Mention any sensitivities, specific styling ideas, or VIP suite requests..."
-                    className="form-input resize-none"
-                    value={form.notes}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn-gold w-full py-4 text-xs tracking-widest uppercase font-semibold"
-                >
-                  Confirm Appointment
-                </button>
-
-                <p className="text-center font-serif text-xs text-dark-400">
-                  🔒 No deposit required for standard barbering. Immediate confirmation via WhatsApp &amp; SMS.
-                </p>
-              </form>
-            )}
+                </motion.form>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </section>
-    </div>
+    </>
   )
 }

@@ -1,320 +1,466 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Hero from '../components/Hero'
-import WhatsAppIcon from '../components/WhatsAppIcon'
+import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
+import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
+import { ADDRESS, HOURS, PHONE_DISPLAY, PHONE_TEL } from '../site'
 
-const pillars = [
-  {
-    num: '01',
-    title: 'Master Barbering',
-    tag: 'Precision & Fades',
-    desc: 'From razor-sharp skin fades to meticulous beard sculpting and traditional hot-towel straight razor shaves.',
-    image: '/images/gallery_haircut.jpg',
-    path: '/barbing',
-    cta: 'Explore Barbering',
-  },
-  {
-    num: '02',
-    title: 'Luxury Spa Therapies',
-    tag: 'Rejuvenation',
-    desc: 'Bespoke facial rejuvenation, deep-tissue therapy, and relaxing head-to-toe body rituals tailored for pure stress relief.',
-    image: '/images/spa_suite.jpg',
-    path: '/services',
-    cta: 'View Spa Menu',
-  },
-  {
-    num: '03',
-    title: 'VIP Executive Suite',
-    tag: 'Private Sanctuaries',
-    desc: 'Complete acoustic seclusion, personal grooming butler, complimentary aged spirits bar, and dedicated private showers.',
-    image: '/images/vip_section.jpg',
-    path: '/vip',
-    cta: 'Discover VIP Suite',
-  },
-  {
-    num: '04',
-    title: 'Tattoo & Body Art',
-    tag: 'Custom Ink',
-    desc: 'Resident tattoo artists specializing in fine-line, bold blackwork, African tribal patterns, and custom body masterpieces.',
-    image: '/images/tattoo_section.jpg',
-    path: '/tattoo',
-    cta: 'View Tattoo Studio',
-  },
+const disciplines = [
+  { num: '01', title: 'Barbering', note: 'Fades, shape-ups, hot towel shaves', image: '/images/gallery_haircut.jpg', path: '/barbing' },
+  { num: '02', title: 'Spa',       note: 'Facials, stone & deep tissue massage', image: '/images/spa_service.jpg', path: '/services' },
+  { num: '03', title: 'VIP Suite', note: 'One client, one room, no rush',        image: '/images/vip_section.jpg',  path: '/vip' },
+  { num: '04', title: 'Tattoo',    note: 'Fine-line, blackwork, Grassfields motifs', image: '/images/tattoo_section.jpg', path: '/tattoo' },
+]
+
+const shortMenu = [
+  { name: 'Classic precision cut',      time: '40 min', price: '3,000' },
+  { name: 'Signature skin fade',        time: '50 min', price: '4,500' },
+  { name: 'Hot towel straight razor',   time: '45 min', price: '4,000' },
+  { name: 'Deep cleanse facial',        time: '60 min', price: '10,000' },
+  { name: 'Heated basalt stone massage', time: '75 min', price: '12,000' },
+  { name: 'Executive suite day pass',   time: '2 hrs',  price: '20,000' },
+]
+
+const day = [
+  { image: '/images/hero_barber.jpg',    time: '08:00', caption: 'Doors open, clippers oiled, first coffee on.' },
+  { image: '/images/barber_service.jpg', time: '10:30', caption: 'Mid-morning fade. Forty minutes, no shortcuts.' },
+  { image: '/images/spa_suite.jpg',      time: '13:00', caption: 'Stone room warms up for the afternoon.' },
+  { image: '/images/tattoo_art.jpg',     time: '15:45', caption: 'Blackwork session, second hour.' },
+  { image: '/images/vip_section.jpg',    time: '18:30', caption: 'Last booking of the day goes to the suite.' },
 ]
 
 const reviews = [
-  {
-    name: 'Nchinda Bertrand',
-    role: 'Business Owner, Bamenda',
-    text: 'Nothing in Bamenda touches Cigaraw. The attention to detail, the clean environment, the skilled hands — this place has completely changed how I think about grooming.',
-  },
-  {
-    name: 'Tabi Godwill',
-    role: 'Creative Director',
-    text: 'My skin fade was on point. These barbers actually know what they are doing — proper technique, clean tools, and genuine care. None of us have looked back.',
-  },
-  {
-    name: 'Fru Valerie',
-    role: 'Entrepreneur',
-    text: 'The spa service was unreal. I came in stressed and left completely renewed. Cigaraw is a genuine gem right here on Commercial Avenue in Bamenda.',
-  },
+  { name: 'Nchinda Bertrand', role: 'Business owner', text: 'Nothing in Bamenda touches CiGa Raw. The attention to detail, the clean tools, the skilled hands — it changed how I think about grooming.' },
+  { name: 'Tabi Godwill',     role: 'Creative director', text: 'My skin fade was on point. These barbers know what they are doing and they take their time. I have brought three friends. None of us have looked back.' },
+  { name: 'Fru Valerie',      role: 'Entrepreneur', text: 'I came in stressed and left completely renewed. The therapist understood exactly what my body needed. A real gem on Commercial Avenue.' },
+  { name: 'Che Kingsley',     role: 'Civil engineer', text: 'The VIP Suite is worth every franc. A haircut in total quiet with an espresso and no crowd made my Saturday.' },
 ]
 
-export default function HomePage() {
-  return (
-    <div className="bg-dark-950">
-      {/* Hero Section */}
-      <Hero />
+function Hero({ ready }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+  const headY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%'])
 
-      {/* Marquee ticker */}
-      <div className="overflow-hidden py-4 border-y border-gold-500/10 bg-dark-900/60">
-        <div className="marquee-track">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <span key={i} className="text-xs font-sans tracking-[0.4em] text-gold-500/50 uppercase whitespace-nowrap">
-              Bamenda's Premier Saloon &bull; Master Barbering &bull; Luxury Spa &bull; Custom Tattoo Art &bull; Private VIP Suite &bull;&nbsp;
-            </span>
+  return (
+    <section ref={ref} className="relative bg-paper pt-28 lg:pt-32 pb-16 overflow-hidden">
+      <div className="wrap">
+        <motion.div
+          className="flex justify-between label text-ink-500 mb-10"
+          initial={{ opacity: 0 }}
+          animate={ready ? { opacity: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <span>Salon · Spa · Ink</span>
+          <span>Bamenda<span className="hidden sm:inline"> — since 2024</span></span>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+          <motion.h1 style={{ y: headY }} className="lg:col-span-8 display text-[16vw] sm:text-[12vw] lg:text-[10.2vw]">
+            <Lines
+              when={ready}
+              delay={0.25}
+              lines={[
+                <>Sharp cuts,</>,
+                <><span className="accent text-ember">slow</span> rituals,</>,
+                <>honest ink.</>,
+              ]}
+            />
+          </motion.h1>
+
+          <div className="lg:col-span-4 relative">
+            <motion.div
+              className="relative aspect-[4/5] lg:aspect-auto lg:h-full min-h-[420px] overflow-hidden"
+              initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+              animate={ready ? { clipPath: 'inset(0% 0% 0% 0%)' } : {}}
+              transition={{ duration: 1.4, ease, delay: 0.5 }}
+            >
+              <motion.img
+                src="/images/barber_service.jpg"
+                alt="A barber finishing a fade at CiGa Raw"
+                style={{ y: imgY }}
+                className="absolute inset-0 w-full h-[120%] object-cover"
+                initial={{ scale: 1.3 }}
+                animate={ready ? { scale: 1 } : {}}
+                transition={{ duration: 2, ease: easeOut, delay: 0.5 }}
+              />
+            </motion.div>
+            <motion.div
+              className="absolute -left-10 -bottom-10 lg:-left-16 hidden sm:block"
+              initial={{ scale: 0, rotate: -120 }}
+              animate={ready ? { scale: 1, rotate: 0 } : {}}
+              transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 1.3 }}
+            >
+              <Link to="/booking" aria-label="Book a chair" className="block group">
+                <SpinBadge className="w-32 h-32 lg:w-36 lg:h-36 text-ink bg-paper rounded-full">
+                  <span className="w-12 h-12 rounded-full bg-ember text-paper grid place-items-center transition-transform duration-500 group-hover:rotate-[-45deg]">
+                    <Arrow className="w-5 h-5" />
+                  </span>
+                </SpinBadge>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+
+        <motion.div
+          className="mt-14 lg:mt-20 grid lg:grid-cols-12 gap-10 items-end"
+          initial={{ opacity: 0, y: 30 }}
+          animate={ready ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, ease: easeOut, delay: 1 }}
+        >
+          <div className="lg:col-span-5">
+            <p className="text-lg lg:text-xl leading-snug text-ink-600 max-w-md">
+              A barbershop, spa and tattoo studio under one roof on Commercial Avenue. Book a chair, take your time, leave sharper than you came in.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Magnetic>
+                <Link to="/booking" className="btn-ink group !pr-2">
+                  Book an appointment <ArrowDot className="bg-paper/15" />
+                </Link>
+              </Magnetic>
+              <Link to="/services" className="btn-line">See the menu</Link>
+            </div>
+          </div>
+
+          <dl className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-ink/15">
+            {[
+              { n: 5000, s: '+', l: 'Clients served' },
+              { n: 12,   s: '',  l: 'Resident artists' },
+              { n: 4.9,  s: '★', l: 'Average rating', raw: true },
+            ].map((x) => (
+              <div key={x.l} className="pt-5 pr-4">
+                <dd className="display text-4xl sm:text-5xl">
+                  {x.raw ? <>{x.n}<span className="text-ember text-3xl align-top">{x.s}</span></> : <Count to={x.n} suffix={x.s} when={ready} />}
+                </dd>
+                <dt className="label text-ink-500 mt-2">{x.l}</dt>
+              </div>
+            ))}
+          </dl>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// Paragraph whose words darken one by one as it scrolls through view
+function ScrollWords({ text, className }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'end 0.45'] })
+  const words = text.split(' ')
+  return (
+    <p ref={ref} className={className}>
+      {words.map((w, i) => (
+        <Word key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>{w}</Word>
+      ))}
+    </p>
+  )
+}
+
+function Word({ children, progress, range }) {
+  const opacity = useTransform(progress, range, [0.15, 1])
+  return <motion.span style={{ opacity }} className="inline-block mr-[0.25em]">{children}</motion.span>
+}
+
+// Big hover list; a photo trails the pointer on desktop
+function Disciplines() {
+  const [active, setActive] = useState(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const sx = useSpring(x, { stiffness: 150, damping: 20 })
+  const sy = useSpring(y, { stiffness: 150, damping: 20 })
+  const listRef = useRef(null)
+
+  const onMove = (e) => {
+    const r = listRef.current.getBoundingClientRect()
+    x.set(e.clientX - r.left)
+    y.set(e.clientY - r.top)
+  }
+
+  return (
+    <section className="bg-ink text-paper py-24 lg:py-36">
+      <div className="wrap">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-14">
+          <div>
+            <Label num="02" className="text-paper/50 mb-6">What we do</Label>
+            <h2 className="h2">
+              <Lines lines={[<>Four rooms,</>, <>one <span className="accent text-ember">standard.</span></>]} />
+            </h2>
+          </div>
+          <Reveal className="max-w-sm text-paper/60 text-lg">
+            Every department runs like its own studio, with its own specialists. Pick one to see the full menu.
+          </Reveal>
+        </div>
+
+        <ul
+          ref={listRef}
+          onMouseMove={onMove}
+          onMouseLeave={() => setActive(null)}
+          className="relative border-t border-paper/15"
+        >
+          {disciplines.map((d, i) => (
+            <Reveal as="li" key={d.num} delay={i * 0.06} className="border-b border-paper/15">
+              <Link
+                to={d.path}
+                onMouseEnter={() => setActive(i)}
+                className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-8 py-6 lg:py-8"
+              >
+                <span className="label text-paper/40 w-8">{d.num}</span>
+                <div className="flex flex-col lg:flex-row lg:items-baseline gap-1 lg:gap-8">
+                  <span className={`display text-5xl sm:text-7xl lg:text-8xl transition-all duration-500 group-hover:translate-x-3 ${
+                    active !== null && active !== i ? 'text-paper/25' : 'text-paper'
+                  }`}>
+                    {d.title}
+                  </span>
+                  <span className="text-paper/50 lg:text-lg">{d.note}</span>
+                </div>
+                <img src={d.image} alt="" className="w-16 h-20 object-cover lg:hidden" loading="lazy" />
+                <ArrowDot className="hidden lg:grid border border-paper/25 w-14 h-14 transition-colors duration-500 group-hover:bg-ember group-hover:border-ember" />
+              </Link>
+            </Reveal>
           ))}
+
+          <motion.div
+            aria-hidden="true"
+            style={{ x: sx, y: sy }}
+            className="hidden lg:block pointer-events-none absolute top-0 left-0 z-10 w-[300px] h-[380px] -translate-x-1/2 -translate-y-1/2"
+          >
+            <motion.div
+              className="w-full h-full overflow-hidden -ml-[150px] -mt-[190px]"
+              animate={{ scale: active !== null ? 1 : 0, rotate: active !== null ? -4 : 0 }}
+              transition={{ duration: 0.5, ease: easeOut }}
+            >
+              <motion.div
+                className="w-full"
+                animate={{ y: `${-(active ?? 0) * 100}%` }}
+                transition={{ duration: 0.6, ease }}
+              >
+                {disciplines.map(d => (
+                  <img key={d.num} src={d.image} alt="" className="w-[300px] h-[380px] object-cover" />
+                ))}
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+// Vertical scroll drives a horizontal strip of photos
+function DayStrip() {
+  const ref = useRef(null)
+  const trackRef = useRef(null)
+  const [distance, setDistance] = useState(0)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const x = useTransform(scrollYProgress, [0, 1], [0, -distance])
+  const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current) setDistance(Math.max(0, trackRef.current.scrollWidth - window.innerWidth))
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  return (
+    <section ref={ref} className="relative bg-bone" style={{ height: `calc(100vh + ${distance}px)` }}>
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+        <div className="wrap flex items-end justify-between gap-6 mb-8 lg:mb-12">
+          <div>
+            <Label num="03" className="text-ink-500 mb-4">A day on Commercial Ave</Label>
+            <h2 className="h2">Open to close.</h2>
+          </div>
+          <div className="hidden sm:block w-48 h-px bg-ink/15 relative">
+            <motion.div style={{ width: bar }} className="absolute inset-y-0 left-0 bg-ember h-[2px] -top-px" />
+          </div>
+        </div>
+
+        <motion.div ref={trackRef} style={{ x }} className="flex gap-5 lg:gap-8 pl-5 sm:pl-8 lg:pl-12 pr-[10vw] w-max">
+          {day.map((d, i) => (
+            <figure key={d.time} className={`shrink-0 ${i % 2 ? 'w-[70vw] sm:w-[34vw] lg:w-[26vw] mt-16' : 'w-[78vw] sm:w-[42vw] lg:w-[32vw]'}`}>
+              <div className={`overflow-hidden ${i % 2 ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
+                <img src={d.image} alt="" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" loading="lazy" />
+              </div>
+              <figcaption className="mt-4 flex gap-4">
+                <span className="label text-ember pt-1">{d.time}</span>
+                <span className="text-ink-600 max-w-xs">{d.caption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function ShortMenu() {
+  return (
+    <section className="bg-paper py-24 lg:py-36">
+      <div className="wrap grid lg:grid-cols-12 gap-12">
+        <div className="lg:col-span-4">
+          <Label num="04" className="text-ink-500 mb-6">The short menu</Label>
+          <h2 className="h2">
+            <Lines lines={[<>Fair prices,</>, <span key="a" className="accent text-ember">written down.</span>]} />
+          </h2>
+          <Reveal className="mt-6 text-ink-600 text-lg max-w-sm">
+            All prices in FCFA. No surprises at the till. Walk-ins welcome, bookings go first.
+          </Reveal>
+          <Reveal delay={0.1} className="mt-8">
+            <Link to="/services" className="btn-line group !pr-2">Full menu <ArrowDot className="bg-ink/5" /></Link>
+          </Reveal>
+        </div>
+
+        <ul className="lg:col-span-7 lg:col-start-6 border-t border-ink/15">
+          {shortMenu.map((m, i) => (
+            <Reveal as="li" key={m.name} delay={i * 0.05} className="menu-row group">
+              <div className="flex items-baseline">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight transition-colors group-hover:text-ember">{m.name}</span>
+                <span className="leader hidden sm:block" />
+              </div>
+              <div className="text-right">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-medium tabular-nums">{m.price}</span>
+                <span className="block label text-ink-500 mt-1">{m.time}</span>
+              </div>
+            </Reveal>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+function Reviews() {
+  const [i, setI] = useState(0)
+  const r = reviews[i]
+  const go = (d) => setI((i + d + reviews.length) % reviews.length)
+
+  useEffect(() => {
+    const t = setTimeout(() => go(1), 7000)
+    return () => clearTimeout(t)
+  })
+
+  return (
+    <section className="bg-ember text-ink py-24 lg:py-32 overflow-hidden">
+      <div className="wrap">
+        <div className="flex justify-between items-center mb-12">
+          <Label num="05" className="text-ink/60">Word of mouth</Label>
+          <div className="flex items-center gap-3">
+            <span className="label tabular-nums">{String(i + 1).padStart(2, '0')} / {String(reviews.length).padStart(2, '0')}</span>
+            <button onClick={() => go(-1)} aria-label="Previous review" className="w-11 h-11 rounded-full border border-ink/30 grid place-items-center hover:bg-ink hover:text-ember transition-colors">
+              <Arrow className="w-4 h-4 rotate-180" />
+            </button>
+            <button onClick={() => go(1)} aria-label="Next review" className="w-11 h-11 rounded-full border border-ink/30 grid place-items-center hover:bg-ink hover:text-ember transition-colors">
+              <Arrow className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="min-h-[340px] sm:min-h-[300px] lg:min-h-[330px]">
+          <AnimatePresence mode="wait">
+            <motion.figure key={i} initial="hide" animate="show" exit="out">
+              <blockquote className="font-serif text-[2rem] sm:text-5xl lg:text-[4.2rem] leading-[1.05] max-w-6xl">
+                {r.text.split(' ').map((w, k) => (
+                  <span key={k} className="inline-block overflow-hidden align-bottom">
+                    <motion.span
+                      className="inline-block mr-[0.22em]"
+                      variants={{
+                        hide: { y: '100%' },
+                        show: { y: '0%', transition: { duration: 0.7, ease: easeOut, delay: k * 0.015 } },
+                        out:  { y: '-100%', transition: { duration: 0.35, ease, delay: k * 0.005 } },
+                      }}
+                    >
+                      {k === 0 && '“'}{w}{k === r.text.split(' ').length - 1 && '”'}
+                    </motion.span>
+                  </span>
+                ))}
+              </blockquote>
+              <motion.figcaption
+                className="mt-10 flex items-center gap-4"
+                variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { delay: 0.5 } }, out: { opacity: 0 } }}
+              >
+                <span className="w-10 h-px bg-ink" />
+                <span className="font-medium">{r.name}</span>
+                <span className="text-ink/60">{r.role}</span>
+              </motion.figcaption>
+            </motion.figure>
+          </AnimatePresence>
         </div>
       </div>
+    </section>
+  )
+}
 
-      {/* About Us Story Section on Home Page */}
-      <section className="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-16 border-b border-gold-500/10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div>
-            <p className="eyebrow">About Cigaraw &bull; Bamenda Roots</p>
-            <h2 className="section-title">
-              Crafted in 2024,<br />Elevated with <em>Passion</em>
-            </h2>
-            <div className="gold-divider my-6" />
-            <p className="font-serif text-dark-200 text-lg leading-relaxed mb-6">
-              Located on Commercial Avenue in Bamenda, Cigaraw Saloon &amp; Spa was founded with a clear intention: to bring authentic luxury, hospital-grade hygiene, and master craftsmanship together under one distinguished roof.
-            </p>
-            <p className="font-serif text-dark-400 text-base leading-relaxed mb-8">
-              Over 2+ years of excellence, we have transformed everyday grooming into an art form. From seamless skin fades and therapeutic hot stone rituals to custom tribal body ink and our private VIP suite, our sanctuary is designed for those who carry themselves with pride.
-            </p>
-
-            {/* Quick value cards */}
-            <div className="grid sm:grid-cols-3 gap-4 mb-8">
-              <div className="border border-gold-500/20 bg-dark-900/40 p-4">
-                <span className="font-display text-3xl text-gold-400 block">2+</span>
-                <span className="text-[0.65rem] font-sans tracking-widest text-dark-300 uppercase mt-1 block">Years of Mastery</span>
-              </div>
-              <div className="border border-gold-500/20 bg-dark-900/40 p-4">
-                <span className="font-display text-3xl text-gold-400 block">5k+</span>
-                <span className="text-[0.65rem] font-sans tracking-widest text-dark-300 uppercase mt-1 block">Satisfied Clients</span>
-              </div>
-              <div className="border border-gold-500/20 bg-dark-900/40 p-4">
-                <span className="font-display text-3xl text-gold-400 block">100%</span>
-                <span className="text-[0.65rem] font-sans tracking-widest text-dark-300 uppercase mt-1 block">Sterile Guarantee</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              <Link to="/about" className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase">
-                Read Our Story &rarr;
-              </Link>
-              <Link to="/booking" className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase">
-                Reserve Appointment
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="relative h-[480px] overflow-hidden border border-gold-500/20">
-              <img
-                src="/images/hero_barber.jpg"
-                alt="Cigaraw Master Barber at work in Bamenda"
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/80 via-transparent to-transparent" />
-              <div className="absolute top-6 right-6 bg-dark-950/90 border border-gold-400/40 px-4 py-2 backdrop-blur-sm">
-                <span className="text-xs font-sans tracking-widest text-gold-400 uppercase font-semibold">
-                  Est. 2024 &bull; Bamenda
-                </span>
-              </div>
-              <div className="absolute bottom-6 left-6 right-6 p-6 bg-dark-950/85 backdrop-blur-md border border-gold-400/30">
-                <p className="font-serif italic text-white text-sm">
-                  &ldquo;A haven of dignity, meticulous skill, and warm camaraderie on Commercial Avenue.&rdquo;
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* The 4 Pillars / Dedicated Portals */}
-      <section className="py-28 max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-          <div>
-            <p className="eyebrow">The Cigaraw Standard</p>
-            <h2 className="section-title">
-              Our Four <em>Pillars</em>
-            </h2>
-          </div>
-          <p className="font-serif text-dark-300 text-base md:text-lg max-w-md leading-relaxed">
-            Every department is an independent sanctuary of craftsmanship. Click any pillar to explore its dedicated menu and details.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {pillars.map((pillar) => (
-            <Link
-              key={pillar.title}
-              to={pillar.path}
-              className="group relative border border-gold-500/15 bg-dark-900/40 overflow-hidden hover:border-gold-400/50 transition-all duration-500 flex flex-col justify-between"
-            >
-              {/* Image aspect ratio container */}
-              <div className="relative h-72 md:h-80 overflow-hidden">
-                <img
-                  src={pillar.image}
-                  alt={pillar.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/40 to-transparent" />
-                <span className="absolute top-5 left-5 px-3 py-1 bg-dark-950/80 border border-gold-400/30 text-gold-400 text-xs font-sans tracking-widest uppercase backdrop-blur-sm">
-                  {pillar.tag}
-                </span>
-                <span className="absolute top-5 right-5 font-mono text-xs text-white/60 tracking-widest">
-                  {pillar.num}
-                </span>
-              </div>
-
-              {/* Text content */}
-              <div className="p-8 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-display text-3xl text-white tracking-wider group-hover:text-gold-400 transition-colors duration-300">
-                    {pillar.title}
-                  </h3>
-                  <div className="gold-divider my-4" />
-                  <p className="font-serif text-dark-300 text-base leading-relaxed mb-6">
-                    {pillar.desc}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2 text-gold-400 text-xs font-sans tracking-widest uppercase font-semibold group-hover:translate-x-2 transition-transform duration-300">
-                  <span>{pillar.cta}</span>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Bamenda Flagship Spotlight */}
-      <section className="py-24 bg-dark-900 relative overflow-hidden border-y border-gold-500/10">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div>
-            <p className="eyebrow">Bamenda Flagship</p>
-            <h2 className="section-title">
-              Crafted in <em>Bamenda</em>,<br />Built for Distinction
-            </h2>
-            <div className="gold-divider my-6" />
-            <p className="font-serif text-dark-300 text-lg leading-relaxed mb-6">
-              Located conveniently on Commercial Avenue in Bamenda, Cigaraw was designed from the ground up to redefine high-end personal grooming in Cameroon.
-            </p>
-            <p className="font-serif text-dark-400 text-base leading-relaxed mb-8">
-              We combine world-class barbering equipment, certified spa practitioners, hospital-grade tattoo sterilization, and an uncompromised commitment to client comfort.
-            </p>
-
-            <div className="grid grid-cols-2 gap-6 mb-8">
-              <div className="border-l-2 border-gold-400 pl-4">
-                <p className="font-display text-3xl text-white">Commercial Ave</p>
-                <p className="text-xs font-sans tracking-widest text-gold-500 uppercase mt-1">Prime Bamenda Address</p>
-              </div>
-              <div className="border-l-2 border-gold-400 pl-4">
-                <p className="font-display text-3xl text-white">7 Days</p>
-                <p className="text-xs font-sans tracking-widest text-gold-500 uppercase mt-1">Open Every Week</p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              <Link to="/booking" className="btn-gold px-8 py-3.5 text-xs tracking-widest uppercase">
-                Book Your Visit
-              </Link>
-              <Link to="/gallery" className="btn-outline-gold px-8 py-3.5 text-xs tracking-widest uppercase">
-                View Gallery
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="relative h-[480px] overflow-hidden border border-gold-500/20">
-              <img
-                src="/images/spa_suite.jpg"
-                alt="Cigaraw Saloon interior in Bamenda"
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark-950/70 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 p-6 bg-dark-950/85 backdrop-blur-md border border-gold-400/30">
-                <p className="font-display text-2xl text-white">The Sanctuary Experience</p>
-                <p className="font-serif text-xs text-dark-300 mt-1">Warm ambient lighting, acoustic seclusion &amp; handcrafted leather appointments.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews Summary */}
-      <section className="py-24 max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-        <div className="text-center mb-16">
-          <p className="eyebrow">Client Endorsements</p>
-          <h2 className="section-title">
-            Words from <em>Our Patrons</em>
+function Visit() {
+  return (
+    <section className="bg-paper py-24 lg:py-36">
+      <div className="wrap grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <ImageReveal src="/images/spa_suite.jpg" alt="The candle-lit spa room" className="lg:col-span-6 aspect-[4/3]" from="left" />
+        <div className="lg:col-span-5 lg:col-start-8">
+          <Label num="06" className="text-ink-500 mb-6">Come by</Label>
+          <h2 className="h2 mb-10">
+            <Lines lines={[<>Commercial</>, <>Avenue, <span className="accent text-ember">Bamenda.</span></>]} />
           </h2>
-          <div className="gold-divider mx-auto my-6" />
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {reviews.map((rev) => (
-            <div key={rev.name} className="border border-gold-500/15 bg-dark-900/30 p-8 flex flex-col justify-between">
-              <div>
-                <div className="flex gap-1 text-gold-400 mb-4">
-                  {'★★★★★'}
-                </div>
-                <p className="font-serif text-dark-200 text-base leading-relaxed italic mb-6">
-                  &ldquo;{rev.text}&rdquo;
-                </p>
-              </div>
-              <div className="pt-4 border-t border-gold-500/10">
-                <p className="font-sans font-semibold text-white text-sm">{rev.name}</p>
-                <p className="font-serif text-xs text-gold-500 mt-0.5">{rev.role}</p>
-              </div>
+          <Reveal className="grid sm:grid-cols-2 gap-8 text-lg">
+            <div>
+              <p className="label text-ink-500 mb-3">Address</p>
+              {ADDRESS.map(l => <p key={l}>{l}</p>)}
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Big Action Banner */}
-      <section className="py-20 bg-gradient-to-r from-dark-950 via-dark-900 to-dark-950 border-t border-gold-500/15">
-        <div className="max-w-4xl mx-auto text-center px-6">
-          <p className="eyebrow">Personalized Grooming</p>
-          <h2 className="font-display text-4xl sm:text-5xl text-white tracking-wider mb-6">
-            Ready to Experience the <em>Cigaraw Standard?</em>
-          </h2>
-          <p className="font-serif text-dark-300 text-base md:text-lg mb-8 max-w-2xl mx-auto">
-            Book online in under 60 seconds or reach out to our concierge on WhatsApp for VIP bookings.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/booking" className="btn-gold px-10 py-4 text-xs tracking-widest uppercase">
-              Schedule Appointment
-            </Link>
-            <a
-              href="https://wa.me/237679170410?text=Hello%20CiGa%20Raw%2C%20I%20would%20like%20to%20book%20an%20appointment"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline-gold px-8 py-4 text-xs tracking-widest uppercase inline-flex items-center gap-2.5 hover:border-[#25D366] hover:text-[#25D366] transition-colors"
-            >
-              <WhatsAppIcon className="w-4 h-4 fill-current text-[#25D366]" />
-              <span>WhatsApp Concierge</span>
+            <div>
+              <p className="label text-ink-500 mb-3">Hours</p>
+              {HOURS.map(h => <p key={h.days}><span className="text-ink-500">{h.days}</span> {h.time}</p>)}
+            </div>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-10">
+            <a href={`tel:${PHONE_TEL}`} className="display text-4xl sm:text-5xl link-draw hover:text-ember transition-colors">
+              {PHONE_DISPLAY}
             </a>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default function HomePage({ ready }) {
+  return (
+    <>
+      <Hero ready={ready} />
+
+      <div className="bg-ember text-paper py-5 lg:py-7 -rotate-1 scale-[1.03] relative z-10">
+        <Marquee>
+          {['Skin fades', 'Hot towel shaves', 'Facials', 'Basalt stone massage', 'Fine-line ink', 'Private VIP suite'].map(t => (
+            <span key={t} className="display text-4xl lg:text-6xl flex items-center">
+              <span className="px-6 lg:px-10">{t}</span>
+              <svg viewBox="0 0 20 20" className="w-6 h-6 lg:w-8 lg:h-8 fill-current" aria-hidden="true">
+                <path d="M10 0l2.2 7.8L20 10l-7.8 2.2L10 20l-2.2-7.8L0 10l7.8-2.2z" />
+              </svg>
+            </span>
+          ))}
+        </Marquee>
+      </div>
+
+      <section className="bg-paper pt-28 pb-24 lg:pt-40 lg:pb-36">
+        <div className="wrap grid lg:grid-cols-12 gap-10">
+          <Label num="01" className="lg:col-span-3 text-ink-500">Who we are</Label>
+          <div className="lg:col-span-9">
+            <ScrollWords
+              className="text-[1.9rem] sm:text-5xl lg:text-[3.6rem] leading-[1.08] font-medium tracking-[-0.03em]"
+              text="We opened on Commercial Avenue in 2024 with a simple idea: Bamenda deserves a place where a haircut is done properly, the tools are always sterile, and nobody rushes you out of the chair."
+            />
+            <Reveal className="mt-12 flex flex-wrap items-center gap-6">
+              <Link to="/about" className="btn-line group !pr-2">Our story <ArrowDot className="bg-ink/5" /></Link>
+              <span className="text-ink-500">Barbers, therapists and tattoo artists — twelve of us.</span>
+            </Reveal>
           </div>
         </div>
       </section>
-    </div>
+
+      <Disciplines />
+      <DayStrip />
+      <ShortMenu />
+      <Reviews />
+      <Visit />
+    </>
   )
 }

@@ -1,43 +1,53 @@
-import { Link } from 'react-router-dom'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { easeOut, Lines } from './motion'
 
-export default function PageHero({ eyebrow, title, highlight, subtitle, image, breadcrumb }) {
+// Editorial page opener: index number, big stacked title, intro copy, full-bleed image
+export default function PageHero({ index, kicker, lines, intro, image, imageAlt = '', aside, ready = true }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '25%'])
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12])
+
   return (
-    <div className="relative pt-36 pb-20 md:pt-44 md:pb-28 overflow-hidden bg-dark-950 border-b border-gold-500/10">
-      {/* Background with dark gradient & vignette */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <img
-          src={image || '/images/hero_barber.jpg'}
-          alt={title}
-          className="w-full h-full object-cover ken-burns-image"
-          style={{ objectPosition: 'center 35%' }}
-        />
-        <div className="absolute inset-0 bg-dark-950/85" />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/60 to-dark-950/80" />
-        <div className="absolute inset-0 bg-noise opacity-30" />
+    <section ref={ref} className="relative bg-paper pt-32 lg:pt-40">
+      <div className="wrap">
+        <div className="flex items-center justify-between label text-ink-500 mb-8 lg:mb-12">
+          <span>({index}) {kicker}</span>
+          <span className="hidden sm:inline">Commercial Ave, Bamenda</span>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-8 items-end">
+          <h1 className="lg:col-span-8 display text-[15vw] sm:text-[11vw] lg:text-[8.2vw]">
+            <Lines lines={lines} delay={0.4} when={ready} />
+          </h1>
+          <motion.div
+            className="lg:col-span-4 lg:pb-4"
+            initial={{ opacity: 0, y: 30 }}
+            animate={ready ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1, ease: easeOut, delay: 0.8 }}
+          >
+            <p className="text-lg lg:text-xl leading-snug text-ink-600 max-w-md">{intro}</p>
+            {aside && <div className="mt-6">{aside}</div>}
+          </motion.div>
+        </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-16 text-center">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="inline-flex items-center gap-2 px-4 py-1.5 border border-gold-500/20 bg-dark-900/60 backdrop-blur-sm mb-6 text-xs font-sans tracking-widest uppercase">
-          <Link to="/" className="text-dark-400 hover:text-gold-400 transition-colors">Home</Link>
-          <span className="text-gold-500/40">/</span>
-          <span className="text-gold-400 font-semibold">{breadcrumb || title}</span>
-        </nav>
-
-        {eyebrow && <p className="eyebrow block mx-auto">{eyebrow}</p>}
-
-        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white tracking-wider max-w-4xl mx-auto leading-tight">
-          {title} {highlight && <em className="text-gradient-gold not-italic">{highlight}</em>}
-        </h1>
-
-        <div className="gold-divider mx-auto my-6" />
-
-        {subtitle && (
-          <p className="font-serif text-dark-300 text-base md:text-xl max-w-2xl mx-auto leading-relaxed">
-            {subtitle}
-          </p>
-        )}
-      </div>
-    </div>
+      {image && (
+        <motion.div
+          className="relative mt-12 lg:mt-16 h-[55vh] lg:h-[78vh] overflow-hidden mx-5 sm:mx-8 lg:mx-12"
+          initial={{ clipPath: 'inset(30% 12% 0% 12%)' }}
+          animate={ready ? { clipPath: 'inset(0% 0% 0% 0%)' } : {}}
+          transition={{ duration: 1.5, ease: [0.65, 0, 0.35, 1], delay: 0.6 }}
+        >
+          <motion.img
+            src={image}
+            alt={imageAlt}
+            style={{ y: imgY, scale: imgScale }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </motion.div>
+      )}
+    </section>
   )
 }
