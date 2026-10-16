@@ -8,15 +8,15 @@ import { ArrowDot, easeOut, ImageReveal, Label, Lines, Marquee, Reveal } from '.
 
 const cuts = [...CLASSIC, FACE_BODY.find(f => f.name === 'Dreadlock renewal')]
 
-// Each style looks for its own photo in public/images/styles/; until one is added it
-// falls back to a shop photo
+// Each style shows its photo from public/images/styles/ (see CREDITS.md there);
+// if a file is missing it falls back to a shop photo
 const styles = [
-  { name: 'Skin fade',     slug: 'skin-fade',     tag: 'Most booked',       fallback: SHOP.mainFloor, pos: 'center 55%', desc: 'Down to bare skin at the base for maximum contrast with the top.' },
-  { name: 'Afro taper',    slug: 'afro-taper',    tag: 'Bamenda favourite', fallback: SHOP.team1, pos: 'center 18%',    desc: 'Full volume on top, clean sideburns and neckline for a sleek outline.' },
-  { name: 'Burst fade',    slug: 'burst-fade',    tag: 'Trending',          fallback: SHOP.floorFacials, pos: 'center 55%', desc: 'A curved fade around the ear that shows off curls or sponge texture.' },
-  { name: 'Low drop fade', slug: 'low-drop-fade', tag: 'Office-ready',      fallback: SHOP.team2, pos: 'center 22%', desc: 'Dips lower behind the crown. Subtle enough for any boardroom.' },
-  { name: '360 waves',     slug: '360-waves',     tag: 'Signature',         fallback: SHOP.vipLounge, pos: '30% 60%', desc: 'Deep wave definition, surgical temple line-up, razor clean-up.' },
-  { name: 'Hair art',      slug: 'hair-art',      tag: 'Creative',          fallback: SHOP.vipChairs, pos: '45% 60%',    desc: 'Geometric or tribal lines cut straight into the fade by hand.' },
+  { name: 'Skin fade',     slug: 'skin-fade',     tag: 'Most booked',       fallback: SHOP.mainFloor, pos: 'center 25%', desc: 'Down to bare skin at the base for maximum contrast with the top.' },
+  { name: 'Afro taper',    slug: 'afro-taper',    tag: 'Bamenda favourite', fallback: SHOP.team1, pos: 'center 40%',    desc: 'Full volume on top, clean sideburns and neckline for a sleek outline.' },
+  { name: 'Burst fade',    slug: 'burst-fade',    tag: 'Trending',          fallback: SHOP.floorFacials, pos: 'center 30%', desc: 'A curved fade around the ear that shows off curls or sponge texture.' },
+  { name: 'Low drop fade', slug: 'low-drop-fade', tag: 'Office-ready',      fallback: SHOP.team2, pos: 'center 35%', desc: 'Dips lower behind the crown. Subtle enough for any boardroom.' },
+  { name: '360 waves',     slug: '360-waves',     tag: 'Signature',         fallback: SHOP.vipLounge, pos: '60% 25%', desc: 'Deep wave definition, surgical temple line-up, razor clean-up.' },
+  { name: 'Hair art',      slug: 'hair-art',      tag: 'Creative',          fallback: SHOP.vipChairs, pos: 'center 35%',    desc: 'Geometric or tribal lines cut straight into the fade by hand.' },
 ]
 
 const hygiene = [
