@@ -230,7 +230,7 @@ function Disciplines() {
             >
               <motion.div
                 className="w-full"
-                animate={{ y: `${-(active ?? 0) * 100}%` }}
+                animate={{ y: `${-(active ?? 0) * (100 / disciplines.length)}%` }}
                 transition={{ duration: 0.6, ease }}
               >
                 {disciplines.map(d => (

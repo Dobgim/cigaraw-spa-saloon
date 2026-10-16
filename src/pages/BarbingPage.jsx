@@ -15,13 +15,15 @@ const cuts = [
   { name: 'Full signature experience', desc: 'Fade, beard sculpt, hot towel shave and face massage', price: '10,000', time: '80 min' },
 ]
 
+// Each style looks for its own photo in public/images/styles/; until one is added it
+// falls back to an existing shop photo
 const styles = [
-  { name: 'Skin fade',          tag: 'Most booked',      desc: 'Down to bare skin at the base for maximum contrast with the top.' },
-  { name: 'Afro taper',         tag: 'Bamenda favourite', desc: 'Full volume on top, clean sideburns and neckline for a sleek outline.' },
-  { name: 'Burst fade',         tag: 'Trending',         desc: 'A curved fade around the ear that shows off curls or sponge texture.' },
-  { name: 'Low drop fade',      tag: 'Office-ready',     desc: 'Dips lower behind the crown. Subtle enough for any boardroom.' },
-  { name: '360 waves',          tag: 'Signature',        desc: 'Deep wave definition, surgical temple line-up, razor clean-up.' },
-  { name: 'Hair art',           tag: 'Creative',         desc: 'Geometric or tribal lines cut straight into the fade by hand.' },
+  { name: 'Skin fade',     slug: 'skin-fade',     tag: 'Most booked',       fallback: '/images/gallery_haircut.jpg', pos: 'center 30%', desc: 'Down to bare skin at the base for maximum contrast with the top.' },
+  { name: 'Afro taper',    slug: 'afro-taper',    tag: 'Bamenda favourite', fallback: '/images/hero_barber.jpg',     pos: '62% 40%',    desc: 'Full volume on top, clean sideburns and neckline for a sleek outline.' },
+  { name: 'Burst fade',    slug: 'burst-fade',    tag: 'Trending',          fallback: '/images/barber_service.jpg',  pos: 'center 45%', desc: 'A curved fade around the ear that shows off curls or sponge texture.' },
+  { name: 'Low drop fade', slug: 'low-drop-fade', tag: 'Office-ready',      fallback: '/images/gallery_haircut.jpg', pos: 'center 60%', desc: 'Dips lower behind the crown. Subtle enough for any boardroom.' },
+  { name: '360 waves',     slug: '360-waves',     tag: 'Signature',         fallback: '/images/barber_service.jpg',  pos: 'center 70%', desc: 'Deep wave definition, surgical temple line-up, razor clean-up.' },
+  { name: 'Hair art',      slug: 'hair-art',      tag: 'Creative',          fallback: '/images/hero_barber.jpg',     pos: '75% 30%',    desc: 'Geometric or tribal lines cut straight into the fade by hand.' },
 ]
 
 const hygiene = [
@@ -54,15 +56,26 @@ function StyleRail() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, ease: easeOut, delay: i * 0.07 }}
-            className="w-[78vw] sm:w-[360px] h-[380px] shrink-0 bg-paper text-ink p-8 flex flex-col justify-between select-none rounded-[2px]"
+            className="group w-[78vw] sm:w-[360px] shrink-0 bg-paper text-ink select-none rounded-[2px] overflow-hidden"
           >
-            <div className="flex justify-between label text-ink-500">
-              <span>0{i + 1}</span>
-              <span className="text-ember">{s.tag}</span>
+            <div className="relative h-[240px] overflow-hidden">
+              <img
+                src={`/images/styles/${s.slug}.jpg`}
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = s.fallback }}
+                alt={`${s.name} haircut`}
+                draggable="false"
+                loading="lazy"
+                style={{ objectPosition: s.pos }}
+                className="w-full h-full object-cover pointer-events-none transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+              />
+              <div className="absolute top-4 inset-x-4 flex justify-between label">
+                <span className="bg-paper/90 text-ink px-2 py-1 rounded-full">0{i + 1}</span>
+                <span className="bg-ember text-paper px-2.5 py-1 rounded-full">{s.tag}</span>
+              </div>
             </div>
-            <div>
-              <h3 className="display text-5xl">{s.name}</h3>
-              <p className="text-ink-600 text-lg mt-4">{s.desc}</p>
+            <div className="p-7">
+              <h3 className="display text-4xl lg:text-5xl">{s.name}</h3>
+              <p className="text-ink-600 text-lg mt-3">{s.desc}</p>
             </div>
           </motion.article>
         ))}
