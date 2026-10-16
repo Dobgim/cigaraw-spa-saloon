@@ -51,8 +51,8 @@ export default function AboutPage({ ready }) {
         kicker="About"
         lines={[<>Grooming,</>, <>done <span className="accent text-ember">properly.</span></>]}
         intro="CiGa Raw started in 2024 because Bamenda deserved better than rushed cuts and dirty tools. This is who we are and how we work."
-        image={SHOP.team1}
-        imageAlt="Two clients posing in the CiGa Raw salon"
+        image={SHOP.vipChairs}
+        imageAlt="Inside CiGa Raw: wood-panelled VIP room with barber chairs"
       />
 
       <section className="bg-paper py-24 lg:py-36">
@@ -112,7 +112,7 @@ export default function AboutPage({ ready }) {
             <h2 className="h2">
               <Lines lines={[<>Two years,</>, <span key="b" className="accent text-ember">four chapters.</span>]} />
             </h2>
-            <ImageReveal src={SHOP.team2} alt="Clients in the CiGa Raw salon" className="hidden lg:block aspect-[4/5] mt-12 max-w-xs" />
+            <ImageReveal src={SHOP.frontDay} alt="The CiGa Raw sign above the shop entrance" className="hidden lg:block aspect-[4/5] mt-12 max-w-xs" />
           </div>
           <Timeline />
         </div>

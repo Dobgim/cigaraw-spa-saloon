@@ -11,12 +11,12 @@ const cuts = [...CLASSIC, FACE_BODY.find(f => f.name === 'Dreadlock renewal')]
 // Each style looks for its own photo in public/images/styles/; until one is added it
 // falls back to a shop photo
 const styles = [
-  { name: 'Skin fade',     slug: 'skin-fade',     tag: 'Most booked',       fallback: SHOP.team2, pos: 'center 20%', desc: 'Down to bare skin at the base for maximum contrast with the top.' },
+  { name: 'Skin fade',     slug: 'skin-fade',     tag: 'Most booked',       fallback: SHOP.mainFloor, pos: 'center 55%', desc: 'Down to bare skin at the base for maximum contrast with the top.' },
   { name: 'Afro taper',    slug: 'afro-taper',    tag: 'Bamenda favourite', fallback: SHOP.team1, pos: 'center 18%',    desc: 'Full volume on top, clean sideburns and neckline for a sleek outline.' },
-  { name: 'Burst fade',    slug: 'burst-fade',    tag: 'Trending',          fallback: SHOP.team2, pos: '75% 25%', desc: 'A curved fade around the ear that shows off curls or sponge texture.' },
-  { name: 'Low drop fade', slug: 'low-drop-fade', tag: 'Office-ready',      fallback: SHOP.team1, pos: '75% 25%', desc: 'Dips lower behind the crown. Subtle enough for any boardroom.' },
-  { name: '360 waves',     slug: '360-waves',     tag: 'Signature',         fallback: SHOP.team2, pos: '40% 20%', desc: 'Deep wave definition, surgical temple line-up, razor clean-up.' },
-  { name: 'Hair art',      slug: 'hair-art',      tag: 'Creative',          fallback: SHOP.team1, pos: '35% 15%',    desc: 'Geometric or tribal lines cut straight into the fade by hand.' },
+  { name: 'Burst fade',    slug: 'burst-fade',    tag: 'Trending',          fallback: SHOP.floorFacials, pos: 'center 55%', desc: 'A curved fade around the ear that shows off curls or sponge texture.' },
+  { name: 'Low drop fade', slug: 'low-drop-fade', tag: 'Office-ready',      fallback: SHOP.team2, pos: 'center 22%', desc: 'Dips lower behind the crown. Subtle enough for any boardroom.' },
+  { name: '360 waves',     slug: '360-waves',     tag: 'Signature',         fallback: SHOP.vipLounge, pos: '30% 60%', desc: 'Deep wave definition, surgical temple line-up, razor clean-up.' },
+  { name: 'Hair art',      slug: 'hair-art',      tag: 'Creative',          fallback: SHOP.vipChairs, pos: '45% 60%',    desc: 'Geometric or tribal lines cut straight into the fade by hand.' },
 ]
 
 const hygiene = [
@@ -86,8 +86,8 @@ export default function BarbingPage({ ready }) {
         kicker="Barbering"
         lines={[<>Clean lines.</>, <><span className="accent text-ember">No</span> shortcuts.</>]}
         intro="Shaving, sporting waves, colour and dreadlock renewal — by barbers who know Afro hair inside out."
-        image={SHOP.team2}
-        imageAlt="Clients in the CiGa Raw salon"
+        image={SHOP.vipChairs}
+        imageAlt="Barber chairs in the CiGa Raw salon"
         aside={<Link to="/booking?service=Normal%20shaving" className="btn-ember group !pr-2">Book a chair <ArrowDot className="bg-paper/15" /></Link>}
       />
 
@@ -104,8 +104,8 @@ export default function BarbingPage({ ready }) {
             </Reveal>
           </div>
           <div className="lg:col-span-5 lg:col-start-8 grid grid-cols-2 gap-4">
-            <ImageReveal src={SHOP.team1} alt="Clients after a session at CiGa Raw" className="aspect-[3/4] mt-16" />
-            <ImageReveal src={SHOP.team2} alt="Inside the CiGa Raw salon" className="aspect-[3/4]" delay={0.15} />
+            <ImageReveal src={SHOP.mainFloor} alt="Barber stations on the CiGa Raw main floor" className="aspect-[3/4] mt-16" />
+            <ImageReveal src={SHOP.floorFacials} alt="Staff at work on the main floor" className="aspect-[3/4]" delay={0.15} />
           </div>
         </div>
       </section>

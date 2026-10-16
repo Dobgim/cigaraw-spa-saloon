@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
-import { SHOP, TATTOOS } from '../photos'
+import { SALON, TATTOOS } from '../photos'
 import { ArrowDot, ease, easeOut, Label, Lines, Reveal } from '../components/motion'
 
 const items = [
-  { id: 's1', title: 'Fresh out of the chair', category: 'Salon', image: SHOP.team1, desc: 'Clients on the CiGa Raw floor.' },
-  { id: 's2', title: 'Good day at the salon',  category: 'Salon', image: SHOP.team2, desc: 'Arched mirrors, black chairs and happy regulars.' },
+  ...SALON.map((p, i) => ({ id: `s${i}`, title: p.title, category: 'Salon', image: p.src, desc: p.desc })),
   ...TATTOOS.map((w, i) => ({ id: `t${i}`, title: w.title, category: 'Tattoo', image: w.src, desc: w.style })),
 ]
 

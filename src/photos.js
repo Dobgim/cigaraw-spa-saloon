@@ -1,9 +1,33 @@
 // Real CiGa Raw photos. Add new ones here and they show up in the gallery.
 
+const s = (file) => `/images/shop/${file}.jpg`
+
 export const SHOP = {
-  team1: '/images/shop/team-1.jpg',
-  team2: '/images/shop/team-2.jpg',
+  team1:        s('team-1'),        // two clients posing, arched mirrors
+  team2:        s('team-2'),
+  frontNight:   s('front-night'),   // storefront sign lit up at night
+  frontDay:     s('front-day'),
+  mainFloor:    s('main-floor'),    // ground-floor barber stations
+  floorFacials: s('floor-facials'), // staff doing face treatments on the main floor
+  facial:       s('facial'),        // therapist giving a face treatment
+  vipLounge:    s('vip-lounge'),    // upstairs VIP chairs, lounge and curtain
+  vipChairs:    s('vip-chairs'),    // wider view of the VIP room
+  vipEntrance:  s('vip-entrance'),  // VIP entrance with poster wall
 }
+
+// Salon photos shown in the gallery
+export const SALON = [
+  { src: SHOP.frontNight,   title: 'CiGa Raw at night',        desc: 'The storefront on Commercial Avenue.' },
+  { src: SHOP.vipLounge,    title: 'The VIP room',             desc: 'Two chairs, a lounge corner and a curtained treatment space.' },
+  { src: SHOP.facial,       title: 'Face treatment',           desc: 'One of our therapists at work.' },
+  { src: SHOP.mainFloor,    title: 'The main floor',           desc: 'Barber stations on the ground floor.' },
+  { src: SHOP.team1,        title: 'Fresh out of the chair',   desc: 'Clients on the CiGa Raw floor.' },
+  { src: SHOP.vipEntrance,  title: 'Upstairs entrance',        desc: 'The way into the VIP spa.' },
+  { src: SHOP.floorFacials, title: 'A busy afternoon',         desc: 'Face treatments on the main floor.' },
+  { src: SHOP.vipChairs,    title: 'VIP spa, wide view',       desc: 'Wood panelling, red carpet, private chairs.' },
+  { src: SHOP.team2,        title: 'Good day at the salon',    desc: 'Arched mirrors, black chairs and happy regulars.' },
+  { src: SHOP.frontDay,     title: 'Our sign by day',          desc: 'Every service we offer, right above the door.' },
+]
 
 export const LOGO = '/logo.png'
 

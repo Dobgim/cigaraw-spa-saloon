@@ -25,8 +25,8 @@ export default function VipPage({ ready }) {
         kicker="VIP Suite"
         lines={[<>Privacy is</>, <>the <span className="accent text-ember">luxury.</span></>]}
         intro="A self-contained suite away from the main floor — for confidential calls, a quiet drink, and grooming without an audience."
-        image={SHOP.team2}
-        imageAlt="Clients at CiGa Raw"
+        image={SHOP.vipLounge}
+        imageAlt="The CiGa Raw VIP room: two barber chairs, a lounge corner and a curtained space"
         aside={
           <a href={wa('Hello CiGa Raw, I would like to reserve the VIP Suite.')} target="_blank" rel="noopener noreferrer" className="btn-ink">
             <WhatsAppIcon className="w-4 h-4 text-wa" /> Reserve on WhatsApp

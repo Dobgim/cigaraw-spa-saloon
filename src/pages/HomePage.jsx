@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { LOGO, SHOP, TATTOOS, tattoo } from '../photos'
+import { SHOP, TATTOOS, tattoo } from '../photos'
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
 import { ADDRESS, HOURS, PHONE_DISPLAY, PHONE_TEL } from '../site'
 import { CLASSIC, FACE_BODY, VIP } from '../menu'
 
 const disciplines = [
-  { num: '01', title: 'Barbering', note: 'Shaving, sporting waves, black & treatment', image: SHOP.team2, path: '/barbing' },
-  { num: '02', title: 'Spa',       note: 'Face treatments, scrubs, massage, mani-pedi', image: LOGO, path: '/services' },
-  { num: '03', title: 'VIP Suite', note: 'VIP shaving, facials & teeth whitening',        image: SHOP.team1, path: '/vip' },
+  { num: '01', title: 'Barbering', note: 'Shaving, sporting waves, black & treatment', image: SHOP.mainFloor, path: '/barbing' },
+  { num: '02', title: 'Spa',       note: 'Face treatments, scrubs, massage, mani-pedi', image: SHOP.facial, path: '/services' },
+  { num: '03', title: 'VIP Suite', note: 'VIP shaving, facials & teeth whitening',        image: SHOP.vipLounge, path: '/vip' },
   { num: '04', title: 'Tattoo',    note: 'Realism, blackwork, lettering', image: tattoo('golden-crown-back'), path: '/tattoo' },
 ]
 
@@ -398,7 +398,7 @@ function Visit() {
   return (
     <section className="bg-paper py-24 lg:py-36">
       <div className="wrap grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <ImageReveal src={SHOP.team2} alt="Clients in the CiGa Raw salon" className="lg:col-span-6 aspect-[4/3]" from="left" />
+        <ImageReveal src={SHOP.frontNight} alt="The CiGa Raw storefront on Commercial Avenue at night" className="lg:col-span-5 aspect-[4/5]" from="left" />
         <div className="lg:col-span-5 lg:col-start-8">
           <Label num="06" className="text-ink-500 mb-6">Come by</Label>
           <h2 className="h2 mb-10">
