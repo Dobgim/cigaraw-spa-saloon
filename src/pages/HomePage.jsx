@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { LOGO, SHOP, TATTOOS, tattoo } from '../photos'
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
 import { ADDRESS, HOURS, PHONE_DISPLAY, PHONE_TEL } from '../site'
 import { CLASSIC, FACE_BODY, VIP } from '../menu'
 
 const disciplines = [
-  { num: '01', title: 'Barbering', note: 'Shaving, sporting waves, black & treatment', image: '/images/gallery_haircut.jpg', path: '/barbing' },
-  { num: '02', title: 'Spa',       note: 'Face treatments, scrubs, massage, mani-pedi', image: '/images/spa_service.jpg', path: '/services' },
-  { num: '03', title: 'VIP Suite', note: 'VIP shaving, facials & teeth whitening',        image: '/images/vip_section.jpg',  path: '/vip' },
-  { num: '04', title: 'Tattoo',    note: 'Fine-line, blackwork, Grassfields motifs', image: '/images/tattoo_section.jpg', path: '/tattoo' },
+  { num: '01', title: 'Barbering', note: 'Shaving, sporting waves, black & treatment', image: SHOP.team2, path: '/barbing' },
+  { num: '02', title: 'Spa',       note: 'Face treatments, scrubs, massage, mani-pedi', image: LOGO, path: '/services' },
+  { num: '03', title: 'VIP Suite', note: 'VIP shaving, facials & teeth whitening',        image: SHOP.team1, path: '/vip' },
+  { num: '04', title: 'Tattoo',    note: 'Realism, blackwork, lettering', image: tattoo('golden-crown-back'), path: '/tattoo' },
 ]
 
 const shortMenu = [
@@ -21,13 +22,9 @@ const shortMenu = [
   { ...VIP[1], group: 'VIP' },
 ]
 
-const day = [
-  { image: '/images/hero_barber.jpg',    time: '08:00', caption: 'Doors open, clippers oiled, first coffee on.' },
-  { image: '/images/barber_service.jpg', time: '10:30', caption: 'Mid-morning fade. Forty minutes, no shortcuts.' },
-  { image: '/images/spa_suite.jpg',      time: '13:00', caption: 'Stone room warms up for the afternoon.' },
-  { image: '/images/tattoo_art.jpg',     time: '15:45', caption: 'Blackwork session, second hour.' },
-  { image: '/images/vip_section.jpg',    time: '18:30', caption: 'Last booking of the day goes to the suite.' },
-]
+// Recent tattoo work for the photo strip
+const day = ['jesus-rosary-realism', 'golden-crown-back', 'one-life-one-chance', 'mary-and-jesus', 'it-is-finished', 'praying-jesus-dove-sleeve']
+  .map(f => TATTOOS.find(x => x.src.endsWith(`/${f}.jpg`)))
 
 const reviews = [
   { name: 'Nchinda Bertrand', role: 'Business owner', text: 'Nothing in Bamenda touches CiGa Raw. The attention to detail, the clean tools, the skilled hands — it changed how I think about grooming.' },
@@ -53,7 +50,7 @@ function Hero({ ready }) {
         transition={{ duration: 1.6, ease, delay: 0.2 }}
       >
         <motion.img
-          src="/images/team_shop.jpg"
+          src={SHOP.team1}
           alt=""
           style={{ y: imgY }}
           className="absolute inset-0 w-full h-[115%] object-cover object-[center_18%]"
@@ -270,8 +267,8 @@ function DayStrip() {
       <div>
         <div className="wrap flex items-end justify-between gap-6 mb-8 lg:mb-10">
           <div>
-            <Label num="03" className="text-ink-500 mb-4">A day on Commercial Ave</Label>
-            <h2 className="h2">Open to close.</h2>
+            <Label num="03" className="text-ink-500 mb-4">Recent ink</Label>
+            <h2 className="h2">Straight from the studio.</h2>
           </div>
           <div className="hidden sm:block w-48 h-px bg-ink/15 relative">
             <motion.div style={{ width: bar }} className="absolute inset-y-0 left-0 bg-ember h-[2px] -top-px" />
@@ -284,13 +281,13 @@ function DayStrip() {
           className="flex items-start gap-5 lg:gap-6 pl-5 sm:pl-8 lg:pl-12 min-[1440px]:pl-[calc((100vw-1440px)/2+3rem)] pr-[6vw] w-max"
         >
           {day.map((d, i) => (
-            <figure key={d.time} className={`shrink-0 ${i % 2 ? 'mt-10' : ''}`}>
-              <div className={`overflow-hidden ${i % 2 ? 'aspect-[3/4] h-[300px] lg:h-[min(42vh,380px)]' : 'aspect-[4/3] h-[240px] lg:h-[min(34vh,300px)]'}`}>
-                <img src={d.image} alt="" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" loading="lazy" />
-              </div>
+            <figure key={d.src} className={`shrink-0 ${i % 2 ? 'mt-10' : ''}`}>
+              <Link to="/tattoo" className="block overflow-hidden aspect-[3/4] h-[300px] lg:h-[min(44vh,400px)]">
+                <img src={d.src} alt={d.title} className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" loading="lazy" />
+              </Link>
               <figcaption className="mt-4 flex gap-4 w-0 min-w-full">
-                <span className="label text-ember pt-1">{d.time}</span>
-                <span className="text-ink-600 max-w-xs">{d.caption}</span>
+                <span className="text-ink font-medium">{d.title}</span>
+                <span className="label text-ink-500 pt-1">{d.style}</span>
               </figcaption>
             </figure>
           ))}
@@ -401,7 +398,7 @@ function Visit() {
   return (
     <section className="bg-paper py-24 lg:py-36">
       <div className="wrap grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <ImageReveal src="/images/spa_suite.jpg" alt="The candle-lit spa room" className="lg:col-span-6 aspect-[4/3]" from="left" />
+        <ImageReveal src={SHOP.team2} alt="Clients in the CiGa Raw salon" className="lg:col-span-6 aspect-[4/3]" from="left" />
         <div className="lg:col-span-5 lg:col-start-8">
           <Label num="06" className="text-ink-500 mb-6">Come by</Label>
           <h2 className="h2 mb-10">

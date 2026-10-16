@@ -3,6 +3,7 @@ import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ArrowDot, ImageReveal, Label, Lines, Reveal } from '../components/motion'
 import { wa } from '../site'
+import { TATTOOS, tattoo } from '../photos'
 
 const tattooStyles = [
   { name: 'Fine-line & script',        rate: 'from 15,000', desc: 'Single-needle work for quotes, dates, botanicals and small symbols.' },
@@ -36,15 +37,16 @@ export default function TattooPage({ ready }) {
         kicker="Tattoo studio"
         lines={[<>Your story,</>, <><span className="accent text-ember">in ink.</span></>]}
         intro="Custom work only, drawn for your body and tattooed by artists who specialise in dark skin tones. Sterile, private, unhurried."
-        image="/images/tattoo_section.jpg"
-        imageAlt="Artist tattooing a tribal piece on a client's forearm"
+        image={tattoo('golden-crown-back')}
+        imagePosition="center 35%"
+        imageAlt="Artist tattooing a golden crown of thorns on a client's back"
         aside={<Link to="/booking?service=Consultation" className="btn-ember group !pr-2">Book a consultation <ArrowDot className="bg-paper/15" /></Link>}
       />
 
       <section className="bg-paper py-24 lg:py-36">
         <div className="wrap grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
-            <ImageReveal src="/images/tattoo_art.jpg" alt="Close-up of fresh blackwork" className="aspect-[4/5]" />
+            <ImageReveal src={tattoo('jesus-rosary-realism')} alt="Black and grey realism: Jesus holding a rosary" className="aspect-[4/5]" />
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <Label num="A" className="text-ink-500 mb-6">How we work</Label>
@@ -59,6 +61,31 @@ export default function TattooPage({ ready }) {
               <div className="pt-5"><p className="display text-5xl">500+</p><p className="label text-ink-500 mt-2">Custom pieces</p></div>
               <div className="pt-5"><p className="display text-5xl">100%</p><p className="label text-ink-500 mt-2">Single-use needles</p></div>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-bone py-24 lg:py-36">
+        <div className="wrap">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-14">
+            <div>
+              <Label num="A+" className="text-ink-500 mb-6">Recent work</Label>
+              <h2 className="h2"><Lines lines={[<>Fresh from</>, <span key="p" className="accent text-ember">the chair.</span>]} /></h2>
+            </div>
+            <Reveal className="max-w-sm text-ink-600 text-lg">Realism, lettering and blackwork — a few of the pieces that have left our studio.</Reveal>
+          </div>
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 lg:gap-5 [&>*]:mb-4 lg:[&>*]:mb-5">
+            {TATTOOS.map((w, i) => (
+              <Reveal key={w.src} delay={(i % 4) * 0.06} y={30} className="break-inside-avoid">
+                <figure className="group relative overflow-hidden rounded-[2px] bg-ink">
+                  <img src={w.src} alt={`${w.title} — ${w.style}`} loading="lazy" className="w-full h-auto transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
+                  <figcaption className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-ink/85 to-transparent text-paper translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                    <span className="block font-medium">{w.title}</span>
+                    <span className="label text-paper/60">{w.style}</span>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

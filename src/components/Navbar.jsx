@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { LOGO, SHOP, tattoo } from '../photos'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { ease, easeOut } from './motion'
 import WhatsAppIcon from './WhatsAppIcon'
 import { ADDRESS, HOURS, NAV, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
 
 const previews = {
-  '/':         '/images/hero_barber.jpg',
-  '/about':    '/images/team_shop.jpg',
-  '/services': '/images/spa_service.jpg',
-  '/barbing':  '/images/gallery_haircut.jpg',
-  '/vip':      '/images/vip_section.jpg',
-  '/tattoo':   '/images/tattoo_section.jpg',
-  '/gallery':  '/images/tattoo_art.jpg',
-  '/booking':  '/images/barber_service.jpg',
+  '/':         SHOP.team1,
+  '/about':    SHOP.team2,
+  '/services': LOGO,
+  '/barbing':  SHOP.team2,
+  '/vip':      SHOP.team1,
+  '/tattoo':   tattoo('golden-crown-back'),
+  '/gallery':  tattoo('jesus-rosary-realism'),
+  '/booking':  SHOP.team1,
 }
 
 const inline = NAV.filter(n => ['/services', '/barbing', '/vip', '/tattoo', '/gallery'].includes(n.path))

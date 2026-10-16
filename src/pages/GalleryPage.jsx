@@ -2,21 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
+import { SHOP, TATTOOS } from '../photos'
 import { ArrowDot, ease, easeOut, Label, Lines, Reveal } from '../components/motion'
 
 const items = [
-  { id: 9, title: 'Fresh out of the chair', category: 'Barbering', image: '/images/team_shop.jpg', desc: 'Clients and crew on the CiGa Raw floor.', span: 'lg:col-span-5 aspect-[3/4]' },
-  { id: 1, title: 'Mid skin fade & groomed beard', category: 'Barbering', image: '/images/gallery_haircut.jpg', desc: 'Crisp hairline, natural beard shape, gradual skin blend.', span: 'lg:col-span-7 aspect-[4/3] lg:aspect-auto' },
-  { id: 2, title: 'Saturday morning on the floor', category: 'Barbering', image: '/images/hero_barber.jpg', desc: 'Clipper work in the main shop on Commercial Avenue.', span: 'lg:col-span-8 aspect-[16/10]' },
-  { id: 3, title: 'Fade detailing',                category: 'Barbering', image: '/images/barber_service.jpg', desc: 'Close focus on the transition and the temple line.', span: 'lg:col-span-4 aspect-[3/4] lg:aspect-auto' },
-  { id: 4, title: 'Facial massage',                category: 'Spa', image: '/images/spa_service.jpg', desc: 'Balancing facial acupressure in the spa room.', span: 'lg:col-span-6 aspect-[4/3]' },
-  { id: 5, title: 'The stone room',                category: 'Spa', image: '/images/spa_suite.jpg', desc: 'Stone walls, candlelight and two massage tables.', span: 'lg:col-span-6 aspect-[4/3]' },
-  { id: 7, title: 'Forearm tribal, session one',   category: 'Tattoo', image: '/images/tattoo_section.jpg', desc: 'Sterile needlework and custom Grassfields linework.', span: 'lg:col-span-5 aspect-[3/4]' },
-  { id: 8, title: 'Blackwork detail',              category: 'Tattoo', image: '/images/tattoo_art.jpg', desc: 'High-density pigment in Cameroonian geometric patterns.', span: 'lg:col-span-7 aspect-[4/3] lg:aspect-auto' },
-  { id: 6, title: 'The VIP Suite',                 category: 'VIP', image: '/images/vip_section.jpg', desc: 'Single-client lounge with leather chairs and a private bar.', span: 'lg:col-span-12 aspect-[4/3] lg:aspect-[21/9]' },
+  { id: 's1', title: 'Fresh out of the chair', category: 'Salon', image: SHOP.team1, desc: 'Clients on the CiGa Raw floor.' },
+  { id: 's2', title: 'Good day at the salon',  category: 'Salon', image: SHOP.team2, desc: 'Arched mirrors, black chairs and happy regulars.' },
+  ...TATTOOS.map((w, i) => ({ id: `t${i}`, title: w.title, category: 'Tattoo', image: w.src, desc: w.style })),
 ]
 
-const categories = ['All', 'Barbering', 'Spa', 'VIP', 'Tattoo']
+const categories = ['All', 'Salon', 'Tattoo']
 
 const reviews = [
   { name: 'Nchinda Bertrand', role: 'Business owner', service: 'Skin fade', text: 'Nothing in Bamenda touches CiGa Raw. Attention to detail, clean tools, skilled hands. I won’t sit in any other chair.' },
@@ -44,7 +39,7 @@ export default function GalleryPage({ ready }) {
         index="06"
         kicker="Gallery"
         lines={[<>Real chairs,</>, <><span className="accent text-ember">real people.</span></>]}
-        intro="No stock photos of strangers. This is the shop, the spa, the suite and the studio — and the work that comes out of them."
+        intro="No stock photos of strangers. This is our salon, our clients and the work that leaves our studio."
       />
 
       <section className="bg-paper pt-10 pb-24 lg:pb-36">
@@ -66,20 +61,19 @@ export default function GalleryPage({ ready }) {
               <span className="label text-ink-500 hidden sm:block tabular-nums">{String(list.length).padStart(2, '0')} photos</span>
             </div>
 
-            <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-6">
-              <AnimatePresence mode="popLayout">
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 lg:gap-5">
+              <AnimatePresence>
                 {list.map((it, i) => (
                   <motion.button
-                    layout
                     key={it.id}
                     onClick={() => setOpen(it)}
                     initial={{ opacity: 0, scale: 0.92 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
-                    transition={{ duration: 0.6, ease: easeOut, delay: i * 0.04 }}
-                    className={`group relative overflow-hidden text-left ${cat === 'All' ? it.span : 'lg:col-span-6 aspect-[4/3]'}`}
+                    transition={{ duration: 0.6, ease: easeOut, delay: Math.min(i, 8) * 0.04 }}
+                    className="group relative block w-full overflow-hidden text-left mb-4 lg:mb-5 break-inside-avoid rounded-[2px] bg-ink"
                   >
-                    <motion.img layoutId={`img-${it.id}`} src={it.image} alt={it.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
+                    <motion.img layoutId={`img-${it.id}`} src={it.image} alt={`${it.title} — ${it.desc}`} loading="lazy" className="block w-full h-auto transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
                     <span className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                     <span className="absolute left-5 right-5 bottom-5 flex items-end justify-between text-paper translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                       <span>
@@ -93,7 +87,7 @@ export default function GalleryPage({ ready }) {
                   </motion.button>
                 ))}
               </AnimatePresence>
-            </motion.div>
+            </div>
 
             <AnimatePresence>
               {open && (
@@ -108,8 +102,8 @@ export default function GalleryPage({ ready }) {
                   aria-label={open.title}
                 >
                   <div className="w-full max-w-6xl grid lg:grid-cols-12 gap-8 items-end" onClick={e => e.stopPropagation()}>
-                    <div className="lg:col-span-8 relative aspect-[4/3] overflow-hidden">
-                      <motion.img layoutId={`img-${open.id}`} src={open.image} alt={open.title} className="absolute inset-0 w-full h-full object-cover" transition={{ duration: 0.7, ease }} />
+                    <div className="lg:col-span-8 flex justify-center">
+                      <motion.img layoutId={`img-${open.id}`} src={open.image} alt={open.title} className="block max-w-full max-h-[62vh] lg:max-h-[82vh] w-auto h-auto" transition={{ duration: 0.7, ease }} />
                     </div>
                     <motion.div
                       className="lg:col-span-4 text-paper"

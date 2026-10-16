@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { easeOut, Lines } from './motion'
 
 // Editorial page opener: index number, big stacked title, intro copy, full-bleed image
-export default function PageHero({ index, kicker, lines, intro, image, imageAlt = '', aside, ready = true }) {
+export default function PageHero({ index, kicker, lines, intro, image, imageAlt = '', imagePosition = 'center', aside, ready = true }) {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '25%'])
@@ -43,7 +43,7 @@ export default function PageHero({ index, kicker, lines, intro, image, imageAlt 
           <motion.img
             src={image}
             alt={imageAlt}
-            style={{ y: imgY, scale: imgScale }}
+            style={{ y: imgY, scale: imgScale, objectPosition: imagePosition }}
             className="absolute inset-0 w-full h-full object-cover"
           />
         </motion.div>

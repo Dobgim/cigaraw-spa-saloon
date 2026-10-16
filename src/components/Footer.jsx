@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { SHOP } from '../photos'
 import { useRef } from 'react'
 import { ArrowDot, Lines, Magnetic } from './motion'
 import { ADDRESS, EMAIL, HOURS, NAV, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
@@ -13,7 +14,7 @@ export default function Footer() {
   return (
     <footer ref={ref} className="relative bg-ink text-paper overflow-hidden">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[720px] lg:h-[640px] overflow-hidden">
-        <motion.img src="/images/team_shop.jpg" alt="" style={{ y: bgY }} className="w-full h-[130%] object-cover object-[center_20%] opacity-35" />
+        <motion.img src={SHOP.team1} alt="" style={{ y: bgY }} className="w-full h-[130%] object-cover object-[center_20%] opacity-35" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/70 to-ink" />
       </div>
       <div className="wrap relative pt-24 lg:pt-36 pb-10">

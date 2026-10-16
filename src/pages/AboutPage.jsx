@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { SHOP } from '../photos'
 import { useRef } from 'react'
 import PageHero from '../components/PageHero'
 import { ArrowDot, Count, ImageReveal, Label, Lines, Reveal } from '../components/motion'
@@ -50,7 +51,7 @@ export default function AboutPage({ ready }) {
         kicker="About"
         lines={[<>Grooming,</>, <>done <span className="accent text-ember">properly.</span></>]}
         intro="CiGa Raw started in 2024 because Bamenda deserved better than rushed cuts and dirty tools. This is who we are and how we work."
-        image="/images/team_shop.jpg"
+        image={SHOP.team1}
         imageAlt="Two clients posing in the CiGa Raw salon"
       />
 
@@ -111,7 +112,7 @@ export default function AboutPage({ ready }) {
             <h2 className="h2">
               <Lines lines={[<>Two years,</>, <span key="b" className="accent text-ember">four chapters.</span>]} />
             </h2>
-            <ImageReveal src="/images/tattoo_art.jpg" alt="Blackwork tattoo detail" className="hidden lg:block aspect-[4/5] mt-12 max-w-xs" />
+            <ImageReveal src={SHOP.team2} alt="Clients in the CiGa Raw salon" className="hidden lg:block aspect-[4/5] mt-12 max-w-xs" />
           </div>
           <Timeline />
         </div>

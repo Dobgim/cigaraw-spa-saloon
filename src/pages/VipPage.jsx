@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
+import { SHOP } from '../photos'
 import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ArrowDot, easeOut, Label, Lines, Reveal } from '../components/motion'
@@ -16,26 +16,6 @@ const amenities = [
   { title: 'Screens & sound',         desc: 'Fast fibre, streaming, and jazz or Afrobeats at the volume you choose.' },
 ]
 
-function SuiteImage() {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const inset = useTransform(scrollYProgress, [0.05, 0.5], ['14%', '0%'])
-  const clip = useTransform(inset, v => `inset(${v} ${v} ${v} ${v} round 2px)`)
-  const scale = useTransform(scrollYProgress, [0, 1], [1.25, 1])
-
-  return (
-    <div ref={ref} className="bg-paper">
-      <motion.div style={{ clipPath: clip }} className="relative h-[75vh] lg:h-[95vh] overflow-hidden">
-        <motion.img style={{ scale }} src="/images/spa_suite.jpg" alt="The candle-lit private suite" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-ink/30" />
-        <p className="absolute bottom-8 left-5 sm:left-8 lg:left-12 display text-paper text-5xl lg:text-8xl max-w-3xl">
-          One client. <span className="accent text-ember">One room.</span>
-        </p>
-      </motion.div>
-    </div>
-  )
-}
-
 export default function VipPage({ ready }) {
   return (
     <>
@@ -45,8 +25,8 @@ export default function VipPage({ ready }) {
         kicker="VIP Suite"
         lines={[<>Privacy is</>, <>the <span className="accent text-ember">luxury.</span></>]}
         intro="A self-contained suite away from the main floor — for confidential calls, a quiet drink, and grooming without an audience."
-        image="/images/vip_section.jpg"
-        imageAlt="The VIP grooming suite"
+        image={SHOP.team2}
+        imageAlt="Clients at CiGa Raw"
         aside={
           <a href={wa('Hello CiGa Raw, I would like to reserve the VIP Suite.')} target="_blank" rel="noopener noreferrer" className="btn-ink">
             <WhatsAppIcon className="w-4 h-4 text-wa" /> Reserve on WhatsApp
@@ -71,8 +51,6 @@ export default function VipPage({ ready }) {
           </ol>
         </div>
       </section>
-
-      <SuiteImage />
 
       <section className="bg-ink text-paper py-24 lg:py-36">
         <div className="wrap grid lg:grid-cols-12 gap-12">
