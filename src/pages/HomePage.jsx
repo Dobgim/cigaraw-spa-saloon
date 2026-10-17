@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { SHOP, TATTOOS, tattoo } from '../photos'
 import { PriceTag } from '../components/TattooCard'
 import LocationMap from '../components/LocationMap'
+import FAQ from '../components/FAQ'
+import OpenStatus from '../components/OpenStatus'
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
 import { ADDRESS, GOOGLE_RATING, HOURS, MAPS_URL, PHONE_DISPLAY, PHONE_TEL } from '../site'
@@ -407,6 +409,7 @@ function Visit() {
                 <p className="text-paper/60 text-sm">★ {GOOGLE_RATING.score} on Google · {GOOGLE_RATING.count} reviews</p>
               </div>
             </div>
+            <OpenStatus className="mt-5" />
             <div className="mt-6 grid grid-cols-2 gap-6 text-sm">
               <div>
                 <p className="label text-paper/40 mb-2">Address</p>
@@ -490,6 +493,7 @@ export default function HomePage({ ready }) {
       <DayStrip />
       <ShortMenu />
       <Reviews />
+      <FAQ />
       <Visit />
     </>
   )

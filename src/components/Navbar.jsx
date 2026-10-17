@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { SHOP, tattoo } from '../photos'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion'
 import { ease, easeOut } from './motion'
 import WhatsAppIcon from './WhatsAppIcon'
 import { ADDRESS, HOURS, NAV, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
@@ -26,7 +26,8 @@ export default function Navbar() {
   const [solid, setSolid] = useState(false)
   const [hovered, setHovered] = useState(null)
   const location = useLocation()
-  const { scrollY } = useScroll()
+  const { scrollY, scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 })
 
   // Hide while scrolling down, return when scrolling up
   useMotionValueEvent(scrollY, 'change', (y) => {
@@ -93,6 +94,8 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+        {/* reading progress */}
+        <motion.div aria-hidden="true" style={{ scaleX: progress }} className="absolute left-0 right-0 bottom-0 h-[2px] bg-ember origin-left" />
       </motion.header>
 
       <AnimatePresence>

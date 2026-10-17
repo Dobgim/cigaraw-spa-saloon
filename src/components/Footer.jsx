@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { SHOP } from '../photos'
+import OpenStatus from './OpenStatus'
 import { useRef } from 'react'
 import { ArrowDot, Lines, Magnetic } from './motion'
 import { ADDRESS, EMAIL, HOURS, NAV, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
@@ -20,7 +21,10 @@ export default function Footer() {
       <div className="wrap relative pt-24 lg:pt-36 pb-10">
         <div className="grid lg:grid-cols-12 gap-12 pb-20 border-b border-paper/10">
           <div className="lg:col-span-7">
-            <p className="label text-paper/40 mb-6">Your chair is waiting</p>
+            <div className="flex flex-wrap items-center gap-4 mb-6">
+              <p className="label text-paper/40">Your chair is waiting</p>
+              <OpenStatus />
+            </div>
             <h2 className="h2 text-paper">
               <Lines lines={[
                 <>Sit down.</>,

@@ -25,6 +25,26 @@ const timeSlots = ['08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30'
 
 const empty = { name: '', phone: '', email: '', service: '', specialist: 'First available', date: '', time: '', notes: '', location: 'salon', address: '' }
 
+// Calendar file for the booked slot. Douala is UTC+1 all year (no daylight saving).
+function calendarFile(b) {
+  const [y, m, d] = b.date.split('-').map(Number)
+  const [hh, mm] = b.time.split(':').map(Number)
+  const start = new Date(Date.UTC(y, m - 1, d, hh - 1, mm))
+  const end = new Date(start.getTime() + 60 * 60 * 1000)
+  const esc = (v) => v.replace(/([\\,;])/g, '\\$1')
+  const stamp = (t) => t.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
+  const where = b.location === 'home' ? b.address : 'CiGa Raw Salon and Spa, Avenue de Logpom, Logpom, Douala'
+  const text = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CiGa Raw//Booking//EN', 'BEGIN:VEVENT',
+    `UID:${b.ref}@cigaraw`, `DTSTAMP:${stamp(new Date())}`, `DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`,
+    `SUMMARY:CiGa Raw — ${esc(b.service)}`,
+    `LOCATION:${esc(where)}`,
+    `DESCRIPTION:Booking ${b.ref}. Confirm on WhatsApp ${WHATSAPP_DISPLAY}.`,
+    'END:VEVENT', 'END:VCALENDAR',
+  ].join('\r\n')
+  return URL.createObjectURL(new Blob([text], { type: 'text/calendar' }))
+}
+
 function Field({ label, error, children, htmlFor }) {
   return (
     <div>
@@ -186,6 +206,10 @@ export default function BookingPage({ ready }) {
                   <div className="mt-8 flex flex-wrap gap-3">
                     <a href={wa(message)} target="_blank" rel="noopener noreferrer" className="btn-ink">
                       <WhatsAppIcon className="w-4 h-4 text-wa" /> Confirm on WhatsApp
+                    </a>
+                    <a href={calendarFile(done)} download={`cigaraw-${done.ref}.ics`} className="btn-line">
+                      <svg viewBox="0 0 16 16" className="w-4 h-4" fill="none" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.3" /><path d="M1.5 6h13M5 1v3M11 1v3" stroke="currentColor" strokeWidth="1.3" /></svg>
+                      Add to calendar
                     </a>
                     <button onClick={() => { setDone(null); setForm(empty) }} className="btn-line">Book something else</button>
                   </div>

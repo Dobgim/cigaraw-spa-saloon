@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Intro          from './components/Intro'
@@ -16,6 +16,7 @@ import TattooPage   from './pages/TattooPage'
 import GalleryPage  from './pages/GalleryPage'
 import BookingPage  from './pages/BookingPage'
 import HomeServicePage from './pages/HomeServicePage'
+import NotFoundPage    from './pages/NotFoundPage'
 
 // Wraps each route: content fades out, an ember panel sweeps over, new page comes in
 function Page({ children }) {
@@ -48,8 +49,28 @@ function Page({ children }) {
   )
 }
 
+const BRAND = 'CiGa Raw Salon and Spa — Logpom, Douala'
+const TITLES = {
+  '/':             BRAND,
+  '/about':        'About Ciga Raw',
+  '/services':     'Services & Prices',
+  '/barbing':      'Barbering',
+  '/vip':          'VIP Suite & Teeth Whitening',
+  '/tattoo':       'Tattoo Studio & Prices',
+  '/gallery':      'Gallery',
+  '/booking':      'Book an Appointment',
+  '/home-service': 'Home Service',
+}
+
 function AnimatedRoutes({ firstLoad }) {
   const location = useLocation()
+
+  // Give every page its own browser-tab / search-result title
+  useEffect(() => {
+    const t = TITLES[location.pathname]
+    document.title = !t ? `Page not found | ${BRAND}` : t === BRAND ? t : `${t} | ${BRAND}`
+  }, [location.pathname])
+
   const pages = {
     '/':         HomePage,
     '/about':    AboutPage,
@@ -68,7 +89,7 @@ function AnimatedRoutes({ firstLoad }) {
         {Object.entries(pages).map(([path, C]) => (
           <Route key={path} path={path} element={<Page><C ready={firstLoad} /></Page>} />
         ))}
-        <Route path="*" element={<Page><HomePage ready={firstLoad} /></Page>} />
+        <Route path="*" element={<Page><NotFoundPage /></Page>} />
       </Routes>
     </AnimatePresence>
   )
@@ -80,8 +101,11 @@ export default function App() {
   return (
     <BrowserRouter>
       {!introDone && <Intro onDone={() => setIntroDone(true)} />}
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[99999] focus:bg-ink focus:text-paper focus:px-4 focus:py-2 focus:rounded-full">
+        Skip to content
+      </a>
       <Navbar />
-      <main className="min-h-screen">
+      <main id="main" className="min-h-screen">
         <AnimatedRoutes firstLoad={introDone} />
       </main>
       <Footer />

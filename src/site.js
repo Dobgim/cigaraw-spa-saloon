@@ -17,6 +17,27 @@ export const HOURS = [
   { days: 'Sunday',    time: '10:00 – 16:00' },
 ]
 
+// Same hours as numbers, by weekday (0 = Sunday), used for the "Open now" badge
+export const OPENING = {
+  0: [10, 16],
+  1: [8, 19], 2: [8, 19], 3: [8, 19], 4: [8, 19], 5: [8, 19], 6: [8, 19],
+}
+
+// Current open/closed state in Douala time (WAT, UTC+1)
+export function openStatus(now = new Date()) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Africa/Douala', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' })
+      .formatToParts(now).map(p => [p.type, p.value])
+  )
+  const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.weekday)
+  const hour = Number(parts.hour) + Number(parts.minute) / 60
+  const [open, close] = OPENING[day]
+  if (hour >= open && hour < close) return { open: true, text: `Open now · until ${close}:00` }
+  if (hour < open) return { open: false, text: `Closed · opens today at ${open}:00` }
+  const [nextOpen] = OPENING[(day + 1) % 7]
+  return { open: false, text: `Closed · opens tomorrow at ${nextOpen}:00` }
+}
+
 export const wa = (text = 'Hello CiGa Raw, I would like to book an appointment.') =>
   `https://wa.me/237679170410?text=${encodeURIComponent(text)}`
 
