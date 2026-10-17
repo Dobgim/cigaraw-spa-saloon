@@ -174,6 +174,94 @@
   .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
 
+/* ─── Map pin: storefront photo with pulse ─── */
+.salon-pin {
+  position: relative;
+  width: 84px;
+  height: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: pin-drop 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.salon-pin__photo {
+  position: relative;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 4px solid #E0521D;
+  background: #17110D;
+  box-shadow: 0 12px 28px -8px rgba(23, 17, 13, 0.6);
+}
+.salon-pin__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.salon-pin__tail {
+  z-index: 1;
+  width: 0;
+  height: 0;
+  margin-top: -6px;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 22px solid #E0521D;
+}
+.salon-pin__pulse {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 88px;
+  height: 88px;
+  margin-left: -44px;
+  border-radius: 9999px;
+  background: rgba(224, 82, 29, 0.35);
+  animation: pin-pulse 2.2s ease-out infinite;
+}
+.salon-pin__label {
+  position: absolute;
+  top: 26px;
+  left: 86px;
+  white-space: nowrap;
+  background: #17110D;
+  color: #F6F0E6;
+  font: 600 13px/1 "Bricolage Grotesque", system-ui, sans-serif;
+  padding: 7px 10px;
+  border-radius: 9999px;
+}
+@keyframes pin-pulse {
+  0%   { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes pin-drop {
+  0%   { transform: translateY(-40px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.salon-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 220px;
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  color: #17110D;
+}
+.salon-popup img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 2px;
+  margin-bottom: 4px;
+}
+.salon-popup strong { font-size: 15px; }
+.salon-popup span { font-size: 13px; line-height: 1.4; color: #4A3B31; }
+.salon-popup a { font-size: 13px; font-weight: 600; color: #BD3F12; }
+.leaflet-popup-content-wrapper { border-radius: 4px; }
+.warm-tiles { filter: saturate(0.55) sepia(0.18) contrast(1.02); }
+.leaflet-container { font-family: "Bricolage Grotesque", system-ui, sans-serif; background: #ECE3D4; }
+
 select option {
   background: #F6F0E6;
   color: #17110D;

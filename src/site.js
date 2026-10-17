@@ -8,6 +8,8 @@ export const EMAIL = 'cigaraw237@gmail.com'
 export const ADDRESS = ['Between Tradex Rhône Poulenc', '& Collège Charles de Gaulle', 'Logpom, Douala, Cameroon']
 export const ADDRESS_SHORT = 'Logpom, Douala'
 export const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('CIGA RAW SALON AND SPA, 3QP6+C5 Logpom, Douala')
+// Plus code 3QP6+C5 Douala (6FPF3QP6+C5), on Avenue de Logpom
+export const SALON_COORDS = [4.08606, 9.76044]
 export const GOOGLE_RATING = { score: '5.0', count: 2 }
 
 export const HOURS = [

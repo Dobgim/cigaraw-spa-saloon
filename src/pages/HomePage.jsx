@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SHOP, TATTOOS, tattoo } from '../photos'
+import { PriceTag } from '../components/TattooCard'
+import LocationMap from '../components/LocationMap'
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
 import { ADDRESS, GOOGLE_RATING, HOURS, MAPS_URL, PHONE_DISPLAY, PHONE_TEL } from '../site'
@@ -276,8 +278,9 @@ function DayStrip() {
         >
           {day.map((d, i) => (
             <figure key={d.src} className={`shrink-0 ${i % 2 ? 'mt-10' : ''}`}>
-              <Link to="/tattoo" className="block overflow-hidden aspect-[3/4] h-[300px] lg:h-[min(44vh,400px)]">
+              <Link to="/tattoo" className="relative block overflow-hidden aspect-[3/4] h-[300px] lg:h-[min(44vh,400px)]">
                 <img src={d.src} alt={d.title} className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" loading="lazy" />
+                <PriceTag price={d.price} className="absolute top-3 left-3" />
               </Link>
               <figcaption className="mt-4 flex gap-4 w-0 min-w-full">
                 <span className="text-ink font-medium">{d.title}</span>
@@ -373,37 +376,53 @@ function Reviews() {
   )
 }
 
+// Map pointing at the salon, with the visit details on a card over it
 function Visit() {
   return (
-    <section className="bg-paper py-24 lg:py-36">
-      <div className="wrap grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <ImageReveal src={SHOP.frontNight} alt="The CiGa Raw Salon and Spa storefront in Logpom, Douala, at night" className="lg:col-span-5 aspect-[4/5]" from="left" />
-        <div className="lg:col-span-5 lg:col-start-8">
-          <Label num="06" className="text-ink-500 mb-6">Come by</Label>
-          <h2 className="h2 mb-10">
-            <Lines lines={[<>Logpom,</>, <span key="d" className="accent text-ember">Douala.</span>]} />
-          </h2>
-          <Reveal className="grid sm:grid-cols-2 gap-8 text-lg">
-            <div>
-              <p className="label text-ink-500 mb-3">Address</p>
-              {ADDRESS.map(l => <p key={l}>{l}</p>)}
-            </div>
-            <div>
-              <p className="label text-ink-500 mb-3">Hours</p>
-              {HOURS.map(h => <p key={h.days}><span className="text-ink-500">{h.days}</span> {h.time}</p>)}
-            </div>
-          </Reveal>
-          <Reveal delay={0.1} className="mt-10">
-            <a href={`tel:${PHONE_TEL}`} className="display text-4xl sm:text-5xl link-draw hover:text-ember transition-colors">
-              {PHONE_DISPLAY}
-            </a>
-          </Reveal>
-          <Reveal delay={0.15} className="mt-8">
-            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="btn-line group !pr-2">
-              Get directions <ArrowDot className="bg-ink/5" />
-            </a>
-          </Reveal>
+    <section className="bg-paper pt-24 lg:pt-36 pb-10">
+      <div className="wrap flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <div>
+          <Label num="06" className="text-ink-500 mb-6">Find us</Label>
+          <h2 className="h2"><Lines lines={[<>Avenue de Logpom,</>, <span key="d" className="accent text-ember">Douala.</span>]} /></h2>
         </div>
+        <Reveal className="max-w-sm text-ink-600 text-lg">Between Tradex Rhône Poulenc and Collège Charles de Gaulle. Tap the pin for directions.</Reveal>
+      </div>
+
+      <div className="relative mx-5 sm:mx-8 lg:mx-12">
+        <motion.div
+          initial={{ clipPath: 'inset(12% 8% 12% 8% round 4px)' }}
+          whileInView={{ clipPath: 'inset(0% 0% 0% 0% round 4px)' }}
+          viewport={{ once: true, margin: '-15% 0px' }}
+          transition={{ duration: 1.4, ease }}
+        >
+          <LocationMap className="h-[70vh] min-h-[460px] lg:h-[78vh]" />
+        </motion.div>
+
+        <Reveal delay={0.3} className="relative lg:absolute lg:left-8 lg:bottom-8 z-[500] mt-4 lg:mt-0 lg:w-[380px]">
+          <div className="bg-ink text-paper p-7 rounded-[4px] shadow-[0_30px_60px_-20px_rgba(23,17,13,0.6)]">
+            <div className="flex gap-4 items-center">
+              <img src={SHOP.frontNight} alt="CiGa Raw storefront at night" className="w-16 h-16 rounded-full object-cover border-2 border-ember" />
+              <div>
+                <p className="font-medium text-lg leading-tight">CiGa Raw Salon and Spa</p>
+                <p className="text-paper/60 text-sm">★ {GOOGLE_RATING.score} on Google · {GOOGLE_RATING.count} reviews</p>
+              </div>
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-6 text-sm">
+              <div>
+                <p className="label text-paper/40 mb-2">Address</p>
+                {ADDRESS.map(l => <p key={l}>{l}</p>)}
+              </div>
+              <div>
+                <p className="label text-paper/40 mb-2">Hours</p>
+                {HOURS.map(h => <p key={h.days}><span className="text-paper/60">{h.days}</span><br />{h.time}</p>)}
+              </div>
+            </div>
+            <a href={`tel:${PHONE_TEL}`} className="mt-6 block display text-3xl link-draw hover:text-ember transition-colors">{PHONE_DISPLAY}</a>
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="btn-ember group !pr-2 mt-6 w-full justify-between">
+              Get directions <ArrowDot className="bg-paper/15" />
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   )

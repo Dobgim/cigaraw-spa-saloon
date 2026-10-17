@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
-import { SALON, TATTOOS } from '../photos'
+import { fullPrice, SALON, TATTOOS } from '../photos'
+import { PriceTag } from '../components/TattooCard'
 import { GOOGLE_RATING, MAPS_URL } from '../site'
 import { ArrowDot, ease, easeOut, Label, Lines, Reveal } from '../components/motion'
 
 const items = [
   ...SALON.map((p, i) => ({ id: `s${i}`, title: p.title, category: 'Salon', image: p.src, desc: p.desc })),
-  ...TATTOOS.map((w, i) => ({ id: `t${i}`, title: w.title, category: 'Tattoo', image: w.src, desc: w.style })),
+  ...TATTOOS.map((w, i) => ({ id: `t${i}`, title: w.title, category: 'Tattoo', image: w.src, desc: w.style, price: w.price })),
 ]
 
 const categories = ['All', 'Salon', 'Tattoo']
@@ -73,6 +74,7 @@ export default function GalleryPage({ ready }) {
                     className="group relative block w-full overflow-hidden text-left mb-4 lg:mb-5 break-inside-avoid rounded-[2px] bg-ink"
                   >
                     <motion.img layoutId={`img-${it.id}`} src={it.image} alt={`${it.title} — ${it.desc}`} loading="lazy" className="block w-full h-auto transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
+                    {it.price && <PriceTag price={it.price} className="absolute top-3 left-3" />}
                     <span className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                     <span className="absolute left-5 right-5 bottom-5 flex items-end justify-between text-paper translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                       <span>
@@ -113,8 +115,22 @@ export default function GalleryPage({ ready }) {
                       <p className="label text-ember">{open.category}</p>
                       <h3 className="display text-4xl lg:text-5xl mt-3">{open.title}</h3>
                       <p className="text-paper/60 text-lg mt-4">{open.desc}</p>
+                      {open.price && (
+                        <p className="mt-6">
+                          <span className="block label text-paper/50">This design</span>
+                          <span className="display text-5xl tabular-nums">{fullPrice(open.price)}</span>
+                          <span className="label text-paper/60 ml-2">FCFA</span>
+                        </p>
+                      )}
                       <div className="mt-8 flex flex-wrap gap-3">
-                        <Link to="/booking" className="btn-ember">Book this look</Link>
+                        <Link
+                          to={open.price
+                            ? `/booking?service=Tattoo&notes=${encodeURIComponent(`Tattoo design: ${open.title} (${fullPrice(open.price)} FCFA)`)}`
+                            : '/booking'}
+                          className="btn-ember"
+                        >
+                          {open.price ? 'Book this design' : 'Book a visit'}
+                        </Link>
                         <button onClick={() => setOpen(null)} className="btn-line-light">Close</button>
                       </div>
                     </motion.div>

@@ -1,17 +1,20 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ArrowDot, ImageReveal, Label, Lines, Reveal } from '../components/motion'
 import { wa } from '../site'
-import { TATTOOS, tattoo } from '../photos'
+import { shortPrice, TATTOOS, tattoo } from '../photos'
+import TattooCard from '../components/TattooCard'
 
 const tattooStyles = [
-  { name: 'Fine-line & script',        rate: 'from 15,000', desc: 'Single-needle work for quotes, dates, botanicals and small symbols.' },
-  { name: 'Afro-centric & tribal',     rate: 'from 25,000', desc: 'African geometry, royal chevrons, cowries and ancestral motifs.' },
-  { name: 'Blackwork',                 rate: 'from 30,000', desc: 'Solid black saturation built for deep melanin skin — high contrast that lasts.' },
-  { name: 'Micro-realism & portraits', rate: 'from 40,000', desc: 'Loved ones, wildlife or icons with photographic depth and shading.' },
-  { name: 'Cover-ups & scars',         rate: 'quote',       desc: 'Turning old tattoos or surgical scars into new work you actually want.' },
-  { name: 'Geometric & mandala',       rate: 'from 25,000', desc: 'Balanced symmetry and dotwork that follows the shape of your body.' },
+  { name: 'Fine-line & script',        rate: 'Priced per design', desc: 'Single-needle work for quotes, dates, botanicals and small symbols.' },
+  { name: 'Afro-centric & tribal',     rate: 'Priced per design', desc: 'African geometry, royal chevrons, cowries and ancestral motifs.' },
+  { name: 'Blackwork',                 rate: 'Priced per design', desc: 'Solid black saturation built for deep melanin skin — high contrast that lasts.' },
+  { name: 'Micro-realism & portraits', rate: 'Priced per design', desc: 'Loved ones, wildlife or icons with photographic depth and shading.' },
+  { name: 'Cover-ups & scars',         rate: 'Priced per design',       desc: 'Turning old tattoos or surgical scars into new work you actually want.' },
+  { name: 'Geometric & mandala',       rate: 'Priced per design', desc: 'Balanced symmetry and dotwork that follows the shape of your body.' },
 ]
 
 const steps = [
@@ -27,6 +30,57 @@ const aftercare = [
   { day: 'Days 8–14',  title: 'Let it peel',     tip: 'Don’t pick or scratch. Keep it lightly moisturised with shea.' },
   { day: 'For life',   title: 'Block the sun',   tip: 'SPF 50 outdoors keeps dark pigment rich for decades.' },
 ]
+
+const budgets = [
+  { label: 'All', test: () => true },
+  { label: 'Under 300K', test: (p) => p < 300_000 },
+  { label: '300K – 500K', test: (p) => p >= 300_000 && p <= 500_000 },
+  { label: '1M and up', test: (p) => p >= 1_000_000 },
+]
+
+// Masonry wall of real work with a budget filter
+function Portfolio() {
+  const [budget, setBudget] = useState(0)
+  const list = TATTOOS.filter(w => budgets[budget].test(w.price))
+  const prices = TATTOOS.map(w => w.price)
+
+  return (
+    <>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <LayoutGroup>
+          <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+            {budgets.map((b, i) => (
+              <button
+                key={b.label}
+                onClick={() => setBudget(i)}
+                className={`relative isolate chip whitespace-nowrap ${budget === i ? 'text-paper border-ink' : 'border-ink/20 hover:border-ink'}`}
+              >
+                {budget === i && <motion.span layoutId="budget" className="absolute inset-0 -z-10 rounded-full bg-ink" transition={{ type: 'spring', stiffness: 400, damping: 32 }} />}
+                {b.label}
+              </button>
+            ))}
+          </div>
+        </LayoutGroup>
+        <span className="label text-ink-500">
+          {list.length} designs · {shortPrice(Math.min(...prices))} – {shortPrice(Math.max(...prices))} FCFA
+        </span>
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={budget}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+          className="columns-2 md:columns-3 lg:columns-4 gap-4 lg:gap-5"
+        >
+          {list.map((w, i) => <TattooCard key={w.src} work={w} index={i} />)}
+        </motion.div>
+      </AnimatePresence>
+    </>
+  )
+}
 
 export default function TattooPage({ ready }) {
   return (
@@ -67,26 +121,14 @@ export default function TattooPage({ ready }) {
 
       <section className="bg-bone py-24 lg:py-36">
         <div className="wrap">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-14">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
             <div>
-              <Label num="A+" className="text-ink-500 mb-6">Recent work</Label>
-              <h2 className="h2"><Lines lines={[<>Fresh from</>, <span key="p" className="accent text-ember">the chair.</span>]} /></h2>
+              <Label num="A+" className="text-ink-500 mb-6">Portfolio & prices</Label>
+              <h2 className="h2"><Lines lines={[<>Pick a piece,</>, <span key="p" className="accent text-ember">see the price.</span>]} /></h2>
             </div>
-            <Reveal className="max-w-sm text-ink-600 text-lg">Realism, lettering and blackwork — a few of the pieces that have left our studio.</Reveal>
+            <Reveal className="max-w-sm text-ink-600 text-lg">Every design shows its price in FCFA. Hover or tap a piece to book it — we adapt it to your body.</Reveal>
           </div>
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 lg:gap-5 [&>*]:mb-4 lg:[&>*]:mb-5">
-            {TATTOOS.map((w, i) => (
-              <Reveal key={w.src} delay={(i % 4) * 0.06} y={30} className="break-inside-avoid">
-                <figure className="group relative overflow-hidden rounded-[2px] bg-ink">
-                  <img src={w.src} alt={`${w.title} — ${w.style}`} loading="lazy" className="w-full h-auto transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
-                  <figcaption className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-ink/85 to-transparent text-paper translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                    <span className="block font-medium">{w.title}</span>
-                    <span className="label text-paper/60">{w.style}</span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
+          <Portfolio />
         </div>
       </section>
 

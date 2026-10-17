@@ -33,24 +33,31 @@ export const LOGO = '/logo.png'
 
 const t = (file) => `/images/tattoo/${file}.jpg`
 
+// price in FCFA for that exact design
 export const TATTOOS = [
-  { src: t('jesus-rosary-realism'),      title: 'Jesus with rosary',        style: 'Black & grey realism' },
-  { src: t('golden-crown-back'),         title: 'Golden crown of thorns',   style: 'Colour realism, back piece' },
-  { src: t('praying-jesus-dove-sleeve'), title: 'Praying Christ & dove',    style: 'Half sleeve' },
-  { src: t('one-life-one-chance'),       title: 'One Life One Chance',      style: 'Colour & lettering' },
-  { src: t('jesus-dove-sleeve'),         title: 'Christ with open hands',   style: 'Half sleeve' },
-  { src: t('mary-and-jesus'),            title: 'Mary & Jesus',             style: 'Black & grey' },
-  { src: t('jesus-chest-sketch'),        title: 'Sketch-style portrait',    style: 'Chest, red accents' },
-  { src: t('praying-jesus-back'),        title: 'Christ in prayer',         style: 'Colour back piece' },
-  { src: t('calvary-forearm'),           title: 'Calvary',                  style: 'Forearm, blue wash' },
-  { src: t('it-is-finished'),            title: 'It is finished',           style: 'Forearm, red accents' },
-  { src: t('jesus-forearm'),             title: 'Crown of thorns',          style: 'Fine shading, forearm' },
-  { src: t('jesus-shoulder-portrait'),   title: 'Shoulder portrait',        style: 'Colour, upper arm' },
-  { src: t('jesus-full-back'),           title: 'Full back',                style: 'Black & grey' },
-  { src: t('crucifix-script'),           title: 'Crucifix & name',          style: 'Blackwork, script' },
-  { src: t('crucifix-wrist'),            title: 'Small crucifix',           style: 'Blackwork, forearm' },
-  { src: t('praying-hands-rosary'),      title: 'Praying hands & rosary',   style: 'Black & grey' },
+  { src: t('jesus-rosary-realism'),      title: 'Jesus with rosary',        style: 'Black & grey realism', price: 500_000 },
+  { src: t('golden-crown-back'),         title: 'Golden crown of thorns',   style: 'Colour realism, back piece', price: 1_500_000 },
+  { src: t('praying-jesus-dove-sleeve'), title: 'Praying Christ & dove',    style: 'Half sleeve', price: 500_000 },
+  { src: t('one-life-one-chance'),       title: 'One Life One Chance',      style: 'Colour & lettering', price: 300_000 },
+  { src: t('jesus-dove-sleeve'),         title: 'Christ with open hands',   style: 'Half sleeve', price: 200_000 },
+  { src: t('mary-and-jesus'),            title: 'Mary & Jesus',             style: 'Black & grey', price: 500_000 },
+  { src: t('jesus-chest-sketch'),        title: 'Sketch-style portrait',    style: 'Chest, red accents', price: 200_000 },
+  { src: t('praying-jesus-back'),        title: 'Christ in prayer',         style: 'Colour back piece', price: 1_000_000 },
+  { src: t('calvary-forearm'),           title: 'Calvary',                  style: 'Forearm, blue wash', price: 300_000 },
+  { src: t('it-is-finished'),            title: 'It is finished',           style: 'Forearm, red accents', price: 200_000 },
+  { src: t('jesus-forearm'),             title: 'Crown of thorns',          style: 'Fine shading, forearm', price: 200_000 },
+  { src: t('jesus-shoulder-portrait'),   title: 'Shoulder portrait',        style: 'Colour, upper arm', price: 500_000 },
+  { src: t('jesus-full-back'),           title: 'Full back',                style: 'Black & grey', price: 2_000_000 },
+  { src: t('crucifix-script'),           title: 'Crucifix & name',          style: 'Blackwork, script', price: 100_000 },
+  { src: t('crucifix-wrist'),            title: 'Small crucifix',           style: 'Blackwork, forearm', price: 200_000 },
+  { src: t('praying-hands-rosary'),      title: 'Praying hands & rosary',   style: 'Black & grey', price: 200_000 },
 ]
 
 // Look up a tattoo photo by its file name
 export const tattoo = (file) => TATTOOS.find(x => x.src.endsWith(`/${file}.jpg`)).src
+
+// 1500000 -> "1.5M", 500000 -> "500K"
+export const shortPrice = (n) => n >= 1_000_000 ? `${+(n / 1_000_000).toFixed(1)}M` : `${n / 1000}K`
+
+// 1500000 -> "1,500,000"
+export const fullPrice = (n) => n.toLocaleString('en-US')
