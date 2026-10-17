@@ -17,7 +17,7 @@ export const SHOP = {
 
 // Salon photos shown in the gallery
 export const SALON = [
-  { src: SHOP.frontNight,   title: 'CiGa Raw at night',        desc: 'The storefront on Commercial Avenue.' },
+  { src: SHOP.frontNight,   title: 'CiGa Raw at night',        desc: 'The storefront in Logpom, Douala.' },
   { src: SHOP.vipLounge,    title: 'The VIP room',             desc: 'Two chairs, a lounge corner and a curtained treatment space.' },
   { src: SHOP.facial,       title: 'Face treatment',           desc: 'One of our therapists at work.' },
   { src: SHOP.mainFloor,    title: 'The main floor',           desc: 'Barber stations on the ground floor.' },

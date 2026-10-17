@@ -1,9 +1,14 @@
 // Contact details and navigation shared across the site
 
-export const PHONE_DISPLAY = '+237 679 170 410'
-export const PHONE_TEL = '+237679170410'
-export const EMAIL = 'bookings@cigaraw.com'
-export const ADDRESS = ['Commercial Avenue', 'Bamenda, North West Region', 'Cameroon']
+// Salon line from the Google Maps listing; WhatsApp stays on the number the owner set
+export const PHONE_DISPLAY = '+237 671 19 08 78'
+export const PHONE_TEL = '+237671190878'
+export const WHATSAPP_DISPLAY = '+237 679 170 410'
+export const EMAIL = 'cigaraw237@gmail.com'
+export const ADDRESS = ['Between Tradex Rhône Poulenc', '& Collège Charles de Gaulle', 'Logpom, Douala, Cameroon']
+export const ADDRESS_SHORT = 'Logpom, Douala'
+export const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('CIGA RAW SALON AND SPA, 3QP6+C5 Logpom, Douala')
+export const GOOGLE_RATING = { score: '5.0', count: 2 }
 
 export const HOURS = [
   { days: 'Mon – Sat', time: '8:00 – 19:00' },

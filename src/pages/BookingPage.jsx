@@ -4,11 +4,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ease, easeOut, Reveal } from '../components/motion'
-import { ADDRESS, EMAIL, HOURS, PHONE_DISPLAY, PHONE_TEL, wa } from '../site'
+import { ADDRESS, EMAIL, HOURS, MAPS_URL, PHONE_DISPLAY, PHONE_TEL, WHATSAPP_DISPLAY, wa } from '../site'
 import { MENU } from '../menu'
 
 const serviceOptions = [
-  ...MENU.flatMap(m => m.items.map(it => ({ group: m.group, name: `${it.name} (${it.price} FCFA)` }))),
+  ...MENU.flatMap(m => m.items.map(it => ({ group: m.group, name: /\d/.test(it.price) ? `${it.name} (${it.price} FCFA)` : `${it.name} (price on request)` }))),
   { group: 'Tattoo', name: 'Tattoo consultation (priced per design)' },
 ]
 
@@ -120,7 +120,7 @@ export default function BookingPage({ ready }) {
             <div className="bg-ink text-paper p-8 rounded-[2px]">
               <p className="label text-paper/40 mb-3">Address</p>
               {ADDRESS.map(l => <p key={l} className="text-lg">{l}</p>)}
-              <p className="text-paper/50 text-sm mt-2">Street parking right outside.</p>
+              <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="text-ember text-sm mt-2 inline-block link-draw">Open in Google Maps →</a>
 
               <p className="label text-paper/40 mb-3 mt-8">Hours</p>
               {HOURS.map(h => (
@@ -129,6 +129,7 @@ export default function BookingPage({ ready }) {
 
               <p className="label text-paper/40 mb-3 mt-8">Contact</p>
               <a href={`tel:${PHONE_TEL}`} className="block text-lg link-draw">{PHONE_DISPLAY}</a>
+              <p className="text-lg"><span className="text-paper/60">WhatsApp</span> {WHATSAPP_DISPLAY}</p>
               <a href={`mailto:${EMAIL}`} className="block text-lg link-draw">{EMAIL}</a>
 
               <a href={wa()} target="_blank" rel="noopener noreferrer" className="btn bg-wa text-ink before:bg-paper w-full mt-8">
@@ -166,7 +167,7 @@ export default function BookingPage({ ready }) {
                       ['Service', done.service],
                       ['With', done.specialist],
                       ['When', `${done.date} · ${done.time}`],
-                      ['Where', 'Commercial Ave, Bamenda'],
+                      ['Where', 'Logpom, Douala'],
                     ].map(([k, v]) => (
                       <div key={k} className="py-4 border-b border-ink/20">
                         <dt className="label opacity-60">{k}</dt>
@@ -230,7 +231,7 @@ export default function BookingPage({ ready }) {
                   <Step n="3" title="You">
                     <div className="grid sm:grid-cols-2 gap-8">
                       <Field label="Full name" htmlFor="name" error={errors.name}>
-                        <input id="name" name="name" type="text" autoComplete="name" placeholder="Bertrand Nchinda" className="field" value={form.name} onChange={onChange} />
+                        <input id="name" name="name" type="text" autoComplete="name" placeholder="Your full name" className="field" value={form.name} onChange={onChange} />
                       </Field>
                       <Field label="Phone / WhatsApp" htmlFor="phone" error={errors.phone}>
                         <input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+237 679 000 000" className="field" value={form.phone} onChange={onChange} />

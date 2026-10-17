@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import { SALON, TATTOOS } from '../photos'
+import { GOOGLE_RATING, MAPS_URL } from '../site'
 import { ArrowDot, ease, easeOut, Label, Lines, Reveal } from '../components/motion'
 
 const items = [
@@ -12,11 +13,10 @@ const items = [
 
 const categories = ['All', 'Salon', 'Tattoo']
 
+// Real reviews from the Google Maps listing
 const reviews = [
-  { name: 'Nchinda Bertrand', role: 'Business owner', service: 'Skin fade', text: 'Nothing in Bamenda touches CiGa Raw. Attention to detail, clean tools, skilled hands. I won’t sit in any other chair.' },
-  { name: 'Tabi Godwill', role: 'Creative director', service: 'Beard sculpt', text: 'Proper technique, clean tools, and they take their time. I’ve brought three friends. None of us have looked back.' },
-  { name: 'Fru Valerie', role: 'Entrepreneur', service: 'Deep tissue', text: 'I came in stressed and left renewed. The therapist understood exactly what my body needed.' },
-  { name: 'Che Kingsley', role: 'Civil engineer', service: 'VIP Suite', text: 'Worth every franc. A haircut in total quiet with an espresso and no crowd made my Saturday.' },
+  { name: 'IDP Board Members', text: 'They offer premium services' },
+  { name: 'Young k', text: 'Fully' },
 ]
 
 export default function GalleryPage({ ready }) {
@@ -129,21 +129,25 @@ export default function GalleryPage({ ready }) {
       <section className="bg-bone py-24 lg:py-36">
         <div className="wrap">
           <Label num="A" className="text-ink-500 mb-6">What clients say</Label>
-          <h2 className="h2 mb-16"><Lines lines={[<>In their</>, <span key="a" className="accent text-ember">own words.</span>]} /></h2>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+            <h2 className="h2"><Lines lines={[<>Rated 5.0</>, <span key="a" className="accent text-ember">on Google.</span>]} /></h2>
+            <Reveal className="text-ink-600 text-lg">{GOOGLE_RATING.count} reviews · Google Maps</Reveal>
+          </div>
           <div className="grid md:grid-cols-2 gap-x-16">
             {reviews.map((r, i) => (
               <Reveal key={r.name} delay={(i % 2) * 0.1} className="border-t border-ink/15 py-10">
-                <p className="font-serif text-3xl lg:text-4xl leading-[1.15]">&ldquo;{r.text}&rdquo;</p>
+                <p className="text-ember text-xl" aria-label="5 out of 5 stars">★★★★★</p>
+                <p className="font-serif text-3xl lg:text-4xl leading-[1.15] mt-4">&ldquo;{r.text}&rdquo;</p>
                 <p className="mt-6 flex flex-wrap gap-x-3 text-ink-600">
                   <span className="text-ink font-medium">{r.name}</span>
-                  <span>{r.role}</span>
-                  <span className="label text-ember self-center">· {r.service}</span>
+                  <span>Google review</span>
                 </p>
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-12">
+          <Reveal className="mt-12 flex flex-wrap gap-3">
             <Link to="/booking" className="btn-ink group !pr-2">Book your appointment <ArrowDot className="bg-paper/15" /></Link>
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="btn-line">Leave a review on Google</a>
           </Reveal>
         </div>
       </section>

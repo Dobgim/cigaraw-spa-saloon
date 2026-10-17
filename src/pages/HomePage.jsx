@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SHOP, TATTOOS, tattoo } from '../photos'
-import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Arrow, ArrowDot, Count, ease, easeOut, ImageReveal, Label, Lines, Magnetic, Marquee, Reveal, SpinBadge } from '../components/motion'
-import { ADDRESS, HOURS, PHONE_DISPLAY, PHONE_TEL } from '../site'
+import { ADDRESS, GOOGLE_RATING, HOURS, MAPS_URL, PHONE_DISPLAY, PHONE_TEL } from '../site'
 import { CLASSIC, FACE_BODY, VIP } from '../menu'
 
 const disciplines = [
@@ -26,12 +26,6 @@ const shortMenu = [
 const day = ['jesus-rosary-realism', 'golden-crown-back', 'one-life-one-chance', 'mary-and-jesus', 'it-is-finished', 'praying-jesus-dove-sleeve']
   .map(f => TATTOOS.find(x => x.src.endsWith(`/${f}.jpg`)))
 
-const reviews = [
-  { name: 'Nchinda Bertrand', role: 'Business owner', text: 'Nothing in Bamenda touches CiGa Raw. The attention to detail, the clean tools, the skilled hands — it changed how I think about grooming.' },
-  { name: 'Tabi Godwill',     role: 'Creative director', text: 'My skin fade was on point. These barbers know what they are doing and they take their time. I have brought three friends. None of us have looked back.' },
-  { name: 'Fru Valerie',      role: 'Entrepreneur', text: 'I came in stressed and left completely renewed. The therapist understood exactly what my body needed. A real gem on Commercial Avenue.' },
-  { name: 'Che Kingsley',     role: 'Civil engineer', text: 'The VIP Suite is worth every franc. A haircut in total quiet with an espresso and no crowd made my Saturday.' },
-]
 
 function Hero({ ready }) {
   const ref = useRef(null)
@@ -70,7 +64,7 @@ function Hero({ ready }) {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <span>Salon · Spa · Ink</span>
-          <span>Bamenda<span className="hidden sm:inline"> — since 2024</span></span>
+          <span>Logpom<span className="hidden sm:inline">, Douala</span></span>
         </motion.div>
 
         <motion.h1 style={{ y: headY }} className="display text-[16vw] sm:text-[12vw] lg:text-[9.6vw] max-w-[11ch]">
@@ -108,7 +102,7 @@ function Hero({ ready }) {
         >
           <div className="lg:col-span-5">
             <p className="text-lg lg:text-xl leading-snug text-paper/75 max-w-md">
-              A barbershop, spa and tattoo studio under one roof on Commercial Avenue. Book a chair, take your time, leave sharper than you came in.
+              A beauty, grooming and wellness salon in Logpom, Douala. Book a chair, take your time, leave sharper than you came in.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
@@ -122,13 +116,13 @@ function Hero({ ready }) {
 
           <dl className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-paper/20">
             {[
-              { n: 5000, s: '+', l: 'Clients served' },
-              { n: 12,   s: '',  l: 'Resident artists' },
-              { n: 4.9,  s: '★', l: 'Average rating', raw: true },
+              { n: 12,   s: '',  l: 'Services' },
+              { n: 4,    s: '',  l: 'Departments' },
+              { n: 5.0,  s: '★', l: 'Google rating', raw: true },
             ].map((x) => (
               <div key={x.l} className="pt-5 pr-4">
                 <dd className="display text-4xl sm:text-5xl">
-                  {x.raw ? <>{x.n}<span className="text-ember text-3xl align-top">{x.s}</span></> : <Count to={x.n} suffix={x.s} when={ready} />}
+                  {x.raw ? <>{x.n.toFixed(1)}<span className="text-ember text-3xl align-top">{x.s}</span></> : <Count to={x.n} suffix={x.s} when={ready} />}
                 </dd>
                 <dt className="label text-paper/55 mt-2">{x.l}</dt>
               </div>
@@ -333,62 +327,47 @@ function ShortMenu() {
   )
 }
 
+// Real Google Maps rating and review
 function Reviews() {
-  const [i, setI] = useState(0)
-  const r = reviews[i]
-  const go = (d) => setI((i + d + reviews.length) % reviews.length)
-
-  useEffect(() => {
-    const t = setTimeout(() => go(1), 7000)
-    return () => clearTimeout(t)
-  })
-
   return (
     <section className="bg-ember text-ink py-24 lg:py-32 overflow-hidden">
-      <div className="wrap">
-        <div className="flex justify-between items-center mb-12">
-          <Label num="05" className="text-ink/60">Word of mouth</Label>
-          <div className="flex items-center gap-3">
-            <span className="label tabular-nums">{String(i + 1).padStart(2, '0')} / {String(reviews.length).padStart(2, '0')}</span>
-            <button onClick={() => go(-1)} aria-label="Previous review" className="w-11 h-11 rounded-full border border-ink/30 grid place-items-center hover:bg-ink hover:text-ember transition-colors">
-              <Arrow className="w-4 h-4 rotate-180" />
-            </button>
-            <button onClick={() => go(1)} aria-label="Next review" className="w-11 h-11 rounded-full border border-ink/30 grid place-items-center hover:bg-ink hover:text-ember transition-colors">
-              <Arrow className="w-4 h-4" />
-            </button>
+      <div className="wrap grid lg:grid-cols-12 gap-12 items-end">
+        <div className="lg:col-span-4">
+          <Label num="05" className="text-ink/60 mb-8">On Google</Label>
+          <p className="display text-[9rem] lg:text-[12rem] leading-[0.8]">
+            <Count to={5} suffix=".0" />
+          </p>
+          <div className="flex gap-1 mt-4 text-2xl" aria-label={`${GOOGLE_RATING.score} out of 5 stars`}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <motion.span
+                key={i}
+                initial={{ scale: 0, rotate: -90 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 0.3 + i * 0.08 }}
+              >
+                ★
+              </motion.span>
+            ))}
           </div>
+          <p className="label text-ink/60 mt-3">Google Maps rating · {GOOGLE_RATING.count} reviews</p>
         </div>
 
-        <div className="min-h-[340px] sm:min-h-[300px] lg:min-h-[330px]">
-          <AnimatePresence mode="wait">
-            <motion.figure key={i} initial="hide" animate="show" exit="out">
-              <blockquote className="font-serif text-[2rem] sm:text-5xl lg:text-[4.2rem] leading-[1.05] max-w-6xl">
-                {r.text.split(' ').map((w, k) => (
-                  <span key={k} className="inline-block overflow-hidden align-bottom">
-                    <motion.span
-                      className="inline-block mr-[0.22em]"
-                      variants={{
-                        hide: { y: '100%' },
-                        show: { y: '0%', transition: { duration: 0.7, ease: easeOut, delay: k * 0.015 } },
-                        out:  { y: '-100%', transition: { duration: 0.35, ease, delay: k * 0.005 } },
-                      }}
-                    >
-                      {k === 0 && '“'}{w}{k === r.text.split(' ').length - 1 && '”'}
-                    </motion.span>
-                  </span>
-                ))}
-              </blockquote>
-              <motion.figcaption
-                className="mt-10 flex items-center gap-4"
-                variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { delay: 0.5 } }, out: { opacity: 0 } }}
-              >
-                <span className="w-10 h-px bg-ink" />
-                <span className="font-medium">{r.name}</span>
-                <span className="text-ink/60">{r.role}</span>
-              </motion.figcaption>
-            </motion.figure>
-          </AnimatePresence>
-        </div>
+        <figure className="lg:col-span-7 lg:col-start-6">
+          <blockquote className="font-serif text-5xl sm:text-6xl lg:text-[5.5rem] leading-[1]">
+            <Lines lines={[<>&ldquo;They offer</>, <>premium services.&rdquo;</>]} />
+          </blockquote>
+          <Reveal as="figcaption" delay={0.3} className="mt-8 flex items-center gap-4">
+            <span className="w-10 h-px bg-ink" />
+            <span className="font-medium">IDP Board Members</span>
+            <span className="text-ink/60">Google review</span>
+          </Reveal>
+          <Reveal delay={0.4} className="mt-10 flex flex-wrap gap-3">
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="btn-ink group !pr-2">
+              Read & write reviews <ArrowDot className="bg-paper/15" />
+            </a>
+          </Reveal>
+        </figure>
       </div>
     </section>
   )
@@ -398,11 +377,11 @@ function Visit() {
   return (
     <section className="bg-paper py-24 lg:py-36">
       <div className="wrap grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-        <ImageReveal src={SHOP.frontNight} alt="The CiGa Raw storefront on Commercial Avenue at night" className="lg:col-span-5 aspect-[4/5]" from="left" />
+        <ImageReveal src={SHOP.frontNight} alt="The CiGa Raw Salon and Spa storefront in Logpom, Douala, at night" className="lg:col-span-5 aspect-[4/5]" from="left" />
         <div className="lg:col-span-5 lg:col-start-8">
           <Label num="06" className="text-ink-500 mb-6">Come by</Label>
           <h2 className="h2 mb-10">
-            <Lines lines={[<>Commercial</>, <>Avenue, <span className="accent text-ember">Bamenda.</span></>]} />
+            <Lines lines={[<>Logpom,</>, <span key="d" className="accent text-ember">Douala.</span>]} />
           </h2>
           <Reveal className="grid sm:grid-cols-2 gap-8 text-lg">
             <div>
@@ -417,6 +396,11 @@ function Visit() {
           <Reveal delay={0.1} className="mt-10">
             <a href={`tel:${PHONE_TEL}`} className="display text-4xl sm:text-5xl link-draw hover:text-ember transition-colors">
               {PHONE_DISPLAY}
+            </a>
+          </Reveal>
+          <Reveal delay={0.15} className="mt-8">
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="btn-line group !pr-2">
+              Get directions <ArrowDot className="bg-ink/5" />
             </a>
           </Reveal>
         </div>
@@ -449,11 +433,11 @@ export default function HomePage({ ready }) {
           <div className="lg:col-span-9">
             <ScrollWords
               className="text-[1.9rem] sm:text-5xl lg:text-[3.6rem] leading-[1.08] font-medium tracking-[-0.03em]"
-              text="We opened on Commercial Avenue in 2024 with a simple idea: Bamenda deserves a place where a haircut is done properly, the tools are always sterile, and nobody rushes you out of the chair."
+              text="It started with a customer at Hair Force 1. Today that customer, Nde Clinton Fru — Ciga Raw — owns the salon, and it carries his name: a place in Logpom built on faith, hard work and a simple promise of beauty, confidence and excellence."
             />
             <Reveal className="mt-12 flex flex-wrap items-center gap-6">
               <Link to="/about" className="btn-line group !pr-2">Our story <ArrowDot className="bg-ink/5" /></Link>
-              <span className="text-ink-500">Barbers, therapists and tattoo artists — twelve of us.</span>
+              <span className="text-ink-500">From Hair Force 1 to CiGa Raw Salon and Spa.</span>
             </Reveal>
           </div>
         </div>

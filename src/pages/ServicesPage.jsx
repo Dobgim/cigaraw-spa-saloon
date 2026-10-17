@@ -35,7 +35,7 @@ function Row({ item }) {
         <span className="flex items-center gap-4">
           <span className="text-right">
             <span className="block text-xl sm:text-2xl lg:text-3xl font-medium tabular-nums whitespace-nowrap">{item.price}</span>
-            <span className="block label text-ink-500 mt-1">FCFA</span>
+            {/\d/.test(item.price) && <span className="block label text-ink-500 mt-1">FCFA</span>}
           </span>
           <ArrowDot className="hidden sm:grid border border-ink/20 transition-colors duration-500 group-hover:bg-ink group-hover:text-paper" />
         </span>

@@ -25,7 +25,7 @@ export default function Intro({ onDone }) {
     >
       <div className="flex justify-between label text-paper/50">
         <span>Salon &amp; Spa</span>
-        <span>Bamenda, CM</span>
+        <span>Douala, CM</span>
       </div>
 
       <div className="flex items-end justify-between gap-6">
@@ -48,7 +48,7 @@ export default function Intro({ onDone }) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.7 }}
         >
-          est. 2024
+          Logpom
         </motion.span>
       </div>
 

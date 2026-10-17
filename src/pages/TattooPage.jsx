@@ -7,7 +7,7 @@ import { TATTOOS, tattoo } from '../photos'
 
 const tattooStyles = [
   { name: 'Fine-line & script',        rate: 'from 15,000', desc: 'Single-needle work for quotes, dates, botanicals and small symbols.' },
-  { name: 'Afro-centric & tribal',     rate: 'from 25,000', desc: 'Grassfields geometry, royal chevrons, cowries and ancestral motifs.' },
+  { name: 'Afro-centric & tribal',     rate: 'from 25,000', desc: 'African geometry, royal chevrons, cowries and ancestral motifs.' },
   { name: 'Blackwork',                 rate: 'from 30,000', desc: 'Solid black saturation built for deep melanin skin — high contrast that lasts.' },
   { name: 'Micro-realism & portraits', rate: 'from 40,000', desc: 'Loved ones, wildlife or icons with photographic depth and shading.' },
   { name: 'Cover-ups & scars',         rate: 'quote',       desc: 'Turning old tattoos or surgical scars into new work you actually want.' },

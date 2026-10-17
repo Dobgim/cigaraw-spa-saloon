@@ -14,7 +14,7 @@ export default function PageHero({ index, kicker, lines, intro, image, imageAlt 
       <div className="wrap">
         <div className="flex items-center justify-between label text-ink-500 mb-8 lg:mb-12">
           <span>({index}) {kicker}</span>
-          <span className="hidden sm:inline">Commercial Ave, Bamenda</span>
+          <span className="hidden sm:inline">Logpom, Douala</span>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 items-end">

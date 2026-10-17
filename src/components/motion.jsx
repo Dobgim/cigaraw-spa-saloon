@@ -170,7 +170,7 @@ export function ArrowDot({ className = '' }) {
 }
 
 // Circular text that slowly rotates, with a mark in the middle
-export function SpinBadge({ text = 'Book a chair · CiGa Raw · Bamenda · ', className = '', children }) {
+export function SpinBadge({ text = 'Book a chair · CiGa Raw · Douala · ', className = '', children }) {
   return (
     <div className={`relative w-32 h-32 ${className}`}>
       <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full animate-spin-slow" aria-hidden="true">

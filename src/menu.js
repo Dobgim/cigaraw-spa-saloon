@@ -35,8 +35,17 @@ export const TEETH_WHITENING = [
   { session: 'Third session',  price: 'Free' },
 ]
 
+// On the shop sign but not on the price list yet
+export const ON_REQUEST = [
+  { name: 'Braiding',          price: 'On request' },
+  { name: 'Hair installation', price: 'On request' },
+  { name: 'Hammam',            price: 'On request' },
+  { name: 'Nails',             price: 'On request' },
+]
+
 export const MENU = [
   { group: 'Classic',     items: CLASSIC },
   { group: 'Face & body', items: FACE_BODY },
+  { group: 'Hair & nails', items: ON_REQUEST },
   { group: 'VIP',         items: [...VIP, { name: 'VIP teeth whitening', price: 'from 50,000', note: '3 sessions: 50,000 · 25,000 · third free' }] },
 ]
