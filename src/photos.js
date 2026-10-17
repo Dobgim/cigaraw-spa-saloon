@@ -49,7 +49,7 @@ export const TATTOOS = [
   { src: t('jesus-shoulder-portrait'),   title: 'Shoulder portrait',        style: 'Colour, upper arm', price: 500_000 },
   { src: t('jesus-full-back'),           title: 'Full back',                style: 'Black & grey', price: 2_000_000 },
   { src: t('crucifix-script'),           title: 'Crucifix & name',          style: 'Blackwork, script', price: 100_000 },
-  { src: t('crucifix-wrist'),            title: 'Small crucifix',           style: 'Blackwork, forearm', price: 200_000 },
+  { src: t('crucifix-wrist'),            title: 'Small crucifix',           style: 'Blackwork, forearm', price: 100_000 },
   { src: t('praying-hands-rosary'),      title: 'Praying hands & rosary',   style: 'Black & grey', price: 200_000 },
 ]
 
