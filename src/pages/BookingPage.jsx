@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import WhatsAppIcon from '../components/WhatsAppIcon'
@@ -23,7 +23,7 @@ const specialists = [
 
 const timeSlots = ['08:30', '09:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30', '16:30', '17:30', '18:15']
 
-const empty = { name: '', phone: '', email: '', service: '', specialist: 'First available', date: '', time: '', notes: '' }
+const empty = { name: '', phone: '', email: '', service: '', specialist: 'First available', date: '', time: '', notes: '', location: 'salon', address: '' }
 
 function Field({ label, error, children, htmlFor }) {
   return (
@@ -57,12 +57,14 @@ export default function BookingPage({ ready }) {
   const [params] = useSearchParams()
   const initial = params.get('service') || params.get('package') || ''
   const initialNotes = params.get('notes') || ''
+  const initialLocation = params.get('location') === 'home' ? 'home' : 'salon'
 
   // Pre-fill from ?service= links; unmatched names go into the notes
   const [form, setForm] = useState(() => {
-    if (!initial) return { ...empty, notes: initialNotes }
+    const base = { ...empty, location: initialLocation }
+    if (!initial) return { ...base, notes: initialNotes }
     const match = serviceOptions.find(s => s.name.toLowerCase().includes(initial.toLowerCase()))
-    return { ...empty, service: match ? match.name : '', notes: initialNotes || (match ? '' : initial) }
+    return { ...base, service: match ? match.name : '', notes: initialNotes || (match ? '' : initial) }
   })
   const [errors, setErrors] = useState({})
   const [done, setDone] = useState(null)
@@ -75,6 +77,7 @@ export default function BookingPage({ ready }) {
     if (!form.service)      err.service = 'Pick a service.'
     if (!form.date)         err.date    = 'Pick a date.'
     if (!form.time)         err.time    = 'Pick a time.'
+    if (form.location === 'home' && !form.address.trim()) err.address = 'Tell us where to come.'
     return err
   }
 
@@ -100,6 +103,7 @@ export default function BookingPage({ ready }) {
     `Service: ${done.service}`,
     `Specialist: ${done.specialist}`,
     `Date: ${done.date} at ${done.time}`,
+    done.location === 'home' ? `HOME SERVICE — Address: ${done.address}` : 'Location: at the salon (Logpom)',
     `Phone: ${done.phone}`,
     `Notes: ${done.notes || 'None'}`,
   ].join('\n')
@@ -167,7 +171,7 @@ export default function BookingPage({ ready }) {
                       ['Service', done.service],
                       ['With', done.specialist],
                       ['When', `${done.date} · ${done.time}`],
-                      ['Where', 'Logpom, Douala'],
+                      ['Where', done.location === 'home' ? `At home — ${done.address}` : 'CiGa Raw, Logpom, Douala'],
                     ].map(([k, v]) => (
                       <div key={k} className="py-4 border-b border-ink/20">
                         <dt className="label opacity-60">{k}</dt>
@@ -177,7 +181,7 @@ export default function BookingPage({ ready }) {
                   </dl>
 
                   <p className="mt-8 max-w-lg text-ink/80">
-                    To lock it in, send this booking to us on WhatsApp — we&rsquo;ll reply to confirm.
+                    To lock it in, send this booking to us on WhatsApp — we&rsquo;ll reply to confirm{done.location === 'home' ? ' your total, including the travel fee' : ''}.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     <a href={wa(message)} target="_blank" rel="noopener noreferrer" className="btn-ink">
@@ -188,7 +192,41 @@ export default function BookingPage({ ready }) {
                 </motion.div>
               ) : (
                 <motion.form key="form" onSubmit={submit} noValidate exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
-                  <Step n="1" title="What">
+                  <Step n="1" title="Where">
+                    <Field label="Where would you like the service?" error={errors.address}>
+                      <div className="flex flex-wrap gap-2 mt-3" role="radiogroup" aria-label="Service location">
+                        {[['salon', 'In the salon'], ['home', 'At my home']].map(([v, l]) => (
+                          <button
+                            type="button"
+                            key={v}
+                            role="radio"
+                            aria-checked={form.location === v}
+                            onClick={() => set('location', v)}
+                            className={`relative isolate chip ${form.location === v ? 'text-paper border-ink' : 'border-ink/20 hover:border-ink'}`}
+                          >
+                            {form.location === v && <motion.span layoutId="loc" className="absolute inset-0 -z-10 rounded-full bg-ink" transition={{ type: 'spring', stiffness: 400, damping: 32 }} />}
+                            {l}
+                          </button>
+                        ))}
+                      </div>
+                      <AnimatePresence initial={false}>
+                        {form.location === 'home' && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.5, ease }}
+                            className="overflow-hidden"
+                          >
+                            <input id="address" name="address" type="text" autoComplete="street-address" placeholder="Your address or neighbourhood in Douala" className="field mt-6" value={form.address} onChange={onChange} />
+                            <p className="text-ink-500 text-sm mt-3">Salon prices plus a travel fee for your location — we confirm the total on WhatsApp. <Link to="/home-service" className="link-draw text-ink">What we can bring →</Link></p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </Field>
+                  </Step>
+
+                  <Step n="2" title="What">
                     <Field label="Service" htmlFor="service" error={errors.service}>
                       <select id="service" name="service" className="field" value={form.service} onChange={onChange}>
                         <option value="">Choose a service…</option>
@@ -206,7 +244,7 @@ export default function BookingPage({ ready }) {
                     </Field>
                   </Step>
 
-                  <Step n="2" title="When">
+                  <Step n="3" title="When">
                     <Field label="Date" htmlFor="date" error={errors.date}>
                       <input id="date" name="date" type="date" min={new Date().toISOString().split('T')[0]} className="field" value={form.date} onChange={onChange} />
                     </Field>
@@ -228,7 +266,7 @@ export default function BookingPage({ ready }) {
                     </Field>
                   </Step>
 
-                  <Step n="3" title="You">
+                  <Step n="4" title="You">
                     <div className="grid sm:grid-cols-2 gap-8">
                       <Field label="Full name" htmlFor="name" error={errors.name}>
                         <input id="name" name="name" type="text" autoComplete="name" placeholder="Your full name" className="field" value={form.name} onChange={onChange} />

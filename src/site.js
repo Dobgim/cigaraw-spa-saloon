@@ -25,6 +25,7 @@ export const NAV = [
   { label: 'Barbering', path: '/barbing' },
   { label: 'VIP Suite', path: '/vip' },
   { label: 'Tattoo',    path: '/tattoo' },
+  { label: 'Home Service', path: '/home-service' },
   { label: 'Gallery',   path: '/gallery' },
   { label: 'Book',      path: '/booking' },
 ]

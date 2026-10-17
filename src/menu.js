@@ -49,3 +49,15 @@ export const MENU = [
   { group: 'Hair & nails', items: ON_REQUEST },
   { group: 'VIP',         items: [...VIP, { name: 'VIP teeth whitening', price: 'from 50,000', note: '3 sessions: 50,000 · 25,000 · third free' }] },
 ]
+
+// Services we can bring to a client's home. Prices are the salon prices;
+// the travel fee depends on the address and is confirmed on WhatsApp.
+const pick = (list, names) => names.map(n => list.find(x => x.name === n))
+
+export const HOME_SERVICE = [
+  { group: 'Grooming',   items: pick(CLASSIC, ['Normal shaving', 'Shaving & black', 'Shaving & sporting wave']) },
+  { group: 'Face',       items: pick(FACE_BODY, ['Face scrub', 'Face scrub & mask', 'Face treatment']) },
+  { group: 'Body',       items: pick(FACE_BODY, ['Full body massage (1 hour)', 'Body scrub', 'Epilation']) },
+  { group: 'Hands & feet', items: pick(FACE_BODY, ['Classic manicure', 'Classic pedicure']).concat(pick(ON_REQUEST, ['Nails'])) },
+  { group: 'Hair',       items: [...pick(FACE_BODY, ['Dreadlock renewal']), ...pick(ON_REQUEST, ['Braiding', 'Hair installation'])] },
+]

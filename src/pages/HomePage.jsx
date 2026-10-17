@@ -409,6 +409,29 @@ function Visit() {
   )
 }
 
+// Promo band for the home service page
+function HomeServiceBand() {
+  return (
+    <section className="bg-paper py-20 lg:py-28 overflow-hidden">
+      <div className="wrap">
+        <Link to="/home-service" className="group grid lg:grid-cols-12 gap-8 items-center">
+          <ImageReveal src={SHOP.facial} alt="A CiGa Raw therapist giving a face treatment" className="lg:col-span-4 aspect-[4/3] lg:aspect-[4/5]" />
+          <div className="lg:col-span-7 lg:col-start-6">
+            <Label num="+" className="text-ink-500 mb-6">New · Home service</Label>
+            <h2 className="display text-6xl sm:text-7xl lg:text-[7.5rem] leading-[0.9]">
+              <Lines lines={[<>Can&rsquo;t come in?</>, <>We come <span className="accent text-ember">to you.</span></>]} />
+            </h2>
+            <Reveal className="mt-8 flex flex-wrap items-center gap-6">
+              <p className="text-lg text-ink-600 max-w-md">Shaving, face treatments, massage, manicure, pedicure and hair — at home, at the office or wherever you are.</p>
+              <span className="btn-ember group-hover:before:translate-y-0 !pr-2">See the home menu <ArrowDot className="bg-paper/15" /></span>
+            </Reveal>
+          </div>
+        </Link>
+      </div>
+    </section>
+  )
+}
+
 export default function HomePage({ ready }) {
   return (
     <>
@@ -444,6 +467,7 @@ export default function HomePage({ ready }) {
       </section>
 
       <Disciplines />
+      <HomeServiceBand />
       <DayStrip />
       <ShortMenu />
       <Reviews />

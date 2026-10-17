@@ -15,6 +15,7 @@ import VipPage      from './pages/VipPage'
 import TattooPage   from './pages/TattooPage'
 import GalleryPage  from './pages/GalleryPage'
 import BookingPage  from './pages/BookingPage'
+import HomeServicePage from './pages/HomeServicePage'
 
 // Wraps each route: content fades out, an ember panel sweeps over, new page comes in
 function Page({ children }) {
@@ -58,6 +59,7 @@ function AnimatedRoutes({ firstLoad }) {
     '/tattoo':   TattooPage,
     '/gallery':  GalleryPage,
     '/booking':  BookingPage,
+    '/home-service': HomeServicePage,
   }
 
   return (

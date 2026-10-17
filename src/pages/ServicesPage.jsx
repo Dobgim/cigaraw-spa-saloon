@@ -84,6 +84,9 @@ export default function ServicesPage({ ready }) {
           </LayoutGroup>
 
           <Reveal className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-ink-600">
+            <span>Most services can also be done at your home.</span>
+            <Link to="/home-service" className="link-draw text-ink">Home service →</Link>
+            <span className="text-ink/30">·</span>
             <span>Tattoo work is priced per design.</span>
             <Link to="/tattoo" className="link-draw text-ink">See the tattoo studio →</Link>
           </Reveal>

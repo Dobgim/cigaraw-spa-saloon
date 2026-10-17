@@ -14,10 +14,11 @@ const previews = {
   '/vip':      SHOP.vipLounge,
   '/tattoo':   tattoo('golden-crown-back'),
   '/gallery':  tattoo('jesus-rosary-realism'),
+  '/home-service': SHOP.facial,
   '/booking':  SHOP.frontNight,
 }
 
-const inline = NAV.filter(n => ['/services', '/barbing', '/vip', '/tattoo', '/gallery'].includes(n.path))
+const inline = NAV.filter(n => ['/services', '/home-service', '/barbing', '/vip', '/tattoo', '/gallery'].includes(n.path))
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
