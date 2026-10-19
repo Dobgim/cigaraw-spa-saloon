@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Admin data, bookings and uploaded photos (created by the server)
+/data

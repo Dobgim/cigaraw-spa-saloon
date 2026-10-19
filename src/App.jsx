@@ -6,6 +6,7 @@ import Navbar         from './components/Navbar'
 import Footer         from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import { ease }       from './components/motion'
+import { loadContent } from './content'
 
 import HomePage     from './pages/HomePage'
 import AboutPage    from './pages/AboutPage'
@@ -97,6 +98,12 @@ function AnimatedRoutes({ firstLoad }) {
 
 export default function App() {
   const [introDone, setIntroDone] = useState(false)
+  // Bumped once live content from the admin dashboard has been applied, so every page re-renders with it
+  const [, setContentVersion] = useState(0)
+
+  useEffect(() => {
+    loadContent().then(applied => applied && setContentVersion(v => v + 1))
+  }, [])
 
   return (
     <BrowserRouter>

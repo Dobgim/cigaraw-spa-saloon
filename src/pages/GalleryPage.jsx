@@ -7,9 +7,9 @@ import { PriceTag } from '../components/TattooCard'
 import { GOOGLE_RATING, MAPS_URL } from '../site'
 import { ArrowDot, ease, easeOut, Label, Lines, Reveal } from '../components/motion'
 
-const items = [
-  ...SALON.map((p, i) => ({ id: `s${i}`, title: p.title, category: 'Salon', image: p.src, desc: p.desc })),
-  ...TATTOOS.map((w, i) => ({ id: `t${i}`, title: w.title, category: 'Tattoo', image: w.src, desc: w.style, price: w.price })),
+const getItems = () => [
+  ...SALON.map((p, i) => ({ id: `s${i}-${p.src}`, title: p.title, category: 'Salon', image: p.src, desc: p.desc })),
+  ...TATTOOS.map((w, i) => ({ id: `t${i}-${w.src}`, title: w.title, category: 'Tattoo', image: w.src, desc: w.style, price: w.price })),
 ]
 
 const categories = ['All', 'Salon', 'Tattoo']
@@ -23,6 +23,7 @@ const reviews = [
 export default function GalleryPage({ ready }) {
   const [cat, setCat] = useState('All')
   const [open, setOpen] = useState(null)
+  const items = getItems()
   const list = cat === 'All' ? items : items.filter(i => i.category === cat)
 
   useEffect(() => {

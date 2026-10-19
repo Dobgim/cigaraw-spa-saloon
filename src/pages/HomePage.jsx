@@ -17,18 +17,16 @@ const disciplines = [
   { num: '04', title: 'Tattoo',    note: 'Realism, blackwork, lettering', image: tattoo('golden-crown-back'), path: '/tattoo' },
 ]
 
-const shortMenu = [
-  { ...CLASSIC[0], group: 'Classic' },
-  { ...CLASSIC[3], group: 'Classic' },
-  { ...FACE_BODY[1], group: 'Face & body' },
-  { ...FACE_BODY[6], group: 'Face & body' },
-  { ...FACE_BODY[8], group: 'Face & body' },
-  { ...VIP[1], group: 'VIP' },
+// A taste of the menu: the first couple of services from each list (read at render time,
+// so prices edited in the admin dashboard show up)
+const shortMenu = () => [
+  ...CLASSIC.slice(0, 2).map(x => ({ ...x, group: 'Classic' })),
+  ...FACE_BODY.slice(0, 3).map(x => ({ ...x, group: 'Face & body' })),
+  ...VIP.slice(1, 2).map(x => ({ ...x, group: 'VIP' })),
 ]
 
-// Recent tattoo work for the photo strip
-const day = ['jesus-rosary-realism', 'golden-crown-back', 'one-life-one-chance', 'mary-and-jesus', 'it-is-finished', 'praying-jesus-dove-sleeve']
-  .map(f => TATTOOS.find(x => x.src.endsWith(`/${f}.jpg`)))
+// Recent tattoo work for the photo strip: the first six in the portfolio
+const recentInk = () => TATTOOS.slice(0, 6)
 
 
 function Hero({ ready }) {
@@ -278,7 +276,7 @@ function DayStrip() {
           style={{ x }}
           className="flex items-start gap-5 lg:gap-6 pl-5 sm:pl-8 lg:pl-12 min-[1440px]:pl-[calc((100vw-1440px)/2+3rem)] pr-[6vw] w-max"
         >
-          {day.map((d, i) => (
+          {recentInk().map((d, i) => (
             <figure key={d.src} className={`shrink-0 ${i % 2 ? 'mt-10' : ''}`}>
               <Link to="/tattoo" className="relative block overflow-hidden aspect-[3/4] h-[300px] lg:h-[min(44vh,400px)]">
                 <img src={d.src} alt={d.title} className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" loading="lazy" />
@@ -314,7 +312,7 @@ function ShortMenu() {
         </div>
 
         <ul className="lg:col-span-7 lg:col-start-6 border-t border-ink/15">
-          {shortMenu.map((m, i) => (
+          {shortMenu().map((m, i) => (
             <Reveal as="li" key={m.name} delay={i * 0.05} className="menu-row group">
               <div className="flex items-baseline">
                 <span className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight transition-colors group-hover:text-ember">{m.name}</span>

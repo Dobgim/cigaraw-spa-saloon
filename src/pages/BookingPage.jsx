@@ -6,13 +6,13 @@ import WhatsAppIcon from '../components/WhatsAppIcon'
 import { ease, easeOut, Reveal } from '../components/motion'
 import { ADDRESS, EMAIL, HOURS, MAPS_URL, PHONE_DISPLAY, PHONE_TEL, WHATSAPP_DISPLAY, wa } from '../site'
 import { MENU } from '../menu'
+import { saveBooking } from '../content'
 
-const serviceOptions = [
+const getServiceOptions = () => [
   ...MENU.flatMap(m => m.items.map(it => ({ group: m.group, name: /\d/.test(it.price) ? `${it.name} (${it.price} FCFA)` : `${it.name} (price on request)` }))),
   { group: 'Tattoo', name: 'Tattoo consultation (priced per design)' },
 ]
 
-const groups = [...new Set(serviceOptions.map(s => s.group))]
 
 const specialists = [
   'First available',
@@ -74,6 +74,8 @@ function Step({ n, title, children }) {
 }
 
 export default function BookingPage({ ready }) {
+  const serviceOptions = getServiceOptions()
+  const groups = [...new Set(serviceOptions.map(s => s.group))]
   const [params] = useSearchParams()
   const initial = params.get('service') || params.get('package') || ''
   const initialNotes = params.get('notes') || ''
@@ -111,7 +113,9 @@ export default function BookingPage({ ready }) {
     e.preventDefault()
     const err = validate()
     if (Object.keys(err).length) { setErrors(err); return }
-    setDone({ ref: `CIG-${Math.floor(10000 + Math.random() * 90000)}`, ...form })
+    const booking = { ref: `CIG-${Math.floor(10000 + Math.random() * 90000)}`, ...form }
+    setDone(booking)
+    saveBooking(booking)
     window.scrollTo({ top: document.getElementById('booking-form').offsetTop - 100, behavior: 'smooth' })
   }
 

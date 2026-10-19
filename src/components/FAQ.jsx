@@ -5,7 +5,7 @@ import { ease, Label, Lines, Reveal } from './motion'
 import { ADDRESS_SHORT, HOURS, WHATSAPP_DISPLAY } from '../site'
 
 // Answers use only details already published on the site
-const faqs = [
+const getFaqs = () => [
   {
     q: 'How do I book an appointment?',
     a: <>Use the <Link to="/booking" className="link-draw text-ember">booking form</Link> or message us on WhatsApp ({WHATSAPP_DISPLAY}). We confirm every booking personally on WhatsApp or by phone.</>,
@@ -77,7 +77,7 @@ export default function FAQ() {
           <Reveal className="mt-6 text-ink-600 text-lg max-w-xs">Something else on your mind? Message us on WhatsApp — we reply fast.</Reveal>
         </div>
         <ul className="lg:col-span-8 border-t border-ink/15">
-          {faqs.map((f, i) => (
+          {getFaqs().map((f, i) => (
             <Item key={f.q} item={f} i={i} open={open === i} onToggle={() => setOpen(open === i ? null : i)} />
           ))}
         </ul>

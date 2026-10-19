@@ -6,9 +6,7 @@ import { ArrowDot, easeOut, Label, Lines, Reveal } from '../components/motion'
 import { MENU, TEETH_WHITENING } from '../menu'
 import { wa } from '../site'
 
-const categories = ['All', ...MENU.map(m => m.group)]
 
-const allServices = MENU.flatMap(m => m.items.map(it => ({ ...it, category: m.group })))
 
 function Row({ item }) {
   return (
@@ -46,6 +44,8 @@ function Row({ item }) {
 
 export default function ServicesPage({ ready }) {
   const [cat, setCat] = useState('All')
+  const categories = ['All', ...MENU.map(m => m.group)]
+  const allServices = MENU.flatMap(m => m.items.map(it => ({ ...it, category: m.group })))
   const list = cat === 'All' ? allServices : allServices.filter(s => s.category === cat)
 
   return (

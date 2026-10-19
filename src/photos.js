@@ -1,4 +1,5 @@
-// Real CiGa Raw photos. Add new ones here and they show up in the gallery.
+// Real CiGa Raw photos. These are the built-in defaults; when the backend is
+// running, applyPhotos() replaces the gallery and tattoo lists with the admin's.
 
 const s = (file) => `/images/shop/${file}.jpg`
 
@@ -16,7 +17,7 @@ export const SHOP = {
 }
 
 // Salon photos shown in the gallery
-export const SALON = [
+export let SALON = [
   { src: SHOP.frontNight,   title: 'CiGa Raw at night',        desc: 'The storefront in Logpom, Douala.' },
   { src: SHOP.vipLounge,    title: 'The VIP room',             desc: 'Two chairs, a lounge corner and a curtained treatment space.' },
   { src: SHOP.facial,       title: 'Face treatment',           desc: 'One of our therapists at work.' },
@@ -34,7 +35,7 @@ export const LOGO = '/logo.png'
 const t = (file) => `/images/tattoo/${file}.jpg`
 
 // price in FCFA for that exact design
-export const TATTOOS = [
+export let TATTOOS = [
   { src: t('jesus-rosary-realism'),      title: 'Jesus with rosary',        style: 'Black & grey realism', price: 500_000 },
   { src: t('golden-crown-back'),         title: 'Golden crown of thorns',   style: 'Colour realism, back piece', price: 1_500_000 },
   { src: t('praying-jesus-dove-sleeve'), title: 'Praying Christ & dove',    style: 'Half sleeve', price: 500_000 },
@@ -53,11 +54,20 @@ export const TATTOOS = [
   { src: t('praying-hands-rosary'),      title: 'Praying hands & rosary',   style: 'Black & grey', price: 200_000 },
 ]
 
-// Look up a tattoo photo by its file name
-export const tattoo = (file) => TATTOOS.find(x => x.src.endsWith(`/${file}.jpg`)).src
+// Built-in tattoo photos, kept for page headers even if the admin removes them from the portfolio
+const BUILT_IN_TATTOOS = TATTOOS
+
+// Look up a built-in tattoo photo by its file name
+export const tattoo = (file) => BUILT_IN_TATTOOS.find(x => x.src.endsWith(`/${file}.jpg`)).src
+
+// Replace the gallery and tattoo lists with saved content from the backend
+export function applyPhotos(c) {
+  if (Array.isArray(c?.salon)) SALON = c.salon
+  if (Array.isArray(c?.tattoos)) TATTOOS = c.tattoos.map(x => ({ ...x, price: Number(x.price) || 0 }))
+}
 
 // 1500000 -> "1.5M", 500000 -> "500K"
-export const shortPrice = (n) => n >= 1_000_000 ? `${+(n / 1_000_000).toFixed(1)}M` : `${n / 1000}K`
+export const shortPrice = (n) => n >= 1_000_000 ? `${+(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `${+(n / 1000).toFixed(1)}K` : `${n}`
 
 // 1500000 -> "1,500,000"
 export const fullPrice = (n) => n.toLocaleString('en-US')

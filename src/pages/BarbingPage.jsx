@@ -6,7 +6,7 @@ import PageHero from '../components/PageHero'
 import { CLASSIC, FACE_BODY } from '../menu'
 import { ArrowDot, easeOut, ImageReveal, Label, Lines, Marquee, Reveal } from '../components/motion'
 
-const cuts = [...CLASSIC, FACE_BODY.find(f => f.name === 'Dreadlock renewal')]
+const cuts = () => [...CLASSIC, FACE_BODY.find(f => f.name === 'Dreadlock renewal')].filter(Boolean)
 
 // Each style shows its photo from public/images/styles/ (see CREDITS.md there);
 // if a file is missing it falls back to a shop photo
@@ -118,7 +118,7 @@ export default function BarbingPage({ ready }) {
             <p className="text-paper/60 text-lg mt-6 max-w-xs">Prices in FCFA. Ranges depend on your hair and the products used — we confirm before we start.</p>
           </div>
           <ul className="lg:col-span-8 border-t border-paper/15">
-            {cuts.map((c, i) => (
+            {cuts().map((c, i) => (
               <Reveal as="li" key={c.name} delay={(i % 4) * 0.04}>
                 <Link to={`/booking?service=${encodeURIComponent(c.name)}`} className="menu-row group">
                   <div>
