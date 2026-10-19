@@ -151,6 +151,7 @@ async function route(req, res, p) {
       ok: true,
       storage: ready ? 'connected' : 'not connected',
       photos: process.env.VERCEL ? (hasBlob ? 'connected' : 'not connected') : 'files',
+      version: (process.env.VERCEL_GIT_COMMIT_SHA || 'local').slice(0, 7),
     })
   }
 
