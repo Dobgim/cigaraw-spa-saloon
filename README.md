@@ -1,8 +1,8 @@
 # CiGa Raw Salon and Spa — website + admin dashboard
 
 - **Website**: React + Vite (`src/`)
-- **Backend & admin dashboard**: plain Node.js, no framework, no database server (`server/`).
-  Content, prices, bookings and settings are saved as JSON files; uploaded photos are saved as files.
+- **Backend**: plain Node.js, no framework (`server/`), also deployed as a Vercel function (`api/index.js`).
+- **Admin dashboard**: plain HTML/CSS/JS (`public/admin/`), served at `/admin`.
 
 ## Run it
 
@@ -46,35 +46,42 @@ npm run admin:reset -- <username> <new-password>
 
 ## Where data lives
 
-Everything the dashboard saves goes in `data/` (or the folder in the `DATA_DIR` environment variable):
+The backend picks its storage automatically:
 
-| File | Contents |
-|---|---|
-| `content.json` | prices, tattoos, gallery photos, hours, contact |
-| `bookings.json` | booking requests |
-| `admin.json` | admin login (password hash) |
-| `secret.key` | key that signs login sessions |
-| `uploads/` | uploaded photos |
+| Where it runs | Content, bookings, login | Uploaded photos |
+|---|---|---|
+| **Vercel** | Upstash Redis (free, private) | Vercel Blob (free) |
+| Your own server / computer | JSON files in `data/` (or `DATA_DIR`) | `data/uploads/` |
 
-`data/` is not committed to Git. **Back it up**, and on a host make sure it is on a persistent disk.
+`data/` is not committed to Git — back it up if you run your own server.
 
-## Deploying
+## Deploying on Vercel (current host)
 
-The dashboard needs a host that runs Node.js 20.11+ with a persistent disk, for example a VPS, Render
-(web service + disk), Railway (volume) or Fly.io (volume):
+The website, the dashboard (`/admin`) and the API (`api/index.js`, a Vercel function) all deploy from this repo.
+The dashboard needs two free storage add-ons, connected once:
 
-- Build command: `npm install && npm run build`
-- Start command: `npm start`
-- Environment: `PORT` (set by most hosts), `DATA_DIR` = the mounted disk path, and optionally `ADMIN_USERNAME` / `ADMIN_PASSWORD`
-- Serve it over **HTTPS** (all of the hosts above do this for you) — login cookies are marked `Secure` behind HTTPS.
+1. Open the project on vercel.com → **Storage**.
+2. **Create / connect "Upstash for Redis"** (Marketplace) → connect it to this project.
+3. **Create / connect a "Blob" store** → connect it to this project.
+4. **Deployments → Redeploy** the latest deployment so it picks up the new settings.
 
-Static-only hosting (Vercel, Netlify) still serves the website with its built-in content,
-but the dashboard and saved bookings need the Node server above.
+Vercel adds the needed environment variables (`KV_REST_API_URL`, `KV_REST_API_TOKEN`, `BLOB_READ_WRITE_TOKEN`) by itself.
+Check it worked at `/api/health` — it should say `"storage":"connected"`.
+
+Until storage is connected the website still works with its built-in content; the dashboard shows what to connect.
+
+## Deploying on your own server instead
+
+Any host that runs Node.js 20.11+ with a persistent disk (VPS, Render + disk, Railway + volume, Fly.io + volume):
+
+- Build: `npm install && npm run build` · Start: `npm start`
+- Environment: `PORT`, `DATA_DIR` (the disk path), optionally `ADMIN_USERNAME` / `ADMIN_PASSWORD`
+- Serve over HTTPS (these hosts do it for you).
 
 ## Security notes
 
 - Passwords are hashed with scrypt; sessions are signed, `HttpOnly`, `SameSite=Strict` cookies that expire after 12 hours.
 - Changing the password signs out every other device.
-- Login is rate-limited (8 attempts per 15 minutes per connection); public booking requests are rate-limited too.
+- Login is rate-limited (8 attempts per 15 minutes per connection); public booking requests are rate-limited too (shared across Vercel instances via Redis).
 - Uploads must be real JPEG/PNG/WebP files (checked by file signature), max 8 MB, saved with random names.
 - The dashboard inserts all visitor-supplied text as plain text, never HTML.

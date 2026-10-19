@@ -47,6 +47,18 @@ export function readJson(req, limit = 100_000) {
   return new Promise((resolve, reject) => {
     const type = req.headers['content-type'] || ''
     if (!type.includes('application/json')) return reject(new HttpError(415, 'Expected JSON'))
+    // On Vercel the platform may have read and parsed the body already
+    if (process.env.VERCEL) {
+      let parsed
+      try { parsed = req.body } catch { return reject(new HttpError(400, 'Invalid JSON')) }
+      if (parsed !== undefined) {
+        if (typeof parsed === 'string') {
+          try { parsed = JSON.parse(parsed) } catch { return reject(new HttpError(400, 'Invalid JSON')) }
+        }
+        if (JSON.stringify(parsed ?? {}).length > limit) return reject(new HttpError(413, 'Request too large'))
+        return resolve(parsed ?? {})
+      }
+    }
     let size = 0
     const chunks = []
     req.on('data', (c) => {

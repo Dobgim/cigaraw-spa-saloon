@@ -727,6 +727,8 @@ VIEWS.account = (main) => {
       await loadAll()
       if (location.pathname.startsWith('/admin/login')) history.replaceState(null, '', '/admin#/overview')
       render()
+    } else if (me.status === 503) {
+      showLogin((await me.json().catch(() => ({}))).error || 'The dashboard storage is not connected yet.')
     } else {
       showLogin()
     }

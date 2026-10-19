@@ -1,12 +1,13 @@
-// First-run setup: copy the website's built-in content into DATA_DIR, and create the
-// admin login from env vars (ADMIN_USERNAME / ADMIN_PASSWORD) or the bundled seed hash.
-import fs from 'node:fs'
-import path from 'node:path'
-import { exists, readData, writeData, newId } from './store.js'
+// First-run setup: copy the website's built-in content into storage, and create the admin
+// login from env vars (ADMIN_USERNAME / ADMIN_PASSWORD) or the bundled seed hash.
+import crypto from 'node:crypto'
+import adminSeed from './admin-seed.js'
 import { hashPassword } from './auth.js'
 import { CLASSIC, FACE_BODY, VIP, ON_REQUEST, TEETH_WHITENING } from '../src/menu.js'
 import { SALON, TATTOOS } from '../src/photos.js'
 import { PHONE_DISPLAY, WHATSAPP_DISPLAY, EMAIL, OPENING } from '../src/site.js'
+
+export const newId = () => crypto.randomBytes(8).toString('hex')
 
 export function defaultContent() {
   return {
@@ -18,24 +19,18 @@ export function defaultContent() {
   }
 }
 
-export function seed() {
-  if (!exists('content.json')) {
-    writeData('content.json', defaultContent())
-    console.log('• Created content.json from the website defaults')
-  }
-  if (!exists('bookings.json')) writeData('bookings.json', [])
+function defaultAdmin() {
+  const { ADMIN_USERNAME, ADMIN_PASSWORD } = process.env
+  if (ADMIN_USERNAME && ADMIN_PASSWORD) return { username: ADMIN_USERNAME, hash: hashPassword(ADMIN_PASSWORD), version: 1 }
+  return { username: adminSeed.username, hash: adminSeed.hash, version: 1 }
+}
 
-  if (!readData('admin.json', null)) {
-    const { ADMIN_USERNAME, ADMIN_PASSWORD } = process.env
-    let admin
-    if (ADMIN_USERNAME && ADMIN_PASSWORD) {
-      admin = { username: ADMIN_USERNAME, hash: hashPassword(ADMIN_PASSWORD), version: 1 }
-      console.log(`• Created admin "${ADMIN_USERNAME}" from environment variables`)
-    } else {
-      const bundled = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, 'admin-seed.json'), 'utf8'))
-      admin = { username: bundled.username, hash: bundled.hash, version: 1 }
-      console.log(`• Created admin "${bundled.username}" from the bundled login — change the password after signing in`)
-    }
-    writeData('admin.json', admin)
-  }
+// Runs once per process; cheap after the first call
+let done = null
+export function ensureSeeded(store) {
+  done ||= (async () => {
+    if (await store.setJSONIfAbsent('content', defaultContent())) console.log('• Created content from the website defaults')
+    if (await store.setJSONIfAbsent('admin', defaultAdmin())) console.log('• Created the admin login')
+  })().catch((e) => { done = null; throw e })
+  return done
 }

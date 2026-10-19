@@ -1,8 +1,18 @@
 {
   "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index?path=:path*" },
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/:rest*", "destination": "/admin/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/admin/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Robots-Tag", "value": "noindex" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
     }
   ]
 }
