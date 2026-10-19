@@ -153,7 +153,7 @@ async function route(req, res, p) {
       photos: process.env.VERCEL ? (hasBlob ? 'connected' : 'not connected') : 'files',
       version: (process.env.VERCEL_GIT_COMMIT_SHA || 'local').slice(0, 7),
       // names only (never values) of storage-related settings, to help connect storage
-      settings: Object.keys(process.env).filter(k => /BLOB|KV_|UPSTASH|REDIS|STORAGE/.test(k)).sort(),
+      settings: Object.keys(process.env).filter(k => /BLOB|STORE|TOKEN|OIDC|KV_|UPSTASH|REDIS|STORAGE|PHOTO/.test(k)).sort(),
     })
   }
 
