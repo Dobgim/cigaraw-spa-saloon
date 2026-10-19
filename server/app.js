@@ -146,7 +146,12 @@ async function route(req, res, p) {
   if (p === '/api/health') {
     let ready = true
     try { await storage() } catch { ready = false }
-    return sendJson(res, 200, { ok: true, storage: ready ? 'connected' : 'not connected' })
+    const { hasBlob } = await import('./storage/vercel.js')
+    return sendJson(res, 200, {
+      ok: true,
+      storage: ready ? 'connected' : 'not connected',
+      photos: process.env.VERCEL ? (hasBlob ? 'connected' : 'not connected') : 'files',
+    })
   }
 
   const store = await storage() // throws a 503 with instructions on Vercel until storage is connected

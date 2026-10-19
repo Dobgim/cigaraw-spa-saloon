@@ -5,12 +5,24 @@
 import crypto from 'node:crypto'
 import { decodeImage } from './images.js'
 
-const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
-const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+// Vercel names these env vars with an optional custom prefix (e.g. KV_REST_API_URL or
+// STORAGE_KV_REST_API_URL), so find them by suffix. Read-only tokens are skipped.
+const env = (...suffixes) => {
+  for (const suffix of suffixes) {
+    const exact = process.env[suffix]
+    if (exact) return exact
+    const key = Object.keys(process.env).find(k => k.endsWith('_' + suffix) && !k.includes('READ_ONLY'))
+    if (key) return process.env[key]
+  }
+  return undefined
+}
+const REDIS_URL = env('KV_REST_API_URL', 'UPSTASH_REDIS_REST_URL')
+const REDIS_TOKEN = env('KV_REST_API_TOKEN', 'UPSTASH_REDIS_REST_TOKEN')
+const BLOB_TOKEN = env('BLOB_READ_WRITE_TOKEN', 'READ_WRITE_TOKEN')
 const PREFIX = 'cigaraw:'
 
 export const hasRedis = Boolean(REDIS_URL && REDIS_TOKEN)
-export const hasBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+export const hasBlob = Boolean(BLOB_TOKEN)
 
 // One Redis command over Upstash's REST API (no SDK needed)
 async function redis(...command) {
@@ -63,7 +75,7 @@ export const vercelStorage = {
     if (img.error) return img
     const { put } = await import('@vercel/blob')
     const name = `${folder}/${Date.now().toString(36)}-${crypto.randomBytes(5).toString('hex')}.${img.ext}`
-    const blob = await put(name, img.buf, { access: 'public', contentType: img.type, addRandomSuffix: false, cacheControlMaxAge: 31536000 })
+    const blob = await put(name, img.buf, { access: 'public', contentType: img.type, addRandomSuffix: false, cacheControlMaxAge: 31536000, token: BLOB_TOKEN })
     return { src: blob.url }
   },
 
@@ -71,7 +83,7 @@ export const vercelStorage = {
   async deleteImage(src) {
     if (!hasBlob || typeof src !== 'string' || !/^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//.test(src)) return
     const { del } = await import('@vercel/blob')
-    await del(src).catch(() => {})
+    await del(src, { token: BLOB_TOKEN }).catch(() => {})
   },
 
   // Shared rate limit across all function instances
