@@ -18,11 +18,15 @@ const env = (...suffixes) => {
 }
 const REDIS_URL = env('KV_REST_API_URL', 'UPSTASH_REDIS_REST_URL')
 const REDIS_TOKEN = env('KV_REST_API_TOKEN', 'UPSTASH_REDIS_REST_TOKEN')
+// Older Blob stores give a read-write token; newer ones give a store ID and sign in with
+// Vercel's automatic per-request OIDC token (handled inside @vercel/blob)
 const BLOB_TOKEN = env('BLOB_READ_WRITE_TOKEN', 'READ_WRITE_TOKEN')
+const BLOB_STORE_ID = env('BLOB_STORE_ID', 'STORE_ID')
+const blobAuth = () => (BLOB_TOKEN ? { token: BLOB_TOKEN } : { storeId: BLOB_STORE_ID })
 const PREFIX = 'cigaraw:'
 
 export const hasRedis = Boolean(REDIS_URL && REDIS_TOKEN)
-export const hasBlob = Boolean(BLOB_TOKEN)
+export const hasBlob = Boolean(BLOB_TOKEN || BLOB_STORE_ID)
 
 // One Redis command over Upstash's REST API (no SDK needed)
 async function redis(...command) {
@@ -75,15 +79,20 @@ export const vercelStorage = {
     if (img.error) return img
     const { put } = await import('@vercel/blob')
     const name = `${folder}/${Date.now().toString(36)}-${crypto.randomBytes(5).toString('hex')}.${img.ext}`
-    const blob = await put(name, img.buf, { access: 'public', contentType: img.type, addRandomSuffix: false, cacheControlMaxAge: 31536000, token: BLOB_TOKEN })
-    return { src: blob.url }
+    try {
+      const blob = await put(name, img.buf, { access: 'public', contentType: img.type, addRandomSuffix: false, cacheControlMaxAge: 31536000, ...blobAuth() })
+      return { src: blob.url }
+    } catch (e) {
+      console.error('Blob upload failed:', e)
+      return { error: `Photo storage refused the upload: ${e.message || e}. Check the Blob store is Public and connected to this project.` }
+    }
   },
 
   // Only photos uploaded to Blob are deleted; built-in /images/... photos are left alone
   async deleteImage(src) {
     if (!hasBlob || typeof src !== 'string' || !/^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//.test(src)) return
     const { del } = await import('@vercel/blob')
-    await del(src, { token: BLOB_TOKEN }).catch(() => {})
+    await del(src, blobAuth()).catch(() => {})
   },
 
   // Shared rate limit across all function instances
